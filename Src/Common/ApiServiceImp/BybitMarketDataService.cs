@@ -180,7 +180,6 @@ namespace bybit.net.api.ApiServiceImp
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("status", status?.Status),
-                ("symbol", symbol),
                 ("baseCoin", baseCoin),
                 ("limit", limit),
                 ("cursor", cursor)
