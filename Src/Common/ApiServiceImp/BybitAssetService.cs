@@ -1,4 +1,4 @@
-﻿using bybit.net.api.Models;
+using bybit.net.api.Models;
 using bybit.net.api.Models.Account;
 using bybit.net.api.Models.Asset;
 using bybit.net.api.Models.Position;
@@ -172,7 +172,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="accountType"></param>
         /// <param name="toAccountType"></param>
         /// <returns>List of coin</returns>
-        public async Task<string?> GetAllAssetBalance(AccountType accountType, AccountType toAccountType)
+        public async Task<string?> GetInternalTransferableCoins(AccountType accountType, AccountType toAccountType)
         {
             var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
             var result = await this.SendSignedAsync<string>(TRANSABLE_COIN, HttpMethod.Get, query: query);
