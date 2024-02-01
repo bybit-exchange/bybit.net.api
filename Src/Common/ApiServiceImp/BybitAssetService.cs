@@ -1,4 +1,4 @@
-﻿using bybit.net.api.Models;
+using bybit.net.api.Models;
 using bybit.net.api.Models.Account;
 using bybit.net.api.Models.Asset;
 using bybit.net.api.Models.Position;
@@ -172,9 +172,9 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="accountType"></param>
         /// <param name="toAccountType"></param>
         /// <returns>List of coin</returns>
-        public async Task<string?> GetAllAssetBalance(AccountType accountType, AccountType toAccountType)
+        public async Task<string?> GetInternalTransferableCoins(AccountType accountType, AccountType toAccountType)
         {
-            var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
+            var query = new Dictionary<string, object> { { "fromAccountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
             var result = await this.SendSignedAsync<string>(TRANSABLE_COIN, HttpMethod.Get, query: query);
             return result;
         }
@@ -192,7 +192,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <returns>transferId</returns>
         public async Task<string?> CreateInternalTransfer(AccountType accountType, AccountType toAccountType, string coin, string amount, string? transferId = null)
         {
-            var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "coin", coin }, { "amount", amount } };
+            var query = new Dictionary<string, object> { { "fromAccountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "coin", coin }, { "amount", amount } };
             if (string.IsNullOrEmpty(transferId)) transferId = BybitParametersUtils.GenerateTransferId();
             query.Add("transferId", transferId);
             var result = await this.SendSignedAsync<string>(INTERNAL_TRANSFER, HttpMethod.Post, query: query);
