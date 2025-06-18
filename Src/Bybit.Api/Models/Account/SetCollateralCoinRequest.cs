@@ -1,8 +1,7 @@
-﻿namespace bybit.net.api.Models.Account
+﻿namespace Bybit.Api.Models.Account;
+
+public class SetCollateralCoinRequest
 {
-    public class SetCollateralCoinRequest
-    {
-        public string? coin { get; set; } // Product type: Unified account or Classic account
-        public string? collateralSwitch { get; set; } // Symbol name
-    }
+    public string? coin { get; set; } // Product type: Unified account or Classic account
+    public string? collateralSwitch { get; set; } // Symbol name
 }

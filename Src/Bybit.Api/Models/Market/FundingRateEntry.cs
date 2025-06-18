@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json;
 
-namespace bybit.net.api.Models.Market
+namespace Bybit.Api.Models.Market;
+
+public class FundingRateEntry
 {
-    public class FundingRateEntry
-    {
-        [JsonProperty("symbol")]
-        public string? Symbol { get; set; }
+    [JsonProperty("symbol")]
+    public string? Symbol { get; set; }
 
-        [JsonProperty("fundingRate")]
-        public string? FundingRate { get; set; }
+    [JsonProperty("fundingRate")]
+    public string? FundingRate { get; set; }
 
-        [JsonProperty("fundingRateTimestamp")]
-        public long? FundingRateTimestamp { get; set; }
-    }
+    [JsonProperty("fundingRateTimestamp")]
+    public long? FundingRateTimestamp { get; set; }
 }

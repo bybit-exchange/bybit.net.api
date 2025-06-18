@@ -1,20 +1,19 @@
-﻿namespace bybit.net.api.Models.Account
+﻿namespace Bybit.Api.Models.Account;
+
+public struct TransferStatus
 {
-    public struct TransferStatus
+    private TransferStatus(string value)
     {
-        private TransferStatus(string value)
-        {
-            Value = value;
-        }
-
-        public string Value { get; private set; }
-
-        public static TransferStatus Success => new("SUCCESS");
-        public static TransferStatus Pending => new("PENDING");
-        public static TransferStatus Failed => new("FAILED");
-
-        public override readonly string ToString() => Value;
-
-        public static implicit operator string(TransferStatus status) => status.Value;
+        Value = value;
     }
+
+    public string Value { get; private set; }
+
+    public static TransferStatus Success => new("SUCCESS");
+    public static TransferStatus Pending => new("PENDING");
+    public static TransferStatus Failed => new("FAILED");
+
+    public override readonly string ToString() => Value;
+
+    public static implicit operator string(TransferStatus status) => status.Value;
 }

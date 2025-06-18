@@ -1,8 +1,7 @@
-﻿namespace bybit.net.api
+﻿namespace Bybit.Api.Security;
+
+public interface IBybitSignatureService
 {
-    public interface IBybitSignatureService
-    {
-        string GeneratePostSignature(IDictionary<string, object> parameters);
-        string GenerateGetSignature(IDictionary<string, object> parameters);
-    }
+    string GeneratePostSignature(IDictionary<string, object> parameters);
+    string GenerateGetSignature(IDictionary<string, object> parameters);
 }

@@ -1,35 +1,35 @@
-﻿using bybit.net.api.Models.Lending;
-using bybit.net.api.Services;
+﻿using Bybit.Api.Models.Lending;
+using Bybit.Api.Services;
+using Bybit.Api.Utils;
 
-namespace bybit.net.api.ApiServiceImp
+namespace Bybit.Api.ApiServiceImp;
+
+public class BybitBrokerService : BybitApiService
 {
-    public class BybitBrokerService : BybitApiService
-    {
-        public BybitBrokerService(string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
+    public BybitBrokerService(string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
         : this(httpClient: new HttpClient(), apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
-        {
-        }
+    {
+    }
 
-        public BybitBrokerService(HttpClient httpClient, string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
-            : base(httpClient: httpClient, apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
-        {
-        }
+    public BybitBrokerService(HttpClient httpClient, string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
+        : base(httpClient: httpClient, apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
+    {
+    }
 
-        private const string BROKER_EARNING_DATA = "/v5/broker/earning-record";
+    private const string BROKER_EARNING_DATA = "/v5/broker/earning-record";
        
-        public async Task<string?> GetBrokerEarning(BizType? bizType = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
-        {
-            var query = new Dictionary<string, object>();
+    public async Task<string?> GetBrokerEarning(BizType? bizType = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+    {
+        var query = new Dictionary<string, object>();
 
-            BybitParametersUtils.AddOptionalParameters(query,
-                ("bizType", bizType?.Value),
-                ("startTime", startTime),
-                ("endTime", endTime),
-                ("limit", limit),
-                ("cursor", cursor)
-            );
-            var result = await this.SendSignedAsync<string>(BROKER_EARNING_DATA, HttpMethod.Get, query: query);
-            return result;
-        }
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("bizType", bizType?.Value),
+            ("startTime", startTime),
+            ("endTime", endTime),
+            ("limit", limit),
+            ("cursor", cursor)
+        );
+        var result = await this.SendSignedAsync<string>(BROKER_EARNING_DATA, HttpMethod.Get, query: query);
+        return result;
     }
 }

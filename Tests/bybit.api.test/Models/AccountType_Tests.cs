@@ -1,16 +1,16 @@
-﻿using bybit.net.api.Models.Account;
+﻿using Bybit.Api.Models.Account;
+
 using Xunit;
 
-namespace bybit.api.test.Models
-{
-    public class AccountType_Tests
-    {
-        [Fact]
-        public void ToString_Matches_Value()
-        {
-            var model = AccountType.Spot;
+namespace Bybit.Api.Test.Models;
 
-            Assert.Equal(model.Value.ToString(), model.ToString());
-        }
+public class AccountType_Tests
+{
+    [Fact]
+    public void ToString_Matches_Value()
+    {
+        var model = AccountType.Spot;
+
+        Assert.Equal(model.Value.ToString(), model.ToString());
     }
 }

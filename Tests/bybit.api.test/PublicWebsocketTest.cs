@@ -1,25 +1,25 @@
-﻿using bybit.net.api.WebSocketStream;
+﻿using Bybit.Api.WebSocketStream;
+
 using Xunit;
 
-namespace bybit.api.test
+namespace Bybit.Api.Test;
+
+public class PublicWebsocketTest
 {
-    public class PublicWebsocketTest
+    readonly BybitLinearWebSocket bybitLinearWebSocket = new(useTestNet: true, pingIntevral: 5);
+    #region Check Public Channel Orderbook
+    [Fact]
+    public async Task Check_OrderBookSubscribe()
     {
-        readonly BybitLinearWebSocket bybitLinearWebSocket = new(useTestNet: true, pingIntevral: 5);
-        #region Check Public Channel Orderbook
-        [Fact]
-        public async Task Check_OrderBookSubscribe()
-        {
-            bybitLinearWebSocket.OnMessageReceived(
-             (data) =>
-             {
-                 Console.WriteLine(data);
+        bybitLinearWebSocket.OnMessageReceived(
+            (data) =>
+                {
+                    Console.WriteLine(data);
 
-                 return Task.CompletedTask;
-             }, CancellationToken.None);
+                    return Task.CompletedTask;
+                }, CancellationToken.None);
 
-            await bybitLinearWebSocket.ConnectAsync(new string[] { "orderbook.50.BTCUSDT" }, CancellationToken.None);
-        }
-        #endregion
+        await bybitLinearWebSocket.ConnectAsync(new string[] { "orderbook.50.BTCUSDT" }, CancellationToken.None);
     }
+    #endregion
 }

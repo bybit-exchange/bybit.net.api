@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Src\Common\Bybit.Api.csproj" />
+    <ProjectReference Include="..\..\Src\Bybit.Api\Bybit.Api.csproj" />
   </ItemGroup>
 
 </Project>

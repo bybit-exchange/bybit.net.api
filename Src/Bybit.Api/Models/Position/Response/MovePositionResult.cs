@@ -1,16 +1,15 @@
 ﻿using Newtonsoft.Json;
 
-namespace bybit.net.api.Models.Position.Response
+namespace Bybit.Api.Models.Position.Response;
+
+public class MovePositionResult
 {
-    public class MovePositionResult
-    {
-        [JsonProperty("blockTradeId")]
-        public string? blockTradeId { get; set; }
+    [JsonProperty("blockTradeId")]
+    public string? blockTradeId { get; set; }
 
-        [JsonProperty("status")]
-        public string? status { get; set; }
+    [JsonProperty("status")]
+    public string? status { get; set; }
 
-        [JsonProperty("rejectParty")]
-        public string? rejectParty { get; set; }
-    }
+    [JsonProperty("rejectParty")]
+    public string? rejectParty { get; set; }
 }

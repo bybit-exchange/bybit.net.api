@@ -1,8 +1,7 @@
-﻿namespace bybit.net.api.Models.Account.Response
+﻿namespace Bybit.Api.Models.Account.Response;
+
+public class CollateralCoinEntry
 {
-    public class CollateralCoinEntry
-    {
-        public string? coin { get; set; }
-        public string? collateralSwitch { get; set; }
-    }
+    public string? coin { get; set; }
+    public string? collateralSwitch { get; set; }
 }

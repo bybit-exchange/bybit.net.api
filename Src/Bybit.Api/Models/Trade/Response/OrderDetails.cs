@@ -1,8 +1,7 @@
-﻿namespace bybit.net.api.Models.Trade.Response
+﻿namespace Bybit.Api.Models.Trade.Response;
+
+public class OrderDetails
 {
-    public class OrderDetails
-    {
-        public string? OrderId { get; set; }
-        public string? OrderLinkId { get; set; }
-    }
+    public string? OrderId { get; set; }
+    public string? OrderLinkId { get; set; }
 }
