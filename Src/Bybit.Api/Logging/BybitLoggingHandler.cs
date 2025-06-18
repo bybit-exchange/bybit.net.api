@@ -6,43 +6,52 @@ namespace Bybit.Api.Logging;
 /// Bybit message processing logging handler.<para/>
 /// A middlewear to listen and log any request or response.
 /// </summary>
-public class BybitLoggingHandler : MessageProcessingHandler
+public sealed class BybitLoggingHandler : MessageProcessingHandler
 {
-    private readonly ILogger logger;
+    private const string MessageLogEntry = "Request content: '{Content}'";
+    private readonly ILogger _logger;
 
     public BybitLoggingHandler(ILogger logger)
         : base(new HttpClientHandler())
     {
-        this.logger = logger;
+        _logger = logger;
     }
 
     public BybitLoggingHandler(ILogger logger, HttpMessageHandler innerHandler)
         : base(innerHandler)
     {
-        this.logger = logger;
+        _logger = logger;
     }
 
     protected override HttpRequestMessage ProcessRequest(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        logger.LogInformation(message: request.ToString());
+        _logger.LogInformation(MessageLogEntry, request);
 
-        if (null != request.Content)
-        {
-            logger.LogInformation(message: request.Content.ReadAsStringAsync(cancellationToken).Result);
-        }
+        LogHttpContent(request.Content, cancellationToken);
 
         return request;
     }
 
     protected override HttpResponseMessage ProcessResponse(HttpResponseMessage response, CancellationToken cancellationToken)
     {
-        logger.LogInformation(message: response.ToString());
+        _logger.LogInformation(MessageLogEntry, response);
 
-        if (null != response.Content)
-        {
-            logger.LogInformation(message: response.Content.ReadAsStringAsync(cancellationToken).Result);
-        }
+        LogHttpContent(response.Content, cancellationToken);
 
         return response;
+    }
+
+    private void LogHttpContent(HttpContent? httpContent, CancellationToken cancellationToken)
+    {
+        if (httpContent is null)
+        {
+            return;
+        }
+
+        using var contentStream = httpContent.ReadAsStream(cancellationToken);
+        using var contentReader = new StreamReader(contentStream);
+        var content = contentReader.ReadToEnd();
+
+        _logger.LogInformation(MessageLogEntry, content);
     }
 }
