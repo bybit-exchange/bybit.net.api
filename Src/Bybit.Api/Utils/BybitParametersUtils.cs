@@ -1,6 +1,6 @@
 ﻿namespace Bybit.Api.Utils;
 
-public class BybitParametersUtils
+public static class BybitParametersUtils
 {
     /// <summary>
     /// Adds optional parameters to the provided query dictionary if they have valid values.
@@ -9,7 +9,7 @@ public class BybitParametersUtils
     /// <param name="parameters">An array of key-value pairs representing optional parameters.</param>
     public static void AddOptionalParameters(Dictionary<string, object> query, params (string key, object? value)[] parameters)
     {
-        foreach (var (key, value) in parameters)
+        foreach ((var key, var value) in parameters)
         {
             if (value != null && !(value is string strValue && string.IsNullOrEmpty(strValue)))
             {

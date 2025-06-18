@@ -17,36 +17,36 @@ public class BybitWebSocketHandler : IBybitWebSocketHandler
 
     public BybitWebSocketHandler(ClientWebSocket clientWebSocket)
     {
-        this.webSocket = clientWebSocket ?? throw new ArgumentNullException(nameof(clientWebSocket));
-        this.webSocket.Options.SetRequestHeader("User-Agent", UserAgent);
+        webSocket = clientWebSocket ?? throw new ArgumentNullException(nameof(clientWebSocket));
+        webSocket.Options.SetRequestHeader("User-Agent", UserAgent);
     }
 
     public WebSocketState State
     {
         get
         {
-            return this.webSocket.State;
+            return webSocket.State;
         }
     }
 
     public async Task ConnectAsync(Uri uri, CancellationToken cancellationToken)
     {
-        await this.webSocket.ConnectAsync(uri, cancellationToken);
+        await webSocket.ConnectAsync(uri, cancellationToken);
     }
 
     public async Task CloseOutputAsync(WebSocketCloseStatus closeStatus, CancellationToken cancellationToken, string? statusDescription = null)
     {
-        await this.webSocket.CloseOutputAsync(closeStatus, statusDescription, cancellationToken);
+        await webSocket.CloseOutputAsync(closeStatus, statusDescription, cancellationToken);
     }
 
     public async Task CloseAsync(WebSocketCloseStatus closeStatus, CancellationToken cancellationToken, string? statusDescription = null)
     {
-        await this.webSocket.CloseAsync(closeStatus, statusDescription, cancellationToken);
+        await webSocket.CloseAsync(closeStatus, statusDescription, cancellationToken);
     }
 
     public async Task<WebSocketReceiveResult> ReceiveAsync(ArraySegment<byte> buffer, CancellationToken cancellationToken)
     {
-        var receiveResult =  await this.webSocket.ReceiveAsync(buffer, cancellationToken);
+        var receiveResult =  await webSocket.ReceiveAsync(buffer, cancellationToken);
         if (debugEnabled)
         {
             string receivedMessage = Encoding.UTF8.GetString(bytes: buffer.Array!, buffer.Offset, receiveResult.Count);
@@ -66,13 +66,13 @@ public class BybitWebSocketHandler : IBybitWebSocketHandler
             Console.WriteLine($"[WebSocket Request] End Of Message: {endOfMessage}");
         }
 
-        await this.webSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
+        await webSocket.SendAsync(buffer, messageType, endOfMessage, cancellationToken);
     }
 
-    public void Dispose() => this.webSocket.Dispose();
+    public void Dispose() => webSocket.Dispose();
 
     public void EnableDebugMode()
     {
-        this.debugEnabled = true;
+        debugEnabled = true;
     }
 }

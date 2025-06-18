@@ -46,8 +46,7 @@ public class BybitPositionService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(POSITION_LIST, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(POSITION_LIST, HttpMethod.Get, query: query);
     }
 
     private const string SET_LEVERAGE = "/v5/position/set-leverage";
@@ -70,8 +69,7 @@ public class BybitPositionService : BybitApiService
             ("buyLeverage", buyLeverage),
             ("sellLeverage", sellLeverage)
         );
-        var result = await this.SendSignedAsync<string>(SET_LEVERAGE, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_LEVERAGE, HttpMethod.Post, query: query);
     }
 
     private const string SWITCH_MARGIN = "/v5/position/switch-isolated";
@@ -96,8 +94,7 @@ public class BybitPositionService : BybitApiService
             ("sellLeverage", sellLeverage),
             ("tradeMode", tradeMode.Value)
         );
-        var result = await this.SendSignedAsync<string>(SWITCH_MARGIN, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SWITCH_MARGIN, HttpMethod.Post, query: query);
     }
 
     private const string SET_TPSL_MODE = "/v5/position/set-tpsl-mode";
@@ -121,8 +118,7 @@ public class BybitPositionService : BybitApiService
             ("symbol", symbol),
             ("tpslMode", tpslMode.Value)
         );
-        var result = await this.SendSignedAsync<string>(SET_TPSL_MODE, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_TPSL_MODE, HttpMethod.Post, query: query);
     }
 
     private const string SWITCH_POSITION_MODE = "/v5/position/switch-mode";
@@ -148,8 +144,7 @@ public class BybitPositionService : BybitApiService
             ("coin", coin),
             ("positionMode", positionMode?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SWITCH_POSITION_MODE, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SWITCH_POSITION_MODE, HttpMethod.Post, query: query);
     }
 
     private const string SET_RISK_LIMIT = "/v5/position/set-risk-limit";
@@ -174,8 +169,7 @@ public class BybitPositionService : BybitApiService
             ("coin", riskId),
             ("positionIdx", positionIdx?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SET_RISK_LIMIT, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_RISK_LIMIT, HttpMethod.Post, query: query);
     }
 
     private const string SET_TRADING_STOP = "/v5/position/trading-stop";
@@ -224,8 +218,7 @@ public class BybitPositionService : BybitApiService
             ("tpOrderType", tpOrderType?.Value),
             ("slOrderType", slOrderType?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SET_TRADING_STOP, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_TRADING_STOP, HttpMethod.Post, query: query);
     }
 
     private const string SET_AUTO_ADD_MARGIN = "/v5/position/set-auto-add-margin";
@@ -243,8 +236,7 @@ public class BybitPositionService : BybitApiService
     {
         var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "autoAddMargin", autoAddMargin.Value }, { "positionIdx", positionIdx.Value } };
 
-        var result = await this.SendSignedAsync<string>(SET_AUTO_ADD_MARGIN, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_AUTO_ADD_MARGIN, HttpMethod.Post, query: query);
     }
 
     private const string UPDATE_MARGIN = "/v5/position/add-margin";
@@ -263,8 +255,7 @@ public class BybitPositionService : BybitApiService
         var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "margin", margin }, };
         BybitParametersUtils.AddOptionalParameters(query,
             ("positionIdx", positionIdx?.Value));
-        var result = await this.SendSignedAsync<string>(UPDATE_MARGIN, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_MARGIN, HttpMethod.Post, query: query);
     }
 
     private const string CLOSE_PNL = "/v5/position/closed-pnl";
@@ -292,8 +283,7 @@ public class BybitPositionService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(CLOSE_PNL, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLOSE_PNL, HttpMethod.Get, query: query);
     }
 
 
@@ -310,8 +300,7 @@ public class BybitPositionService : BybitApiService
     public async Task<string?> ConfirmPositionRiskLimit(Category category, string symbol)
     {
         var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol } };
-        var result = await this.SendSignedAsync<string>(CONFIRM_NEW_RISK_LIMIT, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CONFIRM_NEW_RISK_LIMIT, HttpMethod.Post, query: query);
     }
 
     private const string MOVE_POSITION = "/v5/position/move-positions";
@@ -331,8 +320,7 @@ public class BybitPositionService : BybitApiService
     public async Task<string?> MovePosition(string fromUid, string toUid, List<Dictionary<string, object>> list)
     {
         var query = new Dictionary<string, object> { { "fromUid", fromUid }, { "toUid", toUid }, { "list", list } };
-        var result = await this.SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -351,8 +339,7 @@ public class BybitPositionService : BybitApiService
     public async Task<string?> MovePosition(string fromUid, string toUid, List<MovePositionRequest> list)
     {
         var query = new Dictionary<string, object> { { "fromUid", fromUid }, { "toUid", toUid }, { "list", list } };
-        var result = await this.SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
     }
 
     private const string MOVE_POSITION_HISTORY = "/v5/position/move-history";
@@ -371,7 +358,7 @@ public class BybitPositionService : BybitApiService
     /// <returns>Move Position History</returns>
     public async Task<string?> GetMovePositionHistory(Category? category = null, string? symbol = null, int? startTime = null, int? endTime = null, string? status = null, string? blockTradeId = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("category", category?.Value),
@@ -383,7 +370,6 @@ public class BybitPositionService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(MOVE_POSITION_HISTORY, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(MOVE_POSITION_HISTORY, HttpMethod.Get, query: query);
     }
 }

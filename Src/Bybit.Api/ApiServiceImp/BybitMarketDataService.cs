@@ -26,11 +26,9 @@ public class BybitMarketDataService : BybitApiService
     /// <returns>Bybit server UTC timestamp.</returns>
     public async Task<string?> CheckServerTime()
     {
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          CHECK_SERVER_TIME,
                          HttpMethod.Get);
-
-        return result;
     }
 
     private const string MAKRKET_KLINE = "/v5/market/kline";
@@ -58,12 +56,10 @@ public class BybitMarketDataService : BybitApiService
             ("end", end),
             ("limit", limit)
         );
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MAKRKET_KLINE,
                          HttpMethod.Get,
                          query: query);
-
-        return result;
     }
 
     private const string MARK_PRICE_KLINE = "/v5/market/mark-price-kline";
@@ -90,13 +86,11 @@ public class BybitMarketDataService : BybitApiService
             ("end", end),
             ("limit", limit)
         );
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARK_PRICE_KLINE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string INDEX_PRICE_KLINE = "/v5/market/mark-price-kline";
@@ -123,13 +117,11 @@ public class BybitMarketDataService : BybitApiService
             ("end", end),
             ("limit", limit)
         );
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          INDEX_PRICE_KLINE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string PREMIUM_INDEX_PRICE_KLINE = "/v5/market/premium-index-price-kline";
@@ -156,13 +148,11 @@ public class BybitMarketDataService : BybitApiService
             ("end", end),
             ("limit", limit)
         );
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          PREMIUM_INDEX_PRICE_KLINE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string INSTRUMENT_INFO = "/v5/market/instruments-info";
@@ -191,13 +181,11 @@ public class BybitMarketDataService : BybitApiService
             ("cursor", cursor)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          INSTRUMENT_INFO,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_ORDERBOOK = "/v5/market/orderbook";
@@ -221,13 +209,11 @@ public class BybitMarketDataService : BybitApiService
             ("limit", limit)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_ORDERBOOK,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_TICKERS = "/v5/market/tickers";
@@ -252,13 +238,11 @@ public class BybitMarketDataService : BybitApiService
             ("expDate", expDate)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_TICKERS,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_FUNDING_HISTORY = "/v5/market/funding/history";
@@ -284,13 +268,11 @@ public class BybitMarketDataService : BybitApiService
             ("limit", limit)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_FUNDING_HISTORY,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_RECENT_TRADE = "/v5/market/recent-trade";
@@ -316,13 +298,11 @@ public class BybitMarketDataService : BybitApiService
             ("limit", limit)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_RECENT_TRADE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_OPEN_INTEREST = "/v5/market/open-interest";
@@ -350,13 +330,11 @@ public class BybitMarketDataService : BybitApiService
             ("cursor", cursor)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_OPEN_INTEREST,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_HISTORICAL_VOLATILITY = "/v5/market/historical-volatility";
@@ -385,13 +363,11 @@ public class BybitMarketDataService : BybitApiService
             ("endTime", endTime)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_HISTORICAL_VOLATILITY,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_INSURANCE = "/v5/market/insurance";
@@ -402,19 +378,17 @@ public class BybitMarketDataService : BybitApiService
     /// <returns>Market Insurance</returns>
     public async Task<string?> GetMarketInsurance(string? coin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_INSURANCE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_RISK_LIMIT = "/v5/market/risk-limit";
@@ -432,13 +406,11 @@ public class BybitMarketDataService : BybitApiService
             ("symbol", symbol)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_RISK_LIMIT,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_DELIVERY_PRICE = "/v5/market/delivery-price";
@@ -463,13 +435,11 @@ public class BybitMarketDataService : BybitApiService
             ("cursor", cursor)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_DELIVERY_PRICE,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 
     private const string MARKET_LONG_SHORT_RATIO = "/v5/market/account-ratio";
@@ -489,12 +459,10 @@ public class BybitMarketDataService : BybitApiService
             ("limit", limit)
         );
 
-        var result = await SendPublicAsync<string>(
+        return await SendPublicAsync<string>(
                          MARKET_LONG_SHORT_RATIO,
                          HttpMethod.Get,
                          query: query
                      );
-
-        return result;
     }
 }

@@ -27,15 +27,14 @@ public class BybitAccountService : BybitApiService
     /// <param name="accountType"></param>
     /// <param name="coin"></param>
     /// <returns> Account Balance </returns>
-    public async Task<string?> GetAccountBalance(AccountType accountType, string? coin = null)
+    public Task<string?> GetAccountBalance(AccountType accountType, string? coin = null)
     {
         var query = new Dictionary<string, object> { { "accountType", accountType.Value } };
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(WALLET_BALANCE, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(WALLET_BALANCE, HttpMethod.Get, query: query);
     }
 
     private const string UPGRADE_UTA = "/v5/account/wallet-balance";
@@ -43,11 +42,11 @@ public class BybitAccountService : BybitApiService
     /// Upgrade to Unified Account
     /// </summary>
     /// <returns> UTA Result</returns>
-    public async Task<string?> UpgradeAccount()
+    public Task<string?> UpgradeAccount()
     {
-        var query = new Dictionary<string, object> { };
-        var result = await this.SendSignedAsync<string>(UPGRADE_UTA, HttpMethod.Post, query: query);
-        return result;
+        var query = new Dictionary<string, object>();
+
+        return SendSignedAsync<string>(UPGRADE_UTA, HttpMethod.Post, query: query);
     }
 
     private const string ACCOUNT_BROWSE_HISTORY = "/v5/account/borrow-history";
@@ -60,9 +59,9 @@ public class BybitAccountService : BybitApiService
     /// <param name="limit"></param>
     /// <param name="cursor"></param>
     /// <returns>Borrow History</returns>
-    public async Task<string?> GetAccountBorrowHistory(string? currency = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+    public Task<string?> GetAccountBorrowHistory(string? currency = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("currency", currency),
@@ -71,8 +70,7 @@ public class BybitAccountService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(ACCOUNT_BROWSE_HISTORY, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(ACCOUNT_BROWSE_HISTORY, HttpMethod.Get, query: query);
     }
 
     private const string ACCOUNT_COLLATERAL_INFO = "/v5/account/collateral-info";
@@ -81,15 +79,14 @@ public class BybitAccountService : BybitApiService
     /// </summary>
     /// <param name="currency"></param>
     /// <returns>Collateral Info</returns>
-    public async Task<string?> GetAccountCollateralInfo(string? currency = null)
+    public Task<string?> GetAccountCollateralInfo(string? currency = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("currency", currency)
         );
-        var result = await this.SendSignedAsync<string>(ACCOUNT_COLLATERAL_INFO, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(ACCOUNT_COLLATERAL_INFO, HttpMethod.Get, query: query);
     }
 
     private const string SET_COLLATERAL_COIN = "/v5/account/set-collateral-switch";
@@ -97,15 +94,14 @@ public class BybitAccountService : BybitApiService
     /// You can decide whether the assets in the Unified account needs to be collateral coins.
     /// </summary>
     /// <returns>None</returns>
-    public async Task<string?> SetAccountCollateralCoin(string? coin, CollateralSwitch? collateralSwitch = null)
+    public Task<string?> SetAccountCollateralCoin(string? coin, CollateralSwitch? collateralSwitch = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
             ("collateralSwitch", collateralSwitch?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
     }
 
     private const string BATCH_SET_COLLATERAL_COIN = "/v5/account/set-collateral-switch-batch";
@@ -116,14 +112,14 @@ public class BybitAccountService : BybitApiService
     /// /// <param name="coin">Coin name</param>
     /// /// <param name="collateralSwitch">ON: switch on collateral, OFF: switch off collateral</param>
     /// <returns>Batch Set Collateral Coin</returns>
-    public async Task<string?> BatchSetAccountCollateralCoin(List<Dictionary<string, object>> request)
+    public Task<string?> BatchSetAccountCollateralCoin(List<Dictionary<string, object>> request)
     {
         var query = new Dictionary<string, object>
         {
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
-        return result;
+
+        return SendSignedAsync<string>(BATCH_SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -133,14 +129,14 @@ public class BybitAccountService : BybitApiService
     /// /// <param name="coin">Coin name</param>
     /// /// <param name="collateralSwitch">ON: switch on collateral, OFF: switch off collateral</param>
     /// <returns>Batch Set Collateral Coin</returns>
-    public async Task<string?> BatchSetAccountCollateralCoin(List<SetCollateralCoinRequest> request)
+    public Task<string?> BatchSetAccountCollateralCoin(List<SetCollateralCoinRequest> request)
     {
         var query = new Dictionary<string, object>
         {
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
-        return result;
+
+        return SendSignedAsync<string>(BATCH_SET_COLLATERAL_COIN, HttpMethod.Post, query: query);
     }
 
     private const string ACCOUNT_REPAY_LIABILITY = "/v5/account/quick-repayment";
@@ -149,14 +145,13 @@ public class BybitAccountService : BybitApiService
     /// Applicable: Unified Account Permission: USDC Contracts
     /// </summary>
     /// <returns>Repay Liability</returns>
-    public async Task<string?> RepayAccountLiability(string? coin = null)
+    public Task<string?> RepayAccountLiability(string? coin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(ACCOUNT_REPAY_LIABILITY, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(ACCOUNT_REPAY_LIABILITY, HttpMethod.Post, query: query);
     }
 
     private const string COIN_GREEKS = "/v5/asset/coin-greeks";
@@ -164,14 +159,13 @@ public class BybitAccountService : BybitApiService
     /// Get current account Greeks information
     /// </summary>
     /// <returns>Coin Greeks</returns>
-    public async Task<string?> GetAccountCoinGreeks(string? baseCoin = null)
+    public Task<string?> GetAccountCoinGreeks(string? baseCoin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("baseCoin", baseCoin)
         );
-        var result = await this.SendSignedAsync<string>(COIN_GREEKS, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(COIN_GREEKS, HttpMethod.Get, query: query);
     }
 
     private const string FREE_RATE = "/v5/account/fee-rate";
@@ -183,7 +177,7 @@ public class BybitAccountService : BybitApiService
     /// <param name="symbol"></param>
     /// <param name="baseCoin"></param>
     /// <returns>Free Rates</returns>
-    public async Task<string?> GetAccountFreeRate(Category category, string? symbol = null, string? baseCoin = null)
+    public Task<string?> GetAccountFreeRate(Category category, string? symbol = null, string? baseCoin = null)
     {
         var query = new Dictionary<string, object> { { "category", category.Value } };
 
@@ -191,8 +185,7 @@ public class BybitAccountService : BybitApiService
             ("symbol", symbol),
             ("baseCoin", baseCoin)
         );
-        var result = await this.SendSignedAsync<string>(FREE_RATE, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(FREE_RATE, HttpMethod.Get, query: query);
     }
 
     private const string ACCOUNT_INFO = "/v5/account/info";
@@ -201,12 +194,11 @@ public class BybitAccountService : BybitApiService
     /// Query the margin mode and the upgraded status of account
     /// </summary>
     /// <returns></returns>
-    public async Task<string?> GetAccountInfo()
+    public Task<string?> GetAccountInfo()
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
-        var result = await this.SendSignedAsync<string>(ACCOUNT_INFO, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(ACCOUNT_INFO, HttpMethod.Get, query: query);
     }
 
     private const string TRANSACTION_LOG = "/v5/account/transaction-log";
@@ -223,9 +215,9 @@ public class BybitAccountService : BybitApiService
     /// <param name="limit"></param>
     /// <param name="cursor"></param>
     /// <returns>Transaction Data</returns>
-    public async Task<string?> GetAccountTransaction(AccountType? accountType = null, Category? category = null, string? currency = null, string? baseCoin = null, TransactionType? type = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+    public Task<string?> GetAccountTransaction(AccountType? accountType = null, Category? category = null, string? currency = null, string? baseCoin = null, TransactionType? type = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("accountType", accountType?.Value),
@@ -238,8 +230,7 @@ public class BybitAccountService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(TRANSACTION_LOG, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(TRANSACTION_LOG, HttpMethod.Get, query: query);
     }
 
     private const string ACCOUNT_MARGIN_MODE = "/v5/account/set-margin-mode";
@@ -250,14 +241,13 @@ public class BybitAccountService : BybitApiService
     /// </summary>
     /// <param name="setMarginMode"></param>
     /// <returns>Margin Mode</returns>
-    public async Task<string?> SetAccountMarginMode(SetMarginMode? setMarginMode = null)
+    public Task<string?> SetAccountMarginMode(SetMarginMode? setMarginMode = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("SetMarginMode", setMarginMode?.Value)
         );
-        var result = await this.SendSignedAsync<string>(ACCOUNT_MARGIN_MODE, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(ACCOUNT_MARGIN_MODE, HttpMethod.Post, query: query);
     }
 
     private const string SET_MMP = "/v5/account/mmp-modify";
@@ -270,9 +260,9 @@ public class BybitAccountService : BybitApiService
     /// <param name="qtyLimit"></param>
     /// <param name="deltaLimit"></param>
     /// <returns>None</returns>
-    public async Task<string?> SetMarketMakerProtection(string? baseCoin = null, string? window = null, string? frozenPeriod = null, string? qtyLimit = null, string? deltaLimit = null)
+    public Task<string?> SetMarketMakerProtection(string? baseCoin = null, string? window = null, string? frozenPeriod = null, string? qtyLimit = null, string? deltaLimit = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("baseCoin", baseCoin),
             ("window", window),
@@ -280,8 +270,7 @@ public class BybitAccountService : BybitApiService
             ("qtyLimit", qtyLimit),
             ("deltaLimit", deltaLimit)
         );
-        var result = await this.SendSignedAsync<string>(SET_MMP, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(SET_MMP, HttpMethod.Post, query: query);
     }
 
     private const string RESET_MMP = "/v5/account/mmp-reset";
@@ -291,14 +280,13 @@ public class BybitAccountService : BybitApiService
     /// </summary>
     /// <param name="baseCoin"></param>
     /// <returns>None</returns>
-    public async Task<string?> ResetMarketMakerProtection(string? baseCoin = null)
+    public Task<string?> ResetMarketMakerProtection(string? baseCoin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("baseCoin", baseCoin)
         );
-        var result = await this.SendSignedAsync<string>(RESET_MMP, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(RESET_MMP, HttpMethod.Post, query: query);
     }
 
     private const string SET_SPOT_HEDGE = "/v5/account/set-hedging-mode";
@@ -310,14 +298,13 @@ public class BybitAccountService : BybitApiService
     /// </summary>
     /// <param name="spotHedgeMode"></param>
     /// <returns>Set Spot Hedging</returns>
-    public async Task<string?> SetSpotHedgingMode(SpotHedgeMode? spotHedgeMode = null)
+    public Task<string?> SetSpotHedgingMode(SpotHedgeMode? spotHedgeMode = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("setHedgingMode", spotHedgeMode?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SET_SPOT_HEDGE, HttpMethod.Post, query: query);
-        return result;
+        return SendSignedAsync<string>(SET_SPOT_HEDGE, HttpMethod.Post, query: query);
     }
 
     private const string MMP_STATE = "/v5/account/mmp-state";
@@ -326,13 +313,12 @@ public class BybitAccountService : BybitApiService
     /// </summary>
     /// <param name="baseCoin"></param>
     /// <returns>Market Maker State</returns>
-    public async Task<string?> GetMarketMakerProtectionState(string? baseCoin = null)
+    public Task<string?> GetMarketMakerProtectionState(string? baseCoin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("baseCoin", baseCoin)
         );
-        var result = await this.SendSignedAsync<string>(MMP_STATE, HttpMethod.Get, query: query);
-        return result;
+        return SendSignedAsync<string>(MMP_STATE, HttpMethod.Get, query: query);
     }
 }

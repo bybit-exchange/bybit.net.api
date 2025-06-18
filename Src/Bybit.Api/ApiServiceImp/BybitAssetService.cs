@@ -40,8 +40,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(COIN_EXCHANGE_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(COIN_EXCHANGE_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string ASSET_DELIVERY_RECORDS = "/v5/asset/exchange/order-record";
@@ -65,8 +64,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(ASSET_DELIVERY_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(ASSET_DELIVERY_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string USDC_SETTLEMENT = "/v5/asset/settlement-record";
@@ -88,8 +86,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(USDC_SETTLEMENT, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(USDC_SETTLEMENT, HttpMethod.Get, query: query);
     }
 
     private const string ASSET_INFO = "/v5/asset/transfer/query-asset-info";
@@ -106,8 +103,7 @@ public class BybitAssetService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(ASSET_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(ASSET_INFO, HttpMethod.Get, query: query);
     }
 
     private const string ALL_ASSETS_INFO = "/v5/asset/transfer/query-account-coins-balance";
@@ -129,8 +125,7 @@ public class BybitAssetService : BybitApiService
             ("memberId", memberId),
             ("withBonus", withBonus?.Value)
         );
-        var result = await this.SendSignedAsync<string>(ALL_ASSETS_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(ALL_ASSETS_INFO, HttpMethod.Get, query: query);
     }
 
     private const string SINGLE_ASSET_INFO = "/v5/asset/transfer/query-account-coin-balance";
@@ -162,8 +157,7 @@ public class BybitAssetService : BybitApiService
             ("withTransferSafeAmount", withTransferSafeAmount?.Value),
             ("withLtvTransferSafeAmount", withLtvTransferSafeAmount?.Value)
         );
-        var result = await this.SendSignedAsync<string>(SINGLE_ASSET_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(SINGLE_ASSET_INFO, HttpMethod.Get, query: query);
     }
 
     private const string TRANSABLE_COIN = "/v5/asset/transfer/query-transfer-coin-list";
@@ -176,8 +170,7 @@ public class BybitAssetService : BybitApiService
     public async Task<string?> GetAllAssetBalance(AccountType accountType, AccountType toAccountType)
     {
         var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
-        var result = await this.SendSignedAsync<string>(TRANSABLE_COIN, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(TRANSABLE_COIN, HttpMethod.Get, query: query);
     }
 
     private const string INTERNAL_TRANSFER = "/v5/asset/transfer/inter-transfer";
@@ -196,8 +189,7 @@ public class BybitAssetService : BybitApiService
         var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "coin", coin }, { "amount", amount } };
         if (string.IsNullOrEmpty(transferId)) transferId = BybitParametersUtils.GenerateTransferId();
         query.Add("transferId", transferId);
-        var result = await this.SendSignedAsync<string>(INTERNAL_TRANSFER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(INTERNAL_TRANSFER, HttpMethod.Post, query: query);
     }
 
     private const string UNIVERSAL_TRANSFER = "/v5/asset/transfer/universal-transfer";
@@ -221,8 +213,7 @@ public class BybitAssetService : BybitApiService
         var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "fromMemberId", fromMemberId }, { "toMemberId", toMemberId }, { "coin", coin }, { "amount", amount } };
         if (string.IsNullOrEmpty(transferId)) transferId = BybitParametersUtils.GenerateTransferId();
         query.Add("transferId", transferId);
-        var result = await this.SendSignedAsync<string>(UNIVERSAL_TRANSFER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UNIVERSAL_TRANSFER, HttpMethod.Post, query: query);
     }
 
     private const string INTERNAL_TRANSFER_RECORDS = "/v5/asset/transfer/query-inter-transfer-list";
@@ -239,7 +230,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>Internal Transfers</returns>
     public async Task<string?> GetInternalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("transferId", transferId),
@@ -250,8 +241,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(INTERNAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INTERNAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string UNIVERSAL_TRANSFER_RECORDS = "/v5/asset/transfer/query-universal-transfer-list";
@@ -271,7 +261,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>Universal Transfers</returns>
     public async Task<string?> GetUniversalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("transferId", transferId),
@@ -282,8 +272,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(UNIVERSAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(UNIVERSAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string SUB_UIDS = "/v5/asset/transfer/query-sub-member-list";
@@ -294,9 +283,8 @@ public class BybitAssetService : BybitApiService
     /// <returns>List Sub uid</returns>
     public async Task<string?> GetAssetSubMembers()
     {
-        var query = new Dictionary<string, object> { };
-        var result = await this.SendSignedAsync<string>(SUB_UIDS, HttpMethod.Get, query: query);
-        return result;
+        var query = new Dictionary<string, object>();
+        return await SendSignedAsync<string>(SUB_UIDS, HttpMethod.Get, query: query);
     }
 
     private const string ALLOW_DEPOSIT_COINS = "/v5/asset/deposit/query-allowed-list";
@@ -311,7 +299,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>Deposited Coin Info</returns>
     public async Task<string?> GetAssetAllowedDepositInfo(string? chain = null, string? coin = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("chain", chain),
@@ -319,8 +307,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(ALLOW_DEPOSIT_COINS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(ALLOW_DEPOSIT_COINS, HttpMethod.Get, query: query);
     }
 
     private const string SET_DEPOSIT_ACCOUNT = "/v5/asset/deposit/deposit-to-account";
@@ -337,8 +324,7 @@ public class BybitAssetService : BybitApiService
     public async Task<string?> SetAssetDepositAccount(AccountType accountType)
     {
         var query = new Dictionary<string, object> { { "accountType", accountType.Value } };
-        var result = await this.SendSignedAsync<string>(SET_DEPOSIT_ACCOUNT, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_DEPOSIT_ACCOUNT, HttpMethod.Post, query: query);
     }
 
     private const string DEPOSIT_RECORDS = "/v5/asset/deposit/deposit-to-account";
@@ -354,7 +340,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>deposit records</returns>
     public async Task<string?> GetAssetDepositRecords(string? coin = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
@@ -363,8 +349,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(DEPOSIT_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(DEPOSIT_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string SUB_DEPOSIT_RECORDS = "/v5/asset/deposit/query-sub-member-record";
@@ -389,8 +374,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(SUB_DEPOSIT_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(SUB_DEPOSIT_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string INTERNAL_DEPOSIT_RECORDS = "/v5/asset/deposit/query-sub-member-record";
@@ -406,7 +390,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>Query deposit records within the Bybit platform. These transactions are not on the blockchain.</returns>
     public async Task<string?> GetAssetInternalDepositRecords(string? coin = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
@@ -415,8 +399,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(INTERNAL_DEPOSIT_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INTERNAL_DEPOSIT_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string MASTER_DEPOSIT_ADDRESS = "/v5/asset/deposit/query-address";
@@ -433,8 +416,7 @@ public class BybitAssetService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("chainType", chainType)
         );
-        var result = await this.SendSignedAsync<string>(MASTER_DEPOSIT_ADDRESS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(MASTER_DEPOSIT_ADDRESS, HttpMethod.Get, query: query);
     }
 
     private const string SUB_DEPOSIT_ADDRESS = "/v5/asset/deposit/query-sub-member-address";
@@ -449,8 +431,7 @@ public class BybitAssetService : BybitApiService
     public async Task<string?> GetAssetSubDepositAddress(string coin, string chainType, string subMemberId)
     {
         var query = new Dictionary<string, object> { { "coin", coin }, { "chainType", chainType }, { "subMemberId", subMemberId } };
-        var result = await this.SendSignedAsync<string>(SUB_DEPOSIT_ADDRESS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(SUB_DEPOSIT_ADDRESS, HttpMethod.Get, query: query);
     }
 
     private const string COIN_INFO = "/v5/asset/coin/query-info";
@@ -461,12 +442,11 @@ public class BybitAssetService : BybitApiService
     /// <returns>Coin Info</returns>
     public async Task<string?> GetAssetCoinInfo(string? coin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(COIN_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(COIN_INFO, HttpMethod.Get, query: query);
     }
 
     private const string WITHDRAW_RECORDS = "/v5/asset/withdraw/query-record";
@@ -484,7 +464,7 @@ public class BybitAssetService : BybitApiService
     /// <returns>Get Withdrawal Records</returns>
     public async Task<string?> GetAssetWithdrawRecords(string? coin = null, string? withdrawID = null, WithdrawType? withdrawType = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
             ("withdrawID", withdrawID),
             ("coin", coin),
@@ -494,8 +474,7 @@ public class BybitAssetService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(WITHDRAW_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(WITHDRAW_RECORDS, HttpMethod.Get, query: query);
     }
 
     private const string WITHDRAWABLE_AMOUNT = "/v5/asset/withdraw/withdrawable-amount";
@@ -509,8 +488,7 @@ public class BybitAssetService : BybitApiService
     public async Task<string?> GetAssetWithdrawableAmount(string coin)
     {
         var query = new Dictionary<string, object> { { "coin", coin } };
-        var result = await this.SendSignedAsync<string>(WITHDRAWABLE_AMOUNT, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(WITHDRAWABLE_AMOUNT, HttpMethod.Get, query: query);
     }
 
     private const string ASSET_WITHDRAW = "/v5/asset/withdraw/create";
@@ -546,8 +524,7 @@ public class BybitAssetService : BybitApiService
             ("accountType", accountType?.Value),
             ("feeType", feeType?.Value)
         );
-        var result = await this.SendSignedAsync<string>(ASSET_WITHDRAW, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(ASSET_WITHDRAW, HttpMethod.Post, query: query);
     }
 
     private const string CANCEL_WITHDRAW = "/v5/asset/withdraw/cancel";
@@ -560,7 +537,6 @@ public class BybitAssetService : BybitApiService
     public async Task<string?> CancelAssetWithdrawal(string id)
     {
         var query = new Dictionary<string, object> { { "id", id } };
-        var result = await this.SendSignedAsync<string>(CANCEL_WITHDRAW, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CANCEL_WITHDRAW, HttpMethod.Post, query: query);
     }
 }

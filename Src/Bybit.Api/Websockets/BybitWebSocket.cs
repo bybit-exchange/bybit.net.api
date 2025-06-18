@@ -34,8 +34,8 @@ public class BybitWebSocket : IDisposable
         this.debugMode = debugMode;
         this.pingInterval = pingInterval;
         this.maxAliveTime = maxAliveTime;
-        this.onMessageReceivedFunctions = new List<Func<string, Task>>();
-        this.onMessageReceivedCancellationTokenRegistrations = new List<CancellationTokenRegistration>();
+        onMessageReceivedFunctions = new List<Func<string, Task>>();
+        onMessageReceivedCancellationTokenRegistrations = new List<CancellationTokenRegistration>();
     }
 
     #region Websocket Public Methods
@@ -48,19 +48,19 @@ public class BybitWebSocket : IDisposable
     /// <exception cref="BybitClientException">Thrown when a necessary parameter is missing or when the WebSocket is in an unexpected state.</exception>
     public async Task ConnectAsync(string[] args, CancellationToken cancellationToken)
     {
-        if (this.handler.State != WebSocketState.Open)
+        if (handler.State != WebSocketState.Open)
         {
             if (debugMode)
             {
                 handler.EnableDebugMode();
             }
-            this.loopCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            loopCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             if (string.IsNullOrEmpty(url))
                 throw new BybitClientException("Please set up a websocket url", -1);
             string wssUrl = !string.IsNullOrEmpty(maxAliveTime) && RequiresAuthentication(url) ? GetWssUrl(maxAliveTime) : url;
             await handler.ConnectAsync(new Uri(wssUrl), cancellationToken);
 
-            _ = Task.Run(() => Ping(this.loopCancellationTokenSource.Token), cancellationToken);
+            _ = Task.Run(() => Ping(loopCancellationTokenSource.Token), cancellationToken);
 
             if (RequiresAuthentication(url))
             {
@@ -69,7 +69,7 @@ public class BybitWebSocket : IDisposable
                 await SendAuth(apiKey, apiSecret);
             }
             await SendSubscription(args);
-            await Task.Factory.StartNew(() => this.ReceiveLoop(this.loopCancellationTokenSource.Token, this.receiveBufferSize), this.loopCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+            await Task.Factory.StartNew(() => ReceiveLoop(loopCancellationTokenSource.Token, receiveBufferSize), loopCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
         }
     }
 
@@ -80,12 +80,12 @@ public class BybitWebSocket : IDisposable
     /// <returns>A task that represents the asynchronous disconnect operation.</returns>
     public async Task DisconnectAsync(CancellationToken cancellationToken)
     {
-        this.loopCancellationTokenSource?.Cancel();
+        loopCancellationTokenSource?.Cancel();
 
-        if (this.handler.State == WebSocketState.Open)
+        if (handler.State == WebSocketState.Open)
         {
-            await this.handler.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
-            await this.handler.CloseAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
+            await handler.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
+            await handler.CloseAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
         }
     }
 
@@ -96,14 +96,14 @@ public class BybitWebSocket : IDisposable
     /// <param name="cancellationToken">Token to signal the callback registration to cancel.</param>
     public void OnMessageReceived(Func<string, Task> onMessageReceived, CancellationToken cancellationToken)
     {
-        this.onMessageReceivedFunctions.Add(onMessageReceived);
+        onMessageReceivedFunctions.Add(onMessageReceived);
 
         if (cancellationToken != CancellationToken.None)
         {
             var reg = cancellationToken.Register(() =>
-                this.onMessageReceivedFunctions.Remove(onMessageReceived));
+                onMessageReceivedFunctions.Remove(onMessageReceived));
 
-            this.onMessageReceivedCancellationTokenRegistrations.Add(reg);
+            onMessageReceivedCancellationTokenRegistrations.Add(reg);
         }
     }
 
@@ -117,7 +117,7 @@ public class BybitWebSocket : IDisposable
     {
         byte[] byteArray = Encoding.ASCII.GetBytes(message);
 
-        await this.handler.SendAsync(new ArraySegment<byte>(byteArray), WebSocketMessageType.Text, true, cancellationToken);
+        await handler.SendAsync(new ArraySegment<byte>(byteArray), WebSocketMessageType.Text, true, cancellationToken);
     }
 
     /// <summary>
@@ -125,13 +125,13 @@ public class BybitWebSocket : IDisposable
     /// </summary>
     public void Dispose()
     {
-        this.DisconnectAsync(CancellationToken.None).Wait();
+        DisconnectAsync(CancellationToken.None).Wait();
 
-        this.handler.Dispose();
+        handler.Dispose();
 
-        this.onMessageReceivedCancellationTokenRegistrations.ForEach(ct => ct.Dispose());
+        onMessageReceivedCancellationTokenRegistrations.ForEach(ct => ct.Dispose());
 
-        if (loopCancellationTokenSource != null) this.loopCancellationTokenSource.Dispose();
+        if (loopCancellationTokenSource != null) loopCancellationTokenSource.Dispose();
     }
     #endregion
 
@@ -154,12 +154,12 @@ public class BybitWebSocket : IDisposable
             string timeUnit = match.Groups[2].Value;
             bool isTimeValid = IsTimeValid(timeUnit, timeValue);
             wssUrl = isTimeValid
-                         ? $"{this.url}?max_alive_time={maxAliveTime}"
-                         : $"{this.url}";
+                         ? $"{url}?max_alive_time={maxAliveTime}"
+                         : $"{url}";
         }
         else
         {
-            wssUrl = $"{this.url}";
+            wssUrl = $"{url}";
         }
         Console.WriteLine(wssUrl);
         return wssUrl;
@@ -232,8 +232,8 @@ public class BybitWebSocket : IDisposable
     {
         while (!token.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromSeconds(this.pingInterval), token);
-            if (this.handler.State == WebSocketState.Open)
+            await Task.Delay(TimeSpan.FromSeconds(pingInterval), token);
+            if (handler.State == WebSocketState.Open)
             {
                 await SendAsync("{\"op\":\"ping\"}", CancellationToken.None);
                 await Console.Out.WriteLineAsync("ping sent");
@@ -255,7 +255,7 @@ public class BybitWebSocket : IDisposable
             while (!cancellationToken.IsCancellationRequested)
             {
                 var buffer = new ArraySegment<byte>(new byte[receiveBufferSize]);
-                receiveResult = await this.handler.ReceiveAsync(buffer, cancellationToken);
+                receiveResult = await handler.ReceiveAsync(buffer, cancellationToken);
 
                 if (receiveResult.MessageType == WebSocketMessageType.Close)
                 {
@@ -263,12 +263,12 @@ public class BybitWebSocket : IDisposable
                 }
 
                 string content = Encoding.UTF8.GetString(buffer.ToArray(), buffer.Offset, buffer.Count);
-                this.onMessageReceivedFunctions.ForEach(omrf => omrf(content));
+                onMessageReceivedFunctions.ForEach(omrf => omrf(content));
             }
         }
         catch (TaskCanceledException)
         {
-            await this.DisconnectAsync(CancellationToken.None);
+            await DisconnectAsync(CancellationToken.None);
         }
     }
     #endregion

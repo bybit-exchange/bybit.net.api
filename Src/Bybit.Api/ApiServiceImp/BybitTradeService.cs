@@ -100,8 +100,7 @@ public class BybitTradeService : BybitApiService
             ("tpOrderType", tpOrderType?.Value),
             ("slOrderType", slOrderType?.Value)
         );
-        var result = await this.SendSignedAsync<string>(PLACE_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(PLACE_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string BATCH_PLACE_ORDER = "/v5/order/create-batch";
@@ -124,8 +123,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_PLACE_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_PLACE_ORDER, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -147,8 +145,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_PLACE_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_PLACE_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string AMEND_ORDER = "/v5/order/amend";
@@ -200,8 +197,7 @@ public class BybitTradeService : BybitApiService
             ("tpLimitPrice", tpLimitPrice),
             ("slLimitPrice", slLimitPrice)
         );
-        var result = await this.SendSignedAsync<string>(AMEND_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(AMEND_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string BATCH_AMEND_ORDER = "/v5/order/amend-batch";
@@ -221,8 +217,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_AMEND_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_AMEND_ORDER, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -241,8 +236,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_AMEND_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_AMEND_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string CANCEL_ORDER = "/v5/order/cancel";
@@ -270,8 +264,7 @@ public class BybitTradeService : BybitApiService
             ("orderLinkId", orderLinkId),
             ("orderFilter", orderFilter)
         );
-        var result = await this.SendSignedAsync<string>(CANCEL_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CANCEL_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string BATCH_CANCEL_ORDER = "/v5/order/cancel-batch";
@@ -293,8 +286,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_CANCEL_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_CANCEL_ORDER, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -315,8 +307,7 @@ public class BybitTradeService : BybitApiService
             { "category", category.Value },
             { "request", request }
         };
-        var result = await this.SendSignedAsync<string>(BATCH_CANCEL_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(BATCH_CANCEL_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string REALTIME_ORDER = "/v5/order/realtime";
@@ -358,8 +349,7 @@ public class BybitTradeService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(REALTIME_ORDER, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(REALTIME_ORDER, HttpMethod.Get, query: query);
     }
 
     private const string CANCEL_ALL_ORDER = "/v5/order/cancel-all";
@@ -392,8 +382,7 @@ public class BybitTradeService : BybitApiService
             ("stopOrderType", stopOrderType?.OrderType),
             ("orderFilter", orderFilter)
         );
-        var result = await this.SendSignedAsync<string>(CANCEL_ALL_ORDER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CANCEL_ALL_ORDER, HttpMethod.Post, query: query);
     }
 
     private const string ORDER_HISTORY = "/v5/order/history";
@@ -439,8 +428,7 @@ public class BybitTradeService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(ORDER_HISTORY, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(ORDER_HISTORY, HttpMethod.Get, query: query);
     }
 
     private const string BORROW_QUOTA = "/v5/order/spot-borrow-check";
@@ -462,8 +450,7 @@ public class BybitTradeService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("side", side?.Value)
         );
-        var result = await this.SendSignedAsync<string>(BORROW_QUOTA, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(BORROW_QUOTA, HttpMethod.Get, query: query);
     }
 
     private const string DISCONNECT_CANCELL_ALL = "/v5/order/disconnected-cancel-all";
@@ -488,8 +475,7 @@ public class BybitTradeService : BybitApiService
             { "timeWindow", timeWindow },
         };
 
-        var result = await this.SendSignedAsync<string>(DISCONNECT_CANCELL_ALL, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(DISCONNECT_CANCELL_ALL, HttpMethod.Post, query: query);
     }
 
     private const string EXECUTION_LIST = "/v5/execution/list";
@@ -528,7 +514,6 @@ public class BybitTradeService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(EXECUTION_LIST, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(EXECUTION_LIST, HttpMethod.Get, query: query);
     }
 }

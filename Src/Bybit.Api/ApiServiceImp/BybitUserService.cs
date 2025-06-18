@@ -59,8 +59,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_ORDER_HISTORY, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_ORDER_HISTORY, HttpMethod.Get, query: query);
     }
 
     private const string PREUPGRADE_TRADE_HISTORY = "/v5/pre-upgrade/execution/list";
@@ -101,8 +100,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_TRADE_HISTORY, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_TRADE_HISTORY, HttpMethod.Get, query: query);
     }
 
     private const string PREUPGRADE_CLOSE_PNL = "/v5/pre-upgrade/position/closed-pnl";
@@ -130,8 +128,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_CLOSE_PNL, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_CLOSE_PNL, HttpMethod.Get, query: query);
     }
 
     private const string PREUPGRADE_TRANSACTION_LOG = "/v5/pre-upgrade/position/closed-pnl";
@@ -162,8 +159,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_TRANSACTION_LOG, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_TRANSACTION_LOG, HttpMethod.Get, query: query);
     }
 
     private const string PREUPGRADE_ASSET_DELIVERY = "/v5/pre-upgrade/asset/delivery-record";
@@ -189,8 +185,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_ASSET_DELIVERY, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_ASSET_DELIVERY, HttpMethod.Get, query: query);
     }
 
     private const string PREUPGRADE_USDC_SETTLEMENT = "/v5/pre-upgrade/asset/settlement-record";
@@ -206,8 +201,7 @@ public class BybitUserService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(PREUPGRADE_USDC_SETTLEMENT, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(PREUPGRADE_USDC_SETTLEMENT, HttpMethod.Get, query: query);
     }
     #endregion
 
@@ -237,8 +231,7 @@ public class BybitUserService : BybitApiService
             ("ips", ips),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(CREATE_SUB_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CREATE_SUB_API_KEY, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -265,8 +258,7 @@ public class BybitUserService : BybitApiService
             ("ips", ips),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(CREATE_SUB_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CREATE_SUB_API_KEY, HttpMethod.Post, query: query);
     }
 
     private const string UPDATE_MASTER_API_KEY = "/v5/user/update-api";
@@ -283,7 +275,7 @@ public class BybitUserService : BybitApiService
     /// <returns>Master API Key</returns>
     public async Task<string?> ModifyUserMasterApiKey(MasterUserPermissions? permissions = null, string? note = null, ReadOnly? readOnly = null, string? ips = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("permissions", permissions),
@@ -291,8 +283,7 @@ public class BybitUserService : BybitApiService
             ("ReadOnly", readOnly?.Value),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(UPDATE_MASTER_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_MASTER_API_KEY, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -308,7 +299,7 @@ public class BybitUserService : BybitApiService
     /// <returns>Master API Key</returns>
     public async Task<string?> ModifyUserMasterApiKey(Dictionary<string, List<string>>? permissions = null, string? note = null, ReadOnly? readOnly = null, string? ips = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("permissions", permissions),
@@ -316,8 +307,7 @@ public class BybitUserService : BybitApiService
             ("ReadOnly", readOnly?.Value),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(UPDATE_MASTER_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_MASTER_API_KEY, HttpMethod.Post, query: query);
     }
 
     private const string UPDATE_SUB_API_KEY = "/v5/user/update-sub-api";
@@ -334,7 +324,7 @@ public class BybitUserService : BybitApiService
     /// <returns>Sub API Key</returns>
     public async Task<string?> ModifyUserSubApiKey(string? apikey = null, SubUserPermissions? permissions = null, string? note = null, ReadOnly? readOnly = null, string? ips = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("apikey", apikey),
@@ -343,8 +333,7 @@ public class BybitUserService : BybitApiService
             ("ReadOnly", readOnly?.Value),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(UPDATE_SUB_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_SUB_API_KEY, HttpMethod.Post, query: query);
     }
 
     /// <summary>
@@ -360,7 +349,7 @@ public class BybitUserService : BybitApiService
     /// <returns>Sub API Key</returns>
     public async Task<string?> ModifyUserSubApiKey(string? apikey = null, Dictionary<string, List<string>>? permissions = null, string? note = null, ReadOnly? readOnly = null, string? ips = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("apikey", apikey),
@@ -369,8 +358,7 @@ public class BybitUserService : BybitApiService
             ("ReadOnly", readOnly?.Value),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(UPDATE_SUB_API_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_SUB_API_KEY, HttpMethod.Post, query: query);
     }
 
     private const string CREATE_SUB_USER = "/v5/user/create-sub-member";
@@ -400,8 +388,7 @@ public class BybitUserService : BybitApiService
             ("isUta", isUta?.Value),
             ("note", note)
         );
-        var result = await this.SendSignedAsync<string>(CREATE_SUB_USER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CREATE_SUB_USER, HttpMethod.Post, query: query);
     }
 
     private const string SUB_UID_LIST = "/v5/user/create-sub-member";
@@ -414,8 +401,7 @@ public class BybitUserService : BybitApiService
     public async Task<string?> GetUserSubUidList()
     {
         var query = new Dictionary<string, object>();
-        var result = await this.SendSignedAsync<string>(SUB_UID_LIST, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(SUB_UID_LIST, HttpMethod.Get, query: query);
     }
 
     private const string FROZEN_SUB_MEMBER = "/v5/user/frozen-sub-member";
@@ -430,8 +416,7 @@ public class BybitUserService : BybitApiService
     public async Task<string?> FrozenUserSubMemeber(int subuid, UserFrozen userFrozen)
     {
         var query = new Dictionary<string, object> { { "subuid", subuid }, { "userFrozen", userFrozen.Value } };
-        var result = await this.SendSignedAsync<string>(FROZEN_SUB_MEMBER, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(FROZEN_SUB_MEMBER, HttpMethod.Post, query: query);
     }
 
     private const string API_kEY_INFO = "/v5/user/query-api";
@@ -443,8 +428,7 @@ public class BybitUserService : BybitApiService
     public async Task<string?> GetUserApiKeyInfo()
     {
         var query = new Dictionary<string, object>();
-        var result = await this.SendSignedAsync<string>(API_kEY_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(API_kEY_INFO, HttpMethod.Get, query: query);
     }
 
     private const string UID_WALLET_TYPE = "/v5/user/query-api";
@@ -468,8 +452,7 @@ public class BybitUserService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("memberIds", memberIds)
         );
-        var result = await this.SendSignedAsync<string>(UID_WALLET_TYPE, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(UID_WALLET_TYPE, HttpMethod.Get, query: query);
     }
 
     private const string DELETE_MASTER_KEY = "/v5/user/delete-api";
@@ -483,8 +466,7 @@ public class BybitUserService : BybitApiService
     public async Task<string?> DeleteUserMasterKey()
     {
         var query = new Dictionary<string, object>();
-        var result = await this.SendSignedAsync<string>(DELETE_MASTER_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(DELETE_MASTER_KEY, HttpMethod.Post, query: query);
     }
 
     private const string DELETE_SUB_KEY = "/v5/user/delete-sub-api";
@@ -503,8 +485,7 @@ public class BybitUserService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("apikey", apikey)
         );
-        var result = await this.SendSignedAsync<string>(DELETE_SUB_KEY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(DELETE_SUB_KEY, HttpMethod.Post, query: query);
     }
 
     private const string AFFILIATE_USER_INFO = "/v5/user/aff-customer-info";
@@ -519,8 +500,7 @@ public class BybitUserService : BybitApiService
     public async Task<string?> GetAffiliateUserInfo(string uid)
     {
         var query = new Dictionary<string, object> { { "uid", uid } };
-        var result = await this.SendSignedAsync<string>(AFFILIATE_USER_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(AFFILIATE_USER_INFO, HttpMethod.Get, query: query);
     }
     #endregion
 }

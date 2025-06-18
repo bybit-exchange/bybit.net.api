@@ -29,7 +29,6 @@ public class BybitBrokerService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(BROKER_EARNING_DATA, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(BROKER_EARNING_DATA, HttpMethod.Get, query: query);
     }
 }

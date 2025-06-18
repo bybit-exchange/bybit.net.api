@@ -153,7 +153,7 @@ public abstract class BybitService
 
         LogHttpRequestHeader(request);
 
-        HttpResponseMessage response = await this.httpClient.SendAsync(request);
+        HttpResponseMessage response = await httpClient.SendAsync(request);
 
         LogHttpResponseHeader(response);
 
@@ -256,7 +256,7 @@ public abstract class BybitService
     /// <returns>Http Request message</returns>
     private HttpRequestMessage BuildHttpRequest(string requestUri, HttpMethod httpMethod, string? signature, string? content)
     {
-        var baseUrl = this.url;
+        var baseUrl = url;
         var request = new HttpRequestMessage(httpMethod, baseUrl + requestUri);
         if (signature != null && signature.Length > 0)
         {
@@ -266,9 +266,9 @@ public abstract class BybitService
         request.Headers.Add("X-BAPI-SIGN-TYPE", BybitConstants.DEFAULT_SIGN_TYPE);
         request.Headers.Add("X-BAPI-TIMESTAMP", CurrentTimeStamp);
         request.Headers.Add("X-BAPI-RECV-WINDOW", recvWindow);
-        if (this.apiKey is not null)
+        if (apiKey is not null)
         {
-            request.Headers.Add("X-BAPI-API-KEY", this.apiKey);
+            request.Headers.Add("X-BAPI-API-KEY", apiKey);
         }
         if (content is not null)
         {

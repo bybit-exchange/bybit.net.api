@@ -10,13 +10,13 @@ public class BybitServerException : BybitHttpException
     public BybitServerException(string message)
         : base(message)
     {
-        this.Message = message;
+        Message = message;
     }
 
     public BybitServerException(string message, Exception innerException)
         : base(message, innerException)
     {
-        this.Message = message;
+        Message = message;
     }
 
     public new string Message { get; protected set; }

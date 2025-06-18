@@ -32,8 +32,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendPublicAsync<string>(CLASSICAL_SPOT_MARGIN_COIN, HttpMethod.Get, query: query);
-        return result;
+        return await SendPublicAsync<string>(CLASSICAL_SPOT_MARGIN_COIN, HttpMethod.Get, query: query);
     }
 
     private const string CLASSICAL_BORROWABLE_COIN = "/v5/spot-cross-margin-trade/borrow-token";
@@ -49,8 +48,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendPublicAsync<string>(CLASSICAL_BORROWABLE_COIN, HttpMethod.Get, query: query);
-        return result;
+        return await SendPublicAsync<string>(CLASSICAL_BORROWABLE_COIN, HttpMethod.Get, query: query);
     }
 
     private const string CLASSICAL_INTEREST_QUOTA = "/v5/spot-cross-margin-trade/borrow-token";
@@ -66,8 +64,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(CLASSICAL_INTEREST_QUOTA, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_INTEREST_QUOTA, HttpMethod.Get, query: query);
     }
 
     private const string CLASSICAL_LOAN_INFO = "/v5/spot-cross-margin-trade/account";
@@ -78,8 +75,7 @@ public class BybitSpotMarginService : BybitApiService
     public async Task<string?> GetSpotMarginLoanInfo()
     {
         var query = new Dictionary<string, object>();
-        var result = await this.SendSignedAsync<string>(CLASSICAL_LOAN_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_LOAN_INFO, HttpMethod.Get, query: query);
     }
 
     private const string CLASSICAL_MARGIN_BORROW = "/v5/spot-cross-margin-trade/loan";
@@ -92,8 +88,7 @@ public class BybitSpotMarginService : BybitApiService
     public async Task<string?> BorrowSpotMarginLoan(string coin, string qty)
     {
         var query = new Dictionary<string, object> { { "coin", coin }, { "qty", qty } };
-        var result = await this.SendSignedAsync<string>(CLASSICAL_MARGIN_BORROW, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_MARGIN_BORROW, HttpMethod.Post, query: query);
     }
 
     private const string CLASSICAL_MARGIN_REPAY = "/v5/spot-cross-margin-trade/repay";
@@ -110,8 +105,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("completeRepayment", completeRepayment?.Value)
         );
-        var result = await this.SendSignedAsync<string>(CLASSICAL_MARGIN_REPAY, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_MARGIN_REPAY, HttpMethod.Post, query: query);
     }
 
     private const string CLASSICAL_TOOGLE_MARGIN = "/v5/spot-cross-margin-trade/switch";
@@ -123,8 +117,7 @@ public class BybitSpotMarginService : BybitApiService
     public async Task<string?> SwitchSpotMarginMode(SwitchStatus switchStatus)
     {
         var query = new Dictionary<string, object> { { "swicth", switchStatus.Value } };
-        var result = await this.SendSignedAsync<string>(CLASSICAL_TOOGLE_MARGIN, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_TOOGLE_MARGIN, HttpMethod.Post, query: query);
     }
 
     private const string CLASSICAL_PEPAYMENTS_ORDERS = "/v5/spot-cross-margin-trade/repay-history";
@@ -146,8 +139,7 @@ public class BybitSpotMarginService : BybitApiService
             ("endTime", endTime),
             ("limit", limit)
         );
-        var result = await this.SendSignedAsync<string>(CLASSICAL_PEPAYMENTS_ORDERS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_PEPAYMENTS_ORDERS, HttpMethod.Get, query: query);
     }
 
     private const string CLASSICAL_BORROW_ORDERS = "/v5/spot-cross-margin-trade/orders";
@@ -171,8 +163,7 @@ public class BybitSpotMarginService : BybitApiService
             ("endTime", endTime),
             ("limit", limit)
         );
-        var result = await this.SendSignedAsync<string>(CLASSICAL_BORROW_ORDERS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(CLASSICAL_BORROW_ORDERS, HttpMethod.Get, query: query);
     }
     #endregion
 
@@ -193,8 +184,7 @@ public class BybitSpotMarginService : BybitApiService
             ("vipLevel", vipLevel?.Value),
             ("currency", currency)
         );
-        var result = await this.SendPublicAsync<string>(isUta ? UTA_SPOT_MARGIN_DATA : CLASSICAL_SPOT_MARGIN_DATA, HttpMethod.Get, query: query);
-        return result;
+        return await SendPublicAsync<string>(isUta ? UTA_SPOT_MARGIN_DATA : CLASSICAL_SPOT_MARGIN_DATA, HttpMethod.Get, query: query);
     }
 
     private const string TOOGLE_MARGIN_TRADE = "/v5/spot-margin-trade/switch-mode";
@@ -208,8 +198,7 @@ public class BybitSpotMarginService : BybitApiService
     public async Task<string?> GetSpotMarginVipData(SpotMarginMode spotMarginMode)
     {
         var query = new Dictionary<string, object> { { "spotMarginMode", spotMarginMode.Value } };
-        var result = await this.SendSignedAsync<string>(TOOGLE_MARGIN_TRADE, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(TOOGLE_MARGIN_TRADE, HttpMethod.Get, query: query);
     }
 
     private const string SET_SPOT_MARGIN_LEVERAGE = "/v5/spot-margin-trade/set-leverage";
@@ -223,8 +212,7 @@ public class BybitSpotMarginService : BybitApiService
     public async Task<string?> SetSpotMarginLeverage(string leverage)
     {
         var query = new Dictionary<string, object> { { "leverage", leverage } };
-        var result = await this.SendSignedAsync<string>(SET_SPOT_MARGIN_LEVERAGE, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(SET_SPOT_MARGIN_LEVERAGE, HttpMethod.Post, query: query);
     }
 
     private const string SPOT_MARGIN_STATE = "/v5/spot-margin-trade/state";
@@ -235,9 +223,8 @@ public class BybitSpotMarginService : BybitApiService
     /// <returns>Get Status And Leverage</returns>
     public async Task<string?> GetSpotMarginState()
     {
-        var query = new Dictionary<string, object> { };
-        var result = await this.SendSignedAsync<string>(SPOT_MARGIN_STATE, HttpMethod.Post, query: query);
-        return result;
+        var query = new Dictionary<string, object>();
+        return await SendSignedAsync<string>(SPOT_MARGIN_STATE, HttpMethod.Post, query: query);
     }
     #endregion
 
@@ -255,8 +242,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("ltCoin", ltCoin)
         );
-        var result = await this.SendSignedAsync<string>(LEVERQGE_TOKEN_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(LEVERQGE_TOKEN_INFO, HttpMethod.Get, query: query);
     }
 
     private const string LEVERQGE_TOKEN_MARKET = "/v5/spot-lever-token/reference";
@@ -272,8 +258,7 @@ public class BybitSpotMarginService : BybitApiService
         BybitParametersUtils.AddOptionalParameters(query,
             ("ltCoin", ltCoin)
         );
-        var result = await this.SendSignedAsync<string>(LEVERQGE_TOKEN_MARKET, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(LEVERQGE_TOKEN_MARKET, HttpMethod.Get, query: query);
     }
 
     private const string LEVERQGE_TOKEN_PURCHASE = "/v5/spot-lever-token/purchase";
@@ -293,8 +278,7 @@ public class BybitSpotMarginService : BybitApiService
             ("ltAmount", ltAmount),
             ("serialNo", serialNo)
         );
-        var result = await this.SendSignedAsync<string>(LEVERQGE_TOKEN_PURCHASE, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(LEVERQGE_TOKEN_PURCHASE, HttpMethod.Post, query: query);
     }
 
     private const string LEVERQGE_TOKEN_REDEEM = "/v5/spot-lever-token/redeem";
@@ -314,8 +298,7 @@ public class BybitSpotMarginService : BybitApiService
             ("quantity", quantity),
             ("serialNo", serialNo)
         );
-        var result = await this.SendSignedAsync<string>(LEVERQGE_TOKEN_REDEEM, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(LEVERQGE_TOKEN_REDEEM, HttpMethod.Post, query: query);
     }
 
     private const string LEVERQGE_TOKEN_RECORDS = "/v5/spot-lever-token/order-record";
@@ -345,8 +328,7 @@ public class BybitSpotMarginService : BybitApiService
             ("limit", limit),
             ("cursor", cursor)
         );
-        var result = await this.SendSignedAsync<string>(LEVERQGE_TOKEN_RECORDS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(LEVERQGE_TOKEN_RECORDS, HttpMethod.Get, query: query);
     }
     #endregion
 }

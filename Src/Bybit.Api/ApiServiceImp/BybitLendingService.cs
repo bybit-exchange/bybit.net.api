@@ -27,13 +27,12 @@ public class BybitLendingService : BybitApiService
     /// <returns> Get Product Info </returns>
     public async Task<string?> GetInsLoanInfo(string? productId = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("productId", productId)
         );
-        var result = await this.SendSignedAsync<string>(INS_PRODUCT_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INS_PRODUCT_INFO, HttpMethod.Get, query: query);
     }
 
     private const string INS_MARGIN_COIN = "/v5/ins-loan/ensure-tokens-convert";
@@ -46,13 +45,12 @@ public class BybitLendingService : BybitApiService
     /// <returns>Get Margin Coin Info</returns>
     public async Task<string?> GetInsMarginCoinInfo(string? productId = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("productId", productId)
         );
-        var result = await this.SendSignedAsync<string>(INS_MARGIN_COIN, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INS_MARGIN_COIN, HttpMethod.Get, query: query);
     }
 
     private const string INS_LOAN_ORDERS = "/v5/ins-loan/ensure-tokens-convert";
@@ -67,7 +65,7 @@ public class BybitLendingService : BybitApiService
     /// <returns>Get Loan Orders</returns>
     public async Task<string?> GetInsLoanOrders(string? orderId = null, long? startTime = null, long? endTime = null, int? limit = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("orderId", orderId),
@@ -75,8 +73,7 @@ public class BybitLendingService : BybitApiService
             ("endTime", endTime),
             ("limit", limit)
         );
-        var result = await this.SendSignedAsync<string>(INS_LOAN_ORDERS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INS_LOAN_ORDERS, HttpMethod.Get, query: query);
     }
 
     private const string INS_LOAN_REPAY_ORDERS = "/v5/ins-loan/ensure-tokens-convert";
@@ -90,15 +87,14 @@ public class BybitLendingService : BybitApiService
     /// <returns>Get Repay Orders</returns>
     public async Task<string?> GetInsLoanRepayOrders(long? startTime = null, long? endTime = null, int? limit = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("startTime", startTime),
             ("endTime", endTime),
             ("limit", limit)
         );
-        var result = await this.SendSignedAsync<string>(INS_LOAN_REPAY_ORDERS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(INS_LOAN_REPAY_ORDERS, HttpMethod.Get, query: query);
     }
 
     private const string INS_LOAN_TO_VALUE = "/v5/ins-loan/ltv-convert";
@@ -108,9 +104,8 @@ public class BybitLendingService : BybitApiService
     /// <returns> Loan To Value</returns>
     public async Task<string?> GetInsLoanToValue()
     {
-        var query = new Dictionary<string, object> { };
-        var result = await this.SendSignedAsync<string>(INS_LOAN_TO_VALUE, HttpMethod.Get, query: query);
-        return result;
+        var query = new Dictionary<string, object>();
+        return await SendSignedAsync<string>(INS_LOAN_TO_VALUE, HttpMethod.Get, query: query);
     }
 
     private const string UPDATE_UID_TO_INS_LOAN = "/v5/ins-loan/association-uid";
@@ -121,8 +116,7 @@ public class BybitLendingService : BybitApiService
     public async Task<string?> UpdateInsLoanUID(string uid, OperateType operate)
     {
         var query = new Dictionary<string, object> { {"uid", uid}, {"operate", operate.Value} };
-        var result = await this.SendSignedAsync<string>(UPDATE_UID_TO_INS_LOAN, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(UPDATE_UID_TO_INS_LOAN, HttpMethod.Post, query: query);
     }
     #endregion
 
@@ -136,13 +130,12 @@ public class BybitLendingService : BybitApiService
     /// <returns> Get Lending Coin Info </returns>
     public async Task<string?> GetC2CLendingCoinInfo(string? coin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(C2C_LENDING_INFO, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_LENDING_INFO, HttpMethod.Get, query: query);
     }
 
     private const string C2C_DEPOSIT_FUND = "/v5/lending/purchase";
@@ -157,15 +150,14 @@ public class BybitLendingService : BybitApiService
     /// <returns>Deposit Funds</returns>
     public async Task<string?> C2CDepositFund(string? coin = null, string? quantity = null, string? serialNo = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
             ("quantity", quantity),
             ("serialNo", serialNo)
         );
-        var result = await this.SendSignedAsync<string>(C2C_DEPOSIT_FUND, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_DEPOSIT_FUND, HttpMethod.Post, query: query);
     }
 
     private const string C2C_REDEEM_FUND = "/v5/lending/redeem";
@@ -179,15 +171,14 @@ public class BybitLendingService : BybitApiService
     /// <returns>Redeem Funds</returns>
     public async Task<string?> C2CRedeemFund(string? coin = null, string? quantity = null, string? serialNo = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
             ("quantity", quantity),
             ("serialNo", serialNo)
         );
-        var result = await this.SendSignedAsync<string>(C2C_REDEEM_FUND, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_REDEEM_FUND, HttpMethod.Post, query: query);
     }
 
     private const string C2C_CANCEL_REDEEM = " /v5/lending/redeem-cancel";
@@ -201,15 +192,14 @@ public class BybitLendingService : BybitApiService
     /// <returns>Redeem Funds</returns>
     public async Task<string?> C2CCancelRedeem(string? coin = null, string? orderId = null, string? serialNo = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
             ("orderId", orderId),
             ("serialNo", serialNo)
         );
-        var result = await this.SendSignedAsync<string>(C2C_CANCEL_REDEEM, HttpMethod.Post, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_CANCEL_REDEEM, HttpMethod.Post, query: query);
     }
 
     private const string C2C_LENDING_ORDERS = "/v5/ins-loan/ensure-tokens-convert";
@@ -225,7 +215,7 @@ public class BybitLendingService : BybitApiService
     /// <returns>Get Loan Orders</returns>
     public async Task<string?> GetC2CLendingOrders(string? coin = null, string? orderId = null, long? startTime = null, long? endTime = null, int? limit = null, LendingOrderType? orderType = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin),
@@ -235,8 +225,7 @@ public class BybitLendingService : BybitApiService
             ("limit", limit),
             ("orderType", orderType?.Value)
         );
-        var result = await this.SendSignedAsync<string>(C2C_LENDING_ORDERS, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_LENDING_ORDERS, HttpMethod.Get, query: query);
     }
 
     private const string C2C_LENDING_ACCOUNT = "/v5/lending/account";
@@ -247,13 +236,12 @@ public class BybitLendingService : BybitApiService
     /// <returns>Get Lending Account Info</returns>
     public async Task<string?> GetC2CLendingOrders(string? coin = null)
     {
-        var query = new Dictionary<string, object> { };
+        var query = new Dictionary<string, object>();
 
         BybitParametersUtils.AddOptionalParameters(query,
             ("coin", coin)
         );
-        var result = await this.SendSignedAsync<string>(C2C_LENDING_ACCOUNT, HttpMethod.Get, query: query);
-        return result;
+        return await SendSignedAsync<string>(C2C_LENDING_ACCOUNT, HttpMethod.Get, query: query);
     }
     #endregion
 }
