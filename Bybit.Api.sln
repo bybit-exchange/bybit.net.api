@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bybit.net.api", "Src\Common\bybit.net.api.csproj", "{C50663E5-88F3-4EC5-B5D2-819B16F82FCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bybit.Api", "Src\Bybit.Api\Bybit.Api.csproj", "{C50663E5-88F3-4EC5-B5D2-819B16F82FCB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "bybit.api.test", "Tests\bybit.api.test\bybit.api.test.csproj", "{7D412DD0-E573-40C2-80F6-42393ACD0357}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bybit.Api.Test", "Tests\Bybit.Api.Test\Bybit.Api.Test.csproj", "{7D412DD0-E573-40C2-80F6-42393ACD0357}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution", "solution", "{284B0C48-6525-F3F5-CD5D-7841BD44174A}"
 	ProjectSection(SolutionItems) = preProject
