@@ -40,7 +40,6 @@ Dive into a plethora of functionalities:
       - Set TP/SL Mode was deprecated because now tpsl is based on order level
       - Set Risk Limit was deprecated because it will adapt automaticaaly by your hold position
     </PackageReleaseNotes>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
   </PropertyGroup>
