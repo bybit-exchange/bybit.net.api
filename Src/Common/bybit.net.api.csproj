@@ -45,10 +45,16 @@ Dive into a plethora of functionalities:
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\images\logo.png">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <None Remove="logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="logo.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  
+  <ItemGroup>
     <None Include="..\..\README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
