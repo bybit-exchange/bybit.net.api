@@ -10,35 +10,41 @@ using Newtonsoft.Json;
 
 namespace Bybit.Api.Websockets;
 
-public class BybitWebSocket : IDisposable
+public class BybitWebSocket : IAsyncDisposable
 {
-    private readonly IBybitWebSocketHandler handler;
-    private readonly List<Func<string, Task>> onMessageReceivedFunctions;
-    private readonly List<CancellationTokenRegistration> onMessageReceivedCancellationTokenRegistrations;
-    private CancellationTokenSource? loopCancellationTokenSource;
-    private readonly string url;
-    private readonly int pingInterval;
-    private readonly int receiveBufferSize;
-    private readonly string? apiKey;
-    private readonly string? apiSecret;
-    private readonly string? maxAliveTime; // Valid only for private channel
-    private readonly bool debugMode;
+    private readonly IBybitWebSocketHandler _handler;
+    private readonly List<Func<string, Task>> _onMessageReceivedFunctions;
+    private readonly List<CancellationTokenRegistration> _onMessageReceivedCancellationTokenRegistrations;
+    private CancellationTokenSource? _loopCancellationTokenSource;
+    private readonly string _url;
+    private readonly int _pingInterval;
+    private readonly int _receiveBufferSize;
+    private readonly string? _apiKey;
+    private readonly string? _apiSecret;
+    private readonly string? _maxAliveTime; // Valid only for private channel
+    private readonly bool _debugMode;
 
-    public BybitWebSocket(IBybitWebSocketHandler handler, string url, int pingInterval = 20, int receiveBufferSize = 8192, string? apiKey = null, string? apiSecret = null, bool debugMode = false, string? maxAliveTime = null)
+    protected BybitWebSocket(IBybitWebSocketHandler handler,
+        string url,
+        int pingInterval = 20,
+        int receiveBufferSize = 8192,
+        string? apiKey = null,
+        string? apiSecret = null,
+        bool debugMode = false,
+        string? maxAliveTime = null)
     {
-        this.handler = handler;
-        this.url = url;
-        this.receiveBufferSize = receiveBufferSize;
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.debugMode = debugMode;
-        this.pingInterval = pingInterval;
-        this.maxAliveTime = maxAliveTime;
-        onMessageReceivedFunctions = new List<Func<string, Task>>();
-        onMessageReceivedCancellationTokenRegistrations = new List<CancellationTokenRegistration>();
+        _handler = handler;
+        _url = url;
+        _receiveBufferSize = receiveBufferSize;
+        _apiKey = apiKey;
+        _apiSecret = apiSecret;
+        _debugMode = debugMode;
+        _pingInterval = pingInterval;
+        _maxAliveTime = maxAliveTime;
+        _onMessageReceivedFunctions = [];
+        _onMessageReceivedCancellationTokenRegistrations = [];
     }
 
-    #region Websocket Public Methods
     // <summary>
     /// Establishes a connection to the WebSocket. If required, sends an authentication and subscription request.
     /// </summary>
@@ -48,28 +54,36 @@ public class BybitWebSocket : IDisposable
     /// <exception cref="BybitClientException">Thrown when a necessary parameter is missing or when the WebSocket is in an unexpected state.</exception>
     public async Task ConnectAsync(string[] args, CancellationToken cancellationToken)
     {
-        if (handler.State != WebSocketState.Open)
+        if (_handler.State != WebSocketState.Open)
         {
-            if (debugMode)
+            if (_debugMode)
             {
-                handler.EnableDebugMode();
+                _handler.EnableDebugMode();
             }
-            loopCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            if (string.IsNullOrEmpty(url))
+
+            _loopCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+            if (string.IsNullOrEmpty(_url))
+            {
                 throw new BybitClientException("Please set up a websocket url", -1);
-            string wssUrl = !string.IsNullOrEmpty(maxAliveTime) && RequiresAuthentication(url) ? GetWssUrl(maxAliveTime) : url;
-            await handler.ConnectAsync(new Uri(wssUrl), cancellationToken);
-
-            _ = Task.Run(() => Ping(loopCancellationTokenSource.Token), cancellationToken);
-
-            if (RequiresAuthentication(url))
-            {
-                if (string.IsNullOrEmpty(apiKey) || string.IsNullOrEmpty(apiSecret))
-                    throw new BybitClientException("Please set up your api key and api secret for private websocket channel", -1);
-                await SendAuth(apiKey, apiSecret);
             }
-            await SendSubscription(args);
-            await Task.Factory.StartNew(() => ReceiveLoop(loopCancellationTokenSource.Token, receiveBufferSize), loopCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+            var wssUrl = !string.IsNullOrEmpty(_maxAliveTime) && RequiresAuthentication(_url) ? GetWssUrl(_maxAliveTime) : _url;
+            await _handler.ConnectAsync(new Uri(wssUrl), cancellationToken)
+                .ConfigureAwait(false);
+
+            _ = Task.Run(() => Ping(_loopCancellationTokenSource.Token), cancellationToken);
+
+            if (RequiresAuthentication(_url))
+            {
+                if (string.IsNullOrEmpty(_apiKey) || string.IsNullOrEmpty(_apiSecret))
+                    throw new BybitClientException("Please set up your api key and api secret for private websocket channel", -1);
+                await SendAuth(_apiKey, _apiSecret)
+                    .ConfigureAwait(false);
+            }
+            await SendSubscription(args)
+                .ConfigureAwait(false);
+            await Task.Factory.StartNew(() => ReceiveLoop(_loopCancellationTokenSource.Token, _receiveBufferSize), _loopCancellationTokenSource.Token, TaskCreationOptions.LongRunning, TaskScheduler.Default).ConfigureAwait(false);
         }
     }
 
@@ -80,12 +94,12 @@ public class BybitWebSocket : IDisposable
     /// <returns>A task that represents the asynchronous disconnect operation.</returns>
     public async Task DisconnectAsync(CancellationToken cancellationToken)
     {
-        loopCancellationTokenSource?.Cancel();
+        _loopCancellationTokenSource?.Cancel();
 
-        if (handler.State == WebSocketState.Open)
+        if (_handler.State == WebSocketState.Open)
         {
-            await handler.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
-            await handler.CloseAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
+            await _handler.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
+            await _handler.CloseAsync(WebSocketCloseStatus.NormalClosure, cancellationToken);
         }
     }
 
@@ -96,14 +110,14 @@ public class BybitWebSocket : IDisposable
     /// <param name="cancellationToken">Token to signal the callback registration to cancel.</param>
     public void OnMessageReceived(Func<string, Task> onMessageReceived, CancellationToken cancellationToken)
     {
-        onMessageReceivedFunctions.Add(onMessageReceived);
+        _onMessageReceivedFunctions.Add(onMessageReceived);
 
         if (cancellationToken != CancellationToken.None)
         {
             var reg = cancellationToken.Register(() =>
-                onMessageReceivedFunctions.Remove(onMessageReceived));
+                _onMessageReceivedFunctions.Remove(onMessageReceived));
 
-            onMessageReceivedCancellationTokenRegistrations.Add(reg);
+            _onMessageReceivedCancellationTokenRegistrations.Add(reg);
         }
     }
 
@@ -115,27 +129,11 @@ public class BybitWebSocket : IDisposable
     /// <returns>A task that represents the asynchronous send operation.</returns>
     public async Task SendAsync(string message, CancellationToken cancellationToken)
     {
-        byte[] byteArray = Encoding.ASCII.GetBytes(message);
+        var byteArray = Encoding.ASCII.GetBytes(message);
 
-        await handler.SendAsync(new ArraySegment<byte>(byteArray), WebSocketMessageType.Text, true, cancellationToken);
+        await _handler.SendAsync(new ArraySegment<byte>(byteArray), WebSocketMessageType.Text, true, cancellationToken);
     }
 
-    /// <summary>
-    /// Releases all resources used by the current instance of the WebSocket and ensures a graceful disconnection.
-    /// </summary>
-    public void Dispose()
-    {
-        DisconnectAsync(CancellationToken.None).Wait();
-
-        handler.Dispose();
-
-        onMessageReceivedCancellationTokenRegistrations.ForEach(ct => ct.Dispose());
-
-        if (loopCancellationTokenSource != null) loopCancellationTokenSource.Dispose();
-    }
-    #endregion
-
-    #region Private Methods
     /// <summary>
     /// CUSTOMISE PRIVATE CONNECTION ALIVE TIME. For private channel, you can customise alive duration by adding a param max_alive_time, the lowest value is 30s (30 seconds),
     /// the highest value is 600s (10 minutes). You can also pass 1m, 2m etc when you try to configure by minute level. e.g., 
@@ -145,21 +143,21 @@ public class BybitWebSocket : IDisposable
     private string GetWssUrl(string expression)
     {
         Regex pattern = new("(\\d+)([sm])");
-        Match match = pattern.Match(expression);
+        var match = pattern.Match(expression);
         string wssUrl;
 
         if (match.Success)
         {
-            int timeValue = int.Parse(match.Groups[1].Value);
-            string timeUnit = match.Groups[2].Value;
-            bool isTimeValid = IsTimeValid(timeUnit, timeValue);
+            var timeValue = int.Parse(match.Groups[1].Value);
+            var timeUnit = match.Groups[2].Value;
+            var isTimeValid = IsTimeValid(timeUnit, timeValue);
             wssUrl = isTimeValid
-                         ? $"{url}?max_alive_time={maxAliveTime}"
-                         : $"{url}";
+                         ? $"{_url}?max_alive_time={_maxAliveTime}"
+                         : $"{_url}";
         }
         else
         {
-            wssUrl = $"{url}";
+            wssUrl = $"{_url}";
         }
         Console.WriteLine(wssUrl);
         return wssUrl;
@@ -196,17 +194,19 @@ public class BybitWebSocket : IDisposable
     /// <returns>A task that represents the asynchronous authentication operation.</returns>
     private async Task SendAuth(string key, string secret)
     {
-        long expires = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 10000;
-        string _val = $"GET/realtime{expires}";
+        var expires = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() + 10000;
+        var val = $"GET/realtime{expires}";
 
         var hmacsha256 = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
-        var hash = hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(_val));
-        string signature = BitConverter.ToString(hash).Replace("-", "").ToLower();
+        var hash = hmacsha256.ComputeHash(Encoding.UTF8.GetBytes(val));
+        var signature = BitConverter.ToString(hash).Replace("-", "").ToLower();
 
         var authMessage = new { req_id = BybitParametersUtils.GenerateTransferId(), op = "auth", args = new object[] { key, expires, signature } };
-        string authMessageJson = JsonConvert.SerializeObject(authMessage);
-        await Console.Out.WriteLineAsync(authMessageJson);
-        await SendAsync(authMessageJson, CancellationToken.None);
+        var authMessageJson = JsonConvert.SerializeObject(authMessage);
+        await Console.Out.WriteLineAsync(authMessageJson)
+            .ConfigureAwait(false);
+        await SendAsync(authMessageJson, CancellationToken.None)
+            .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -218,9 +218,12 @@ public class BybitWebSocket : IDisposable
     {
         BybitParametersUtils.EnsureNoDuplicates(args);
         var subMessage = new { req_id = Guid.NewGuid().ToString(), op = "subscribe", args = args };
-        string subMessageJson = JsonConvert.SerializeObject(subMessage);
-        await Console.Out.WriteLineAsync($"send subscription {subMessageJson}");
-        await SendAsync(subMessageJson, CancellationToken.None);
+        var subMessageJson = JsonConvert.SerializeObject(subMessage);
+
+        await Console.Out.WriteLineAsync($"send subscription {subMessageJson}")
+            .ConfigureAwait(false);
+        await SendAsync(subMessageJson, CancellationToken.None)
+            .ConfigureAwait(false);
     }
 
     /// <summary>
@@ -232,8 +235,8 @@ public class BybitWebSocket : IDisposable
     {
         while (!token.IsCancellationRequested)
         {
-            await Task.Delay(TimeSpan.FromSeconds(pingInterval), token);
-            if (handler.State == WebSocketState.Open)
+            await Task.Delay(TimeSpan.FromSeconds(_pingInterval), token);
+            if (_handler.State == WebSocketState.Open)
             {
                 await SendAsync("{\"op\":\"ping\"}", CancellationToken.None);
                 await Console.Out.WriteLineAsync("ping sent");
@@ -255,21 +258,51 @@ public class BybitWebSocket : IDisposable
             while (!cancellationToken.IsCancellationRequested)
             {
                 var buffer = new ArraySegment<byte>(new byte[receiveBufferSize]);
-                receiveResult = await handler.ReceiveAsync(buffer, cancellationToken);
+                receiveResult = await _handler.ReceiveAsync(buffer, cancellationToken);
 
                 if (receiveResult.MessageType == WebSocketMessageType.Close)
                 {
                     break;
                 }
 
-                string content = Encoding.UTF8.GetString(buffer.ToArray(), buffer.Offset, buffer.Count);
-                onMessageReceivedFunctions.ForEach(omrf => omrf(content));
+                var content = Encoding.UTF8.GetString(buffer.ToArray(), buffer.Offset, buffer.Count);
+                _onMessageReceivedFunctions.ForEach(omrf => omrf(content));
             }
         }
         catch (TaskCanceledException)
         {
-            await DisconnectAsync(CancellationToken.None);
+            await DisconnectAsync(CancellationToken.None)
+                .ConfigureAwait(false);
         }
     }
-    #endregion
+
+    public async ValueTask DisposeAsync()
+    {
+        await DisconnectAsync(CancellationToken.None)
+            .ConfigureAwait(false);
+        await CastAndDispose(_handler)
+            .ConfigureAwait(false);
+
+        if (_loopCancellationTokenSource != null)
+        {
+            await CastAndDispose(_loopCancellationTokenSource)
+                .ConfigureAwait(false);
+        }
+
+        return;
+
+        async static ValueTask CastAndDispose(IDisposable resource)
+        {
+            if (resource is IAsyncDisposable resourceAsyncDisposable)
+            {
+                await resourceAsyncDisposable
+                    .DisposeAsync()
+                    .ConfigureAwait(false);
+            }
+            else
+            {
+                resource.Dispose();
+            }
+        }
+    }
 }

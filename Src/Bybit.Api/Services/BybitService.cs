@@ -99,6 +99,37 @@ public abstract class BybitService
 
         return await SendAsync<T>(requestUri, httpMethod, signature, content ?? null);
     }
+
+    /// <summary>
+    /// Sends a request with automatic retry logic for transient errors
+    /// </summary>
+    protected async Task<T?> SendAsyncWithRetry<T>(string requestUri, HttpMethod httpMethod, string? signature = null, string? content = null, int maxRetries = 3)
+    {
+        int retryCount = 0;
+        
+        while (true)
+        {
+            try
+            {
+                return await SendAsync<T>(requestUri, httpMethod, signature, content);
+            }
+            catch (BybitHttpException ex) when (
+                (ex.StatusCode >= 500 || ex.StatusCode == 429) && // Server error or rate limiting
+                retryCount < maxRetries)
+            {
+                retryCount++;
+                // Exponential backoff with jitter
+                var delay = (Math.Pow(2, retryCount) * 1000) + new Random().Next(200);
+                
+                if (debugMode)
+                {
+                    Console.WriteLine($"Request failed with {ex.StatusCode}, retrying in {delay}ms (attempt {retryCount}/{maxRetries})");
+                }
+                
+                await Task.Delay((int)delay);
+            }
+        }
+    }
     #endregion
 
     #region Private Helpers Method
@@ -159,6 +190,13 @@ public abstract class BybitService
 
         using HttpContent responseContent = response.Content;
         string contentString = await responseContent.ReadAsStringAsync();
+        
+        // Log detailed response in debug mode
+        if (debugMode)
+        {
+            LogDetailedHttpResponse(response, contentString);
+        }
+        
         if (response.IsSuccessStatusCode)
         {
             if (typeof(T) == typeof(string))
@@ -185,33 +223,74 @@ public abstract class BybitService
         }
         else
         {
-            BybitHttpException? httpException;
             int statusCode = (int)response.StatusCode;
-            if (!string.IsNullOrWhiteSpace(contentString))
+            BybitHttpException httpException;
+            
+            // Enhanced handling for empty responses
+            if (string.IsNullOrWhiteSpace(contentString))
             {
-                try
-                {
-                    httpException = JsonConvert.DeserializeObject<BybitClientException>(contentString);
-                }
-                catch (JsonReaderException ex)
-                {
-                    httpException = new BybitClientException(contentString, -1, ex);
-                }
+                httpException = new BybitClientException(
+                    $"Unsuccessful response with no content. Status: {statusCode} {response.ReasonPhrase}", 
+                    statusCode);
             }
             else
             {
-                httpException = statusCode >= 400 && statusCode < 500 ? new BybitClientException("Unsuccessful response with no content", -1) : new BybitClientException(contentString);
+                // Try to parse error response as JSON
+                try
+                {
+                    httpException = JsonConvert.DeserializeObject<BybitClientException>(contentString);
+                    
+                    // If deserialization returns null but we have content, create exception with content
+                    if (httpException == null)
+                    {
+                        httpException = new BybitClientException(contentString, statusCode);
+                    }
+                }
+                catch (JsonReaderException ex)
+                {
+                    // If we can't parse as JSON, include the raw content in the exception
+                    httpException = new BybitClientException(
+                        $"Failed to parse error response: {contentString}", 
+                        statusCode, 
+                        ex);
+                }
             }
-
-            if (httpException != null) // Check for null before dereferencing
-            {
-                httpException.StatusCode = statusCode;
-                httpException.Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value);
-
-                throw httpException;
-            }
+            
+            // Add metadata to exception
+            httpException.StatusCode = statusCode;
+            httpException.Headers = response.Headers.ToDictionary(a => a.Key, a => a.Value);
+            
+            throw httpException;
         }
         return default;
+    }
+
+    /// <summary>
+    /// Logs detailed HTTP response information for debugging
+    /// </summary>
+    private void LogDetailedHttpResponse(HttpResponseMessage response, string contentString)
+    {
+        if (!debugMode) return;
+        
+        Console.WriteLine("--------------------Detailed HTTP Response:-----------------------");
+        Console.WriteLine($"Status Code: {(int)response.StatusCode} {response.StatusCode}");
+        Console.WriteLine($"Is Success Status Code: {response.IsSuccessStatusCode}");
+        Console.WriteLine($"Reason Phrase: {response.ReasonPhrase}");
+        Console.WriteLine($"Version: {response.Version}");
+        Console.WriteLine("Headers:");
+        foreach (var header in response.Headers)
+        {
+            Console.WriteLine($"  {header.Key}: {string.Join(", ", header.Value)}");
+        }
+        Console.WriteLine("Content Headers:");
+        foreach (var header in response.Content.Headers)
+        {
+            Console.WriteLine($"  {header.Key}: {string.Join(", ", header.Value)}");
+        }
+        Console.WriteLine($"Content Length: {response.Content.Headers.ContentLength}");
+        Console.WriteLine($"Content Type: {response.Content.Headers.ContentType}");
+        Console.WriteLine("Content Body:");
+        Console.WriteLine(contentString);
     }
 
     /// <summary>

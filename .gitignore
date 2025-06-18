@@ -211,3 +211,6 @@ FakesAssemblies/
 
 # JetBrains Rider
 *.sln.iml
+
+# Secret configuration files
+**/secrets.json

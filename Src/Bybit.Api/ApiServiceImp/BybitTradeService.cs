@@ -1,4 +1,5 @@
-﻿using Bybit.Api.Models;
+﻿using Bybit.Api.Interfaces;
+using Bybit.Api.Models;
 using Bybit.Api.Models.Position;
 using Bybit.Api.Models.Trade;
 using Bybit.Api.Services;
@@ -6,7 +7,7 @@ using Bybit.Api.Utils;
 
 namespace Bybit.Api.ApiServiceImp;
 
-public class BybitTradeService : BybitApiService
+public class BybitTradeService : BybitApiService, ITradeService
 {
     public BybitTradeService(string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
         : this(httpClient: new HttpClient(), apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
