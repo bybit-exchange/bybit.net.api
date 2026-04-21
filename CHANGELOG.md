@@ -38,6 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `BybitMarketDataService.GetAdlAlert(...)` for `GET /v5/market/adlAlert`.
 - Added `BybitMarketDataService.GetIndexPriceComponents(...)` for `GET /v5/market/index-price-components`.
 - Added `BybitMarketDataService.GetFeeGroupInfo(...)` for `GET /v5/market/fee-group-info`.
+- Added `BybitNewCryptoLoanService.GetMaxLoanAmount(...)` for `POST /v5/crypto-loan-common/max-loan`.
+- Added `BybitNewCryptoLoanService.RenewFixedLoan(...)` for `POST /v5/crypto-loan-fixed/renew`.
+- Added `BybitNewCryptoLoanService.GetRenewOrderInfoFixed(...)` for `GET /v5/crypto-loan-fixed/renew-info`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
@@ -46,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added typed earn response models for shared earn, fixed-term earn, and BYUSDT token earn endpoints.
 - Added typed lending response models for institutional lending and legacy C2C lending endpoints.
 - Added typed market response models for recent trades, open interest, insurance pool, delivery price, index price components, ADL alerts, and fee group info.
+- Added typed new crypto loan request and response models for active common, flexible, and fixed crypto loan endpoints.
 - Added account endpoint tests covering new routes and request payload mapping.
 - Added asset endpoint tests covering route selection, payload mapping, and public access behavior.
 - Added broker endpoint tests covering current broker routes and request payload mapping.
@@ -75,6 +79,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitMarketDataService.GetMarketOrderbook(...)` to require the documented `symbol` parameter.
 - Updated market kline methods to support omitted `category` where the V5 docs define a default.
 - Updated `BybitMarketDataService.GetMarketHistoricalVolatility(...)` to support `quoteCoin` and the documented integer `period` request shape.
+- Updated `BybitNewCryptoLoanService` with public constructors so public new crypto loan endpoints can be used without API credentials.
+- Updated `BybitNewCryptoLoanService.BorrowFlexibleLoan(...)` to send documented `currency` and `amount` collateral fields.
+- Updated `BybitNewCryptoLoanService.CreateBorrowOrderFixed(...)` to support the documented `repayType` parameter.
+- Updated `BybitNewCryptoLoanService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
