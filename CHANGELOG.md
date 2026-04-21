@@ -33,15 +33,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added easy earn methods for `GET /v5/earn/apr-history`, `GET /v5/earn/hourly-yield`, `GET /v5/earn/yield`, and `POST /v5/earn/position/modify`.
 - Added fixed-term earn methods for `GET /v5/earn/fixed-term/product`, `POST /v5/earn/fixed-term/place-order`, `GET /v5/earn/fixed-term/order`, `GET /v5/earn/fixed-term/position`, `POST /v5/earn/fixed-term/redeem`, and `POST /v5/earn/fixed-term/position/auto-invest`.
 - Added token earn methods for `GET /v5/earn/token/product`, `POST /v5/earn/token/place-order`, `GET /v5/earn/token/order`, `GET /v5/earn/token/position`, `GET /v5/earn/token/yield`, `GET /v5/earn/token/hourly-yield`, and `GET /v5/earn/token/history-apr`.
+- Added `BybitLendingService.RepayInsLoan(...)` for `POST /v5/ins-loan/repay-loan`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
 - Added typed asset response models for transfer, funding, portfolio margin, withdrawal address, small balance convert, fiat convert, delivery, settlement, exchange record, and allowed deposit endpoints.
 - Added typed broker response and request models for earnings, account info, subaccount deposits, rate limits, and voucher endpoints.
 - Added typed earn response models for shared earn, fixed-term earn, and BYUSDT token earn endpoints.
+- Added typed lending response models for institutional lending and legacy C2C lending endpoints.
 - Added account endpoint tests covering new routes and request payload mapping.
 - Added asset endpoint tests covering route selection, payload mapping, and public access behavior.
 - Added broker endpoint tests covering current broker routes and request payload mapping.
 - Added earn endpoint tests covering shared earn, fixed-term, and token endpoint routing and payload mapping.
+- Added lending endpoint tests covering current OTC routes, public access behavior, and corrected legacy lending routes.
 
 ### Changed
 - Updated `BybitAccountService.SetAccountMarginMode(...)` to send the correct request field name `setMarginMode`.
@@ -55,6 +58,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitEarnService.GetProductInfo(...)`, `PlaceEarnOrder(...)`, `GetEarnOrderHistory(...)`, and `GetStakedPosition(...)` to return typed models instead of raw JSON strings.
 - Updated `BybitEarnService.GetEarnOrderHistory(...)` to support the documented `productId`, `startTime`, `endTime`, `limit`, and `cursor` parameters.
 - Updated `BybitEarnService` with public constructors so public earn endpoints can be used without API credentials.
+- Updated `BybitLendingService.GetInsLoanOrders(...)` and `GetInsLoanRepayOrders(...)` to use the current OTC routes instead of the incorrect `ensure-tokens-convert` placeholder route.
+- Updated `BybitLendingService.GetInsLoanInfo(...)` and `GetInsMarginCoinInfo(...)` to use the public endpoint flow and return typed models.
+- Updated `BybitLendingService` legacy C2C methods to use typed models and corrected routes for `redeem-cancel` and `history-order`.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
