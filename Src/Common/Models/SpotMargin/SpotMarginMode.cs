@@ -7,8 +7,8 @@
             Value = value;
         }
 
-        public static SpotMarginMode ON => new(0);
-        public static SpotMarginMode OFF => new(1);
+        public static SpotMarginMode ON => new(1);
+        public static SpotMarginMode OFF => new(0);
 
         public int Value { get; private set; }
 

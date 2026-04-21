@@ -204,10 +204,23 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="spotMarginMode"></param>
         /// <returns>Toggle Margin Trade</returns>
-        public async Task<string?> GetSpotMarginVipData(SpotMarginMode spotMarginMode)
+        public async Task<string?> SwitchSpotMarginMode(SpotMarginMode spotMarginMode)
         {
             var query = new Dictionary<string, object> { { "spotMarginMode", spotMarginMode.Value } };
-            var result = await this.SendSignedAsync<string>(TOOGLE_MARGIN_TRADE, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<string>(TOOGLE_MARGIN_TRADE, HttpMethod.Post, query: query);
+            return result;
+        }
+
+        /// <summary>
+        /// Turn on / off spot margin trade
+        /// Covers: Margin trade(Unified Account)
+        /// Your account needs to activate spot margin first; i.e., you must have finished the quiz on web / app.
+        /// </summary>
+        /// <param name="spotMarginMode"></param>
+        /// <returns>Toggle Margin Trade</returns>
+        public async Task<string?> GetSpotMarginVipData(SpotMarginMode spotMarginMode)
+        {
+            var result = await SwitchSpotMarginMode(spotMarginMode);
             return result;
         }
 
@@ -218,10 +231,14 @@ namespace bybit.net.api.ApiServiceImp
         /// Your account needs to activate spot margin first; i.e., you must have finished the quiz on web / app.
         /// </summary>
         /// <param name="leverage"></param>
+        /// <param name="currency"></param>
         /// <returns>Set Leverage</returns>
-        public async Task<string?> SetSpotMarginLeverage(string leverage)
+        public async Task<string?> SetSpotMarginLeverage(string leverage, string? currency = null)
         {
             var query = new Dictionary<string, object> { { "leverage", leverage } };
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
             var result = await this.SendSignedAsync<string>(SET_SPOT_MARGIN_LEVERAGE, HttpMethod.Post, query: query);
             return result;
         }
@@ -235,7 +252,94 @@ namespace bybit.net.api.ApiServiceImp
         public async Task<string?> GetSpotMarginState()
         {
             var query = new Dictionary<string, object> { };
-            var result = await this.SendSignedAsync<string>(SPOT_MARGIN_STATE, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<string>(SPOT_MARGIN_STATE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_CURRENCY_DATA = "/v5/spot-margin-trade/currency-data";
+
+        /// <summary>
+        /// Get currency data
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Currency data</returns>
+        public async Task<string?> GetSpotMarginCurrencyData(string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_CURRENCY_DATA, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_COIN_STATE = "/v5/spot-margin-trade/coinstate";
+
+        /// <summary>
+        /// Get coin state
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Coin state</returns>
+        public async Task<string?> GetSpotMarginCoinState(string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_COIN_STATE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_POSITION_TIERS = "/v5/spot-margin-trade/position-tiers";
+
+        /// <summary>
+        /// Get Position Tiers
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Position tiers</returns>
+        public async Task<string?> GetSpotMarginPositionTiers(string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_POSITION_TIERS, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_MAX_BORROWABLE = "/v5/spot-margin-trade/max-borrowable";
+
+        /// <summary>
+        /// Get Max Borrowable Amount
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Max borrowable amount</returns>
+        public async Task<string?> GetSpotMarginMaxBorrowable(string currency)
+        {
+            var query = new Dictionary<string, object> { { "currency", currency } };
+            var result = await this.SendSignedAsync<string>(GET_MAX_BORROWABLE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_REPAYMENT_AVAILABLE_AMOUNT = "/v5/spot-margin-trade/repayment-available-amount";
+
+        /// <summary>
+        /// Get Available Amount to Repay
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Repayment available amount</returns>
+        public async Task<string?> GetSpotMarginRepaymentAvailableAmount(string currency)
+        {
+            var query = new Dictionary<string, object> { { "currency", currency } };
+            var result = await this.SendSignedAsync<string>(GET_REPAYMENT_AVAILABLE_AMOUNT, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -283,6 +387,192 @@ namespace bybit.net.api.ApiServiceImp
             );
 
             var result = await this.SendSignedAsync<string>(GET_HISTORICAL_INTEREST_RATE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string SET_AUTO_REPAY_MODE = "/v5/spot-margin-trade/set-auto-repay-mode";
+
+        /// <summary>
+        /// Set Auto Repay Mode
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="autoRepayMode">1: On, 0: Off</param>
+        /// <param name="currency"></param>
+        /// <returns>Auto repay mode</returns>
+        public async Task<string?> SetAutoRepayMode(string autoRepayMode, string? currency = null)
+        {
+            var query = new Dictionary<string, object> { { "autoRepayMode", autoRepayMode } };
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            var result = await this.SendSignedAsync<string>(SET_AUTO_REPAY_MODE, HttpMethod.Post, query: query);
+            return result;
+        }
+
+        private const string GET_AUTO_REPAY_MODE = "/v5/spot-margin-trade/get-auto-repay-mode";
+
+        /// <summary>
+        /// Get Auto Repay Mode
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Auto repay mode</returns>
+        public async Task<string?> GetAutoRepayMode(string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_AUTO_REPAY_MODE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_FIXED_BORROW_ORDER_QUOTE = "/v5/spot-margin-trade/fixedborrow-order-quote";
+
+        /// <summary>
+        /// Get Fixed-Rate Borrow Order Quote
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="orderCurrency"></param>
+        /// <param name="term"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="sort"></param>
+        /// <param name="limit"></param>
+        /// <returns>Fixed-rate borrow order quote</returns>
+        public async Task<string?> GetFixedBorrowOrderQuote(string orderCurrency, string? term = null, string? orderBy = null, int? sort = null, int? limit = null)
+        {
+            var query = new Dictionary<string, object> { { "orderCurrency", orderCurrency } };
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("term", term),
+                ("orderBy", orderBy),
+                ("sort", sort),
+                ("limit", limit)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_FIXED_BORROW_ORDER_QUOTE, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string FIXED_BORROW = "/v5/spot-margin-trade/fixedborrow";
+
+        /// <summary>
+        /// Fixed-Rate Borrow
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="orderCurrency"></param>
+        /// <param name="orderAmount"></param>
+        /// <param name="annualRate"></param>
+        /// <param name="term"></param>
+        /// <param name="repayType"></param>
+        /// <returns>Fixed-rate borrow</returns>
+        public async Task<string?> FixedBorrow(string orderCurrency, string orderAmount, string annualRate, string term, string? repayType = null)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "orderCurrency", orderCurrency },
+                { "orderAmount", orderAmount },
+                { "annualRate", annualRate },
+                { "term", term }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("repayType", repayType)
+            );
+
+            var result = await this.SendSignedAsync<string>(FIXED_BORROW, HttpMethod.Post, query: query);
+            return result;
+        }
+
+        private const string FIXED_BORROW_RENEW = "/v5/spot-margin-trade/fixedborrow-renew";
+
+        /// <summary>
+        /// Renew Fixed-Rate Borrow
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="loanId"></param>
+        /// <param name="qty"></param>
+        /// <returns>Renew fixed-rate borrow</returns>
+        public async Task<string?> RenewFixedBorrow(string loanId, string? qty = null)
+        {
+            var query = new Dictionary<string, object> { { "loanId", loanId } };
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("qty", qty)
+            );
+
+            var result = await this.SendSignedAsync<string>(FIXED_BORROW_RENEW, HttpMethod.Post, query: query);
+            return result;
+        }
+
+        private const string GET_FIXED_BORROW_ORDER_INFO = "/v5/spot-margin-trade/fixedborrow-order-info";
+
+        /// <summary>
+        /// Get Fixed-Rate Borrow Order Info
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="orderCurrency"></param>
+        /// <param name="state"></param>
+        /// <param name="term"></param>
+        /// <param name="limit"></param>
+        /// <param name="cursor"></param>
+        /// <returns>Fixed-rate borrow order info</returns>
+        public async Task<string?> GetFixedBorrowOrderInfo(string? orderId = null, string? orderCurrency = null, string? state = null, string? term = null, string? limit = null, string? cursor = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("orderId", orderId),
+                ("orderCurrency", orderCurrency),
+                ("state", state),
+                ("term", term),
+                ("limit", limit),
+                ("cursor", cursor)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_FIXED_BORROW_ORDER_INFO, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_FIXED_BORROW_CONTRACT_INFO = "/v5/spot-margin-trade/fixedborrow-contract-info";
+
+        /// <summary>
+        /// Get Fixed-Rate Borrow Contract Info
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <param name="orderCurrency"></param>
+        /// <param name="term"></param>
+        /// <param name="limit"></param>
+        /// <param name="cursor"></param>
+        /// <returns>Fixed-rate borrow contract info</returns>
+        public async Task<string?> GetFixedBorrowContractInfo(string? orderId = null, string? orderCurrency = null, string? term = null, string? limit = null, string? cursor = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("orderId", orderId),
+                ("orderCurrency", orderCurrency),
+                ("term", term),
+                ("limit", limit),
+                ("cursor", cursor)
+            );
+
+            var result = await this.SendSignedAsync<string>(GET_FIXED_BORROW_CONTRACT_INFO, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string GET_LIABILITY = "/v5/spot-margin-trade/liability";
+
+        /// <summary>
+        /// Get Liability Info
+        /// Covers: Margin trade(Unified Account)
+        /// </summary>
+        /// <param name="currency"></param>
+        /// <returns>Liability info</returns>
+        public async Task<string?> GetSpotMarginLiability(string currency)
+        {
+            var query = new Dictionary<string, object> { { "currency", currency } };
+            var result = await this.SendSignedAsync<string>(GET_LIABILITY, HttpMethod.Get, query: query);
             return result;
         }
 

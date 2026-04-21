@@ -44,6 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `BybitP2PService.ReviewSellerCancelOrderApply(...)` for `POST /v5/p2p/order/buyer/examine/sellerCancelOrderApply`.
 - Added `BybitP2PService.UploadChatFile(...)` for `POST /v5/p2p/oss/upload_file`.
 - Added `BybitRFQService.AcceptOtherQuote(...)` for `POST /v5/rfq/accept-other-quote`.
+- Added Spot Margin UTA methods for currency data, coin state, position tiers, max borrowable amount, repayment available amount, auto repay mode, fixed-rate borrow, fixed-rate renew, fixed-rate order/contract info, and liability endpoints.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
@@ -98,6 +99,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitPositionService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 - Updated `BybitRateLimitService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 - Updated RFQ quote request legs to support the documented `price` field.
+- Updated Spot Margin UTA switch-mode to use `POST`, corrected `SpotMarginMode` values, changed status lookup to `GET`, and added optional `currency` support to set leverage.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
