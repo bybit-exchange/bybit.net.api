@@ -22,11 +22,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `BybitAssetService.GetWithdrawalAddressList(...)` for `GET /v5/asset/withdraw/query-address`.
 - Added small balance convert methods for `GET /v5/asset/covert/small-balance-list`, `POST /v5/asset/covert/get-quote`, `POST /v5/asset/covert/small-balance-execute`, and `GET /v5/asset/covert/small-balance-history`.
 - Added fiat convert methods for `GET /v5/fiat/balance-query`, `GET /v5/fiat/query-coin-list`, `POST /v5/fiat/quote-apply`, `POST /v5/fiat/trade-execute`, `GET /v5/fiat/trade-query`, `GET /v5/fiat/query-trade-history`, and `GET /v5/fiat/reference-price`.
+- Added `BybitBrokerService.GetBrokerAccountInfo()` for `GET /v5/broker/account-info`.
+- Added `BybitBrokerService.GetBrokerSubMemberDepositRecords(...)` for `GET /v5/broker/asset/query-sub-member-deposit-record`.
+- Added `BybitBrokerService.GetBrokerAllRateLimits(...)` for `GET /v5/broker/apilimit/query-all`.
+- Added `BybitBrokerService.GetBrokerRateLimitCap()` for `GET /v5/broker/apilimit/query-cap`.
+- Added `BybitBrokerService.SetBrokerRateLimit(...)` for `POST /v5/broker/apilimit/set`.
+- Added `BybitBrokerService.GetBrokerVoucherSpec(...)` for `POST /v5/broker/award/info`.
+- Added `BybitBrokerService.IssueBrokerVoucher(...)` for `POST /v5/broker/award/distribute-award`.
+- Added `BybitBrokerService.GetIssuedBrokerVoucher(...)` for `POST /v5/broker/award/distribution-record`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
 - Added typed asset response models for transfer, funding, portfolio margin, withdrawal address, small balance convert, fiat convert, delivery, settlement, exchange record, and allowed deposit endpoints.
+- Added typed broker response and request models for earnings, account info, subaccount deposits, rate limits, and voucher endpoints.
 - Added account endpoint tests covering new routes and request payload mapping.
 - Added asset endpoint tests covering route selection, payload mapping, and public access behavior.
+- Added broker endpoint tests covering current broker routes and request payload mapping.
 
 ### Changed
 - Updated `BybitAccountService.SetAccountMarginMode(...)` to send the correct request field name `setMarginMode`.
@@ -36,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitAssetService.GetInternalTransferRecords(...)` and `GetUniversalTransferRecords(...)` to send `status` instead of `transferStatus`.
 - Updated `BybitAssetService.GetAssetAllowedDepositInfo(...)` to use the public endpoint flow instead of signed authentication.
 - Updated `BybitAssetService.GetDeliveryRecord(...)`, `GetCoinExchangeRecords(...)`, and `GetAssetUsdcSettlement(...)` to return typed response models.
+- Updated `BybitBrokerService.GetBrokerEarning(...)` to use `GET /v5/broker/earnings-info` with `begin`, `end`, and `uid` instead of the obsolete `earning-record` route and `startTime`/`endTime` fields.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
