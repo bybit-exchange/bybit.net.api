@@ -43,6 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `BybitNewCryptoLoanService.GetRenewOrderInfoFixed(...)` for `GET /v5/crypto-loan-fixed/renew-info`.
 - Added `BybitP2PService.ReviewSellerCancelOrderApply(...)` for `POST /v5/p2p/order/buyer/examine/sellerCancelOrderApply`.
 - Added `BybitP2PService.UploadChatFile(...)` for `POST /v5/p2p/oss/upload_file`.
+- Added `BybitRFQService.AcceptOtherQuote(...)` for `POST /v5/rfq/accept-other-quote`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
@@ -96,6 +97,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitPositionService.GetMovePositionHistory(...)` and `GetClosedOptionsPositions(...)` timestamp parameters to use 64-bit values.
 - Updated `BybitPositionService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 - Updated `BybitRateLimitService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
+- Updated RFQ quote request legs to support the documented `price` field.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.

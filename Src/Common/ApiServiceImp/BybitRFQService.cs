@@ -139,6 +139,26 @@ namespace bybit.net.api.ApiServiceImp
             return result;
         }
 
+        private const string ACCEPT_OTHER_QUOTE = "/v5/rfq/accept-other-quote";
+
+        /// <summary>
+        /// Accept non-LP Quote — POST /v5/rfq/accept-other-quote
+        /// </summary>
+        public async Task<string?> AcceptOtherQuote(string rfqId)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "rfqId", rfqId }
+            };
+
+            var result = await this.SendSignedAsync<string>(
+                ACCEPT_OTHER_QUOTE,
+                HttpMethod.Post,
+                query: body);
+
+            return result;
+        }
+
         private const string EXECUTE_QUOTE = "/v5/rfq/execute-quote";
 
         /// <summary>
