@@ -95,6 +95,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitPositionService.SetPositionAutoAddMargin(...)` to make `positionIdx` optional.
 - Updated `BybitPositionService.GetMovePositionHistory(...)` and `GetClosedOptionsPositions(...)` timestamp parameters to use 64-bit values.
 - Updated `BybitPositionService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
+- Updated `BybitRateLimitService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.

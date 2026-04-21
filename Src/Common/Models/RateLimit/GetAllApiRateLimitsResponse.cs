@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace bybit.net.api.Models.RateLimit
 {
+    public class GetApiRateLimitResponse
+    {
+        public List<GetApiRateLimitItem>? list { get; set; }
+    }
+
     public class GetAllApiRateLimitsResponse
     {
         public string? nextPageCursor { get; set; }
