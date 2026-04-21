@@ -1,4 +1,6 @@
 ﻿using bybit.net.api.Services;
+using bybit.net.api.Models;
+using bybit.net.api.Models.P2P;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +33,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="page">Page number, default 1</param>
         /// <param name="size">Page size, default 10</param>
         /// <returns></returns>
-        public async Task<string?> GetAds(string tokenId, string currencyId, string side, string? page = null, string? size = null)
+        public async Task<P2PResponse<GetAdsResult>?> GetAds(string tokenId, string currencyId, string side, string? page = null, string? size = null)
         {
             var body = new Dictionary<string, object>
             {
@@ -45,7 +47,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("size", size)
             );
 
-            var result = await this.SendPublicAsync<string>(GET_P2P_ADS, HttpMethod.Post, query: body);
+            var result = await this.SendPublicAsync<P2PResponse<GetAdsResult>>(GET_P2P_ADS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -75,7 +77,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="paymentPeriod">Payment period in minutes</param>
         /// <param name="itemType">"ORIGIN" or "BULK"</param>
         /// <returns></returns>
-        public async Task<string?> PostAd(
+        public async Task<P2PResponse<PostAdResult>?> PostAd(
             string tokenId,
             string currencyId,
             string side,
@@ -109,7 +111,7 @@ namespace bybit.net.api.ApiServiceImp
                 { "itemType", itemType }
             };
 
-            var result = await this.SendSignedAsync<string>(POST_P2P_AD, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<PostAdResult>>(POST_P2P_AD, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -121,14 +123,14 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="itemId">Advertisement ID</param>
         /// <returns></returns>
-        public async Task<string?> RemoveAd(string itemId)
+        public async Task<P2PResponse<object>?> RemoveAd(string itemId)
         {
             var body = new Dictionary<string, object>
             {
                 { "itemId", itemId }
             };
 
-            var result = await this.SendSignedAsync<string>(REMOVE_P2P_AD, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<object>>(REMOVE_P2P_AD, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -156,7 +158,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="quantity">Token quantity</param>
         /// <param name="paymentPeriod">Payment period in minutes</param>
         /// <returns></returns>
-        public async Task<string?> UpdateOrRelistAd(
+        public async Task<P2PResponse<object>?> UpdateOrRelistAd(
             string id,
             string priceType,
             string premium,
@@ -186,7 +188,7 @@ namespace bybit.net.api.ApiServiceImp
                 { "paymentPeriod", paymentPeriod }
             };
 
-            var result = await this.SendSignedAsync<string>(UPDATE_RELIST_P2P_AD, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<object>>(UPDATE_RELIST_P2P_AD, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -205,7 +207,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="size">default 10</param>
         /// <param name="currencyId">e.g., USD</param>
         /// <returns></returns>
-        public async Task<string?> GetMyAds(
+        public async Task<P2PResponse<GetMyAdsResult>?> GetMyAds(
             string? itemId = null,
             string? status = null,
             string? side = null,
@@ -226,7 +228,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("currencyId", currencyId)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_MY_P2P_ADS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetMyAdsResult>>(GET_MY_P2P_ADS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -239,14 +241,14 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="itemId">Advertisement ID</param>
         /// <returns></returns>
-        public async Task<string?> GetMyAdDetails(string itemId)
+        public async Task<P2PResponse<MyAdItem>?> GetMyAdDetails(string itemId)
         {
             var body = new Dictionary<string, object>
             {
                 { "itemId", itemId }
             };
 
-            var result = await this.SendSignedAsync<string>(GET_MY_AD_DETAILS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<MyAdItem>>(GET_MY_AD_DETAILS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -262,16 +264,16 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="beginTime">Begin time</param>
         /// <param name="endTime">End time</param>
         /// <param name="tokenId">Token id</param>
-        /// <param name="side">Sides filter, e.g., [0] or [1,0]</param>
+        /// <param name="side">Side filter. 0 buy; 1 sell</param>
         /// <returns></returns>
-        public async Task<string?> GetAllOrders(
+        public async Task<P2PResponse<GetAllOrdersResult>?> GetAllOrders(
             int page,
             int size,
             int? status = null,
             string? beginTime = null,
             string? endTime = null,
             string? tokenId = null,
-            IEnumerable<int>? side = null)
+            int? side = null)
         {
             var body = new Dictionary<string, object>
             {
@@ -284,10 +286,10 @@ namespace bybit.net.api.ApiServiceImp
                 ("beginTime", beginTime),
                 ("endTime", endTime),
                 ("tokenId", tokenId),
-                ("side", side?.ToArray())
+                ("side", side)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_P2P_ALL_ORDERS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetAllOrdersResult>>(GET_P2P_ALL_ORDERS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -299,14 +301,14 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="orderId">Order ID</param>
         /// <returns></returns>
-        public async Task<string?> GetOrderDetail(string orderId)
+        public async Task<P2PResponse<GetOrderDetailResult>?> GetOrderDetail(string orderId)
         {
             var body = new Dictionary<string, object>
             {
                 { "orderId", orderId }
             };
 
-            var result = await this.SendSignedAsync<string>(GET_P2P_ORDER_DETAIL, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetOrderDetailResult>>(GET_P2P_ORDER_DETAIL, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -322,16 +324,16 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="beginTime">Begin time</param>
         /// <param name="endTime">End time</param>
         /// <param name="tokenId">Token id</param>
-        /// <param name="side">Sides filter, e.g., [0] or [0,1]</param>
+        /// <param name="side">Side filter. 0 buy; 1 sell</param>
         /// <returns></returns>
-        public async Task<string?> GetPendingOrders(
+        public async Task<P2PResponse<GetAllOrdersResult>?> GetPendingOrders(
             int page,
             int size,
             int? status = null,
             string? beginTime = null,
             string? endTime = null,
             string? tokenId = null,
-            IEnumerable<int>? side = null)
+            int? side = null)
         {
             var body = new Dictionary<string, object>
             {
@@ -344,10 +346,10 @@ namespace bybit.net.api.ApiServiceImp
                 ("beginTime", beginTime),
                 ("endTime", endTime),
                 ("tokenId", tokenId),
-                ("side", side?.ToArray())
+                ("side", side)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_P2P_PENDING_ORDERS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetAllOrdersResult>>(GET_P2P_PENDING_ORDERS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -362,7 +364,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="paymentType">Payment method type</param>
         /// <param name="paymentId">Payment method ID</param>
         /// <returns></returns>
-        public async Task<string?> MarkOrderAsPaid(string orderId, string paymentType, string paymentId)
+        public async Task<P2PResponse<object>?> MarkOrderAsPaid(string orderId, string paymentType, string paymentId)
         {
             var body = new Dictionary<string, object>
             {
@@ -371,7 +373,7 @@ namespace bybit.net.api.ApiServiceImp
                 { "paymentId", paymentId }
             };
 
-            var result = await this.SendSignedAsync<string>(MARK_P2P_ORDER_AS_PAID, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<object>>(MARK_P2P_ORDER_AS_PAID, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -384,14 +386,49 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="orderId">Order ID</param>
         /// <returns></returns>
-        public async Task<string?> ReleaseAssets(string orderId)
+        public async Task<P2PResponse<object>?> ReleaseAssets(string orderId)
         {
             var body = new Dictionary<string, object>
             {
                 { "orderId", orderId }
             };
 
-            var result = await this.SendSignedAsync<string>(RELEASE_P2P_ORDER_ASSETS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<object>>(RELEASE_P2P_ORDER_ASSETS, HttpMethod.Post, query: body);
+            return result;
+        }
+
+        private const string REVIEW_SELLER_CANCEL_ORDER_APPLY = "/v5/p2p/order/buyer/examine/sellerCancelOrderApply";
+
+        /// <summary>
+        /// Review Seller Cancel Order Apply
+        /// Approve or reject a seller cancel request as the buyer.
+        /// </summary>
+        /// <param name="orderId">Order ID</param>
+        /// <param name="examineResult">PASS or REJECT</param>
+        /// <param name="rejectReason">Reject reason. Required when examineResult is REJECT</param>
+        /// <param name="rejectProofs">Reject proof image URLs or identifiers, comma-separated. Required when examineResult is REJECT</param>
+        /// <param name="rejectRemark">Reject remark</param>
+        /// <returns></returns>
+        public async Task<GeneralResponse<object>?> ReviewSellerCancelOrderApply(
+            string orderId,
+            string examineResult,
+            string? rejectReason = null,
+            string? rejectProofs = null,
+            string? rejectRemark = null)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "orderId", orderId },
+                { "examineResult", examineResult }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(body,
+                ("rejectReason", rejectReason),
+                ("rejectProofs", rejectProofs),
+                ("rejectRemark", rejectRemark)
+            );
+
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(REVIEW_SELLER_CANCEL_ORDER_APPLY, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -408,7 +445,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="msgUuid">Client message UUID</param>
         /// <param name="fileName">Optional filename for pic/pdf/video</param>
         /// <returns></returns>
-        public async Task<string?> SendChatMessage(
+        public async Task<P2PResponse<object>?> SendChatMessage(
             string message,
             string contentType,
             string orderId,
@@ -425,7 +462,28 @@ namespace bybit.net.api.ApiServiceImp
 
             BybitParametersUtils.AddOptionalParameters(body, ("fileName", fileName));
 
-            var result = await this.SendSignedAsync<string>(SEND_P2P_CHAT_MESSAGE, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<object>>(SEND_P2P_CHAT_MESSAGE, HttpMethod.Post, query: body);
+            return result;
+        }
+
+        private const string UPLOAD_P2P_CHAT_FILE = "/v5/p2p/oss/upload_file";
+
+        /// <summary>
+        /// Upload Chat File
+        /// Upload a file for P2P order chat.
+        /// </summary>
+        /// <param name="fileContent">File content stream</param>
+        /// <param name="fileName">File name</param>
+        /// <param name="contentType">File content type</param>
+        /// <returns></returns>
+        public async Task<P2PResponse<UploadChatFileResult>?> UploadChatFile(Stream fileContent, string fileName, string contentType)
+        {
+            using var content = new MultipartFormDataContent();
+            var file = new StreamContent(fileContent);
+            file.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(contentType);
+            content.Add(file, "upload_file", fileName);
+
+            var result = await this.SendSignedMultipartAsync<P2PResponse<UploadChatFileResult>>(UPLOAD_P2P_CHAT_FILE, content);
             return result;
         }
 
@@ -439,7 +497,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="size">Page size</param>
         /// <param name="currentPage">Current page number</param>
         /// <returns></returns>
-        public async Task<string?> GetChatMessage(string orderId, string size, string? currentPage = null)
+        public async Task<P2PResponse<GetChatMessageResult>?> GetChatMessage(string orderId, string size, string? currentPage = null)
         {
             var body = new Dictionary<string, object>
             {
@@ -448,7 +506,7 @@ namespace bybit.net.api.ApiServiceImp
             };
             BybitParametersUtils.AddOptionalParameters(body, ("currentPage", currentPage));
 
-            var result = await this.SendSignedAsync<string>(GET_P2P_CHAT_MESSAGE, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetChatMessageResult>>(GET_P2P_CHAT_MESSAGE, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -459,10 +517,10 @@ namespace bybit.net.api.ApiServiceImp
         /// Returns your P2P account profile. POST uses query: body with no parameters.
         /// </summary>
         /// <returns></returns>
-        public async Task<string?> GetAccountInformation()
+        public async Task<P2PResponse<GetAccountInformationResult>?> GetAccountInformation()
         {
             var body = new Dictionary<string, object>(); // empty POST payload goes in query
-            var result = await this.SendSignedAsync<string>(GET_P2P_ACCOUNT_INFORMATION, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetAccountInformationResult>>(GET_P2P_ACCOUNT_INFORMATION, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -476,7 +534,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="originalUid">Counterparty User ID</param>
         /// <param name="orderId">Order ID</param>
         /// <returns></returns>
-        public async Task<string?> GetCounterpartyUserInfo(string? originalUid = null, string? orderId = null)
+        public async Task<P2PResponse<GetAccountInformationResult>?> GetCounterpartyUserInfo(string? originalUid = null, string? orderId = null)
         {
             var body = new Dictionary<string, object>();
             BybitParametersUtils.AddOptionalParameters(body,
@@ -484,7 +542,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("orderId", orderId)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_P2P_COUNTERPARTY_USER_INFO, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetAccountInformationResult>>(GET_P2P_COUNTERPARTY_USER_INFO, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -494,10 +552,10 @@ namespace bybit.net.api.ApiServiceImp
         /// Get User Payment
         /// Returns your saved P2P payment methods. POST sends params via query: body (none here).
         /// </summary>
-        public async Task<string?> GetUserPayment()
+        public async Task<P2PResponse<List<UserPaymentItem>>?> GetUserPayment()
         {
             var body = new Dictionary<string, object>(); // empty payload
-            var result = await this.SendSignedAsync<string>(GET_P2P_USER_PAYMENT, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<List<UserPaymentItem>>>(GET_P2P_USER_PAYMENT, HttpMethod.Post, query: body);
             return result;
         }
     }

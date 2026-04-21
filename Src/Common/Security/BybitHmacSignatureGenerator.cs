@@ -28,6 +28,12 @@ namespace bybit.net.api
         public string GeneratePostSignature(IDictionary<string, object> parameters)
         {
             string paramJson = JsonConvert.SerializeObject(parameters);
+            return GeneratePostSignature(paramJson);
+        }
+
+        public string GeneratePostSignature(string body)
+        {
+            string paramJson = body;
             string rawData = $"{currentTimeStamp}{apikey}{recWindow}{paramJson}";
             return Sign(rawData);
         }
