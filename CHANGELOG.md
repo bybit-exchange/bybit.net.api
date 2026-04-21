@@ -67,6 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added affiliate endpoint tests covering the affiliate date-filter query mapping and typed response mapping.
 
 ### Changed
+- Updated library, test, and example project target frameworks to .NET 10 LTS.
 - Updated `BybitAccountService.SetAccountMarginMode(...)` to send the correct request field name `setMarginMode`.
 - Updated `BybitAccountService.ManualRepay(...)` to support the documented `repaymentType` parameter.
 - Updated `BybitAccountService.ManualBorrow(...)`, `ManualRepay(...)`, and `SetAccountMarginMode(...)` to return typed models instead of raw JSON strings.
