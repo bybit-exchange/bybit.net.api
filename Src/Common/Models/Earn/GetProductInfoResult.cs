@@ -1,47 +1,91 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace bybit.net.api.Models.Earn
 {
     public class GetProductInfoResult
     {
-        public List<EarnProduct>? list { get; set; }
+        [JsonProperty("list")]
+        public List<EarnProduct>? List { get; set; }
     }
 
     public class EarnProduct
     {
-        public string? category { get; set; }                 // FlexibleSaving, OnChain
-        public string? estimateApr { get; set; }              // e.g., "3%", "4.25%"
-        public string? coin { get; set; }
-        public string? minStakeAmount { get; set; }
-        public string? maxStakeAmount { get; set; }
-        public string? precision { get; set; }
-        public string? productId { get; set; }
-        public string? status { get; set; }                   // Available, NotAvailable
-        public List<BonusEvent>? bonusEvents { get; set; }
-        public string? minRedeemAmount { get; set; }
-        public string? maxRedeemAmount { get; set; }
-        public string? duration { get; set; }                 // Fixed, Flexible
-        public int? term { get; set; }                        // days, for OnChain Fixed
-        public string? swapCoin { get; set; }
-        public string? swapCoinPrecision { get; set; }
-        public string? stakeExchangeRate { get; set; }
-        public string? redeemExchangeRate { get; set; }
-        public string? rewardDistributionType { get; set; }   // Simple, Compound, Other(LST)
-        public int? rewardIntervalMinute { get; set; }
-        public string? redeemProcessingMinute { get; set; }
-        public string? stakeTime { get; set; }                // ms
-        public string? interestCalculationTime { get; set; }  // ms
+        [JsonProperty("category")]
+        public string? Category { get; set; }
+
+        [JsonProperty("estimateApr")]
+        public string? EstimateApr { get; set; }
+
+        [JsonProperty("coin")]
+        public string? Coin { get; set; }
+
+        [JsonProperty("minStakeAmount")]
+        public string? MinStakeAmount { get; set; }
+
+        [JsonProperty("maxStakeAmount")]
+        public string? MaxStakeAmount { get; set; }
+
+        [JsonProperty("precision")]
+        public string? Precision { get; set; }
+
+        [JsonProperty("productId")]
+        public string? ProductId { get; set; }
+
+        [JsonProperty("status")]
+        public string? Status { get; set; }
+
+        [JsonProperty("bonusEvents")]
+        public List<BonusEvent>? BonusEvents { get; set; }
+
+        [JsonProperty("minRedeemAmount")]
+        public string? MinRedeemAmount { get; set; }
+
+        [JsonProperty("maxRedeemAmount")]
+        public string? MaxRedeemAmount { get; set; }
+
+        [JsonProperty("duration")]
+        public string? Duration { get; set; }
+
+        [JsonProperty("term")]
+        public int? Term { get; set; }
+
+        [JsonProperty("swapCoin")]
+        public string? SwapCoin { get; set; }
+
+        [JsonProperty("swapCoinPrecision")]
+        public string? SwapCoinPrecision { get; set; }
+
+        [JsonProperty("stakeExchangeRate")]
+        public string? StakeExchangeRate { get; set; }
+
+        [JsonProperty("redeemExchangeRate")]
+        public string? RedeemExchangeRate { get; set; }
+
+        [JsonProperty("rewardDistributionType")]
+        public string? RewardDistributionType { get; set; }
+
+        [JsonProperty("rewardIntervalMinute")]
+        public int? RewardIntervalMinute { get; set; }
+
+        [JsonProperty("redeemProcessingMinute")]
+        public string? RedeemProcessingMinute { get; set; }
+
+        [JsonProperty("stakeTime")]
+        public string? StakeTime { get; set; }
+
+        [JsonProperty("interestCalculationTime")]
+        public string? InterestCalculationTime { get; set; }
     }
 
     public class BonusEvent
     {
-        public string? apr { get; set; }          // Yesterday's Rewards APR
-        public string? coin { get; set; }         // Reward coin
-        public string? announcement { get; set; } // link
-    }
+        [JsonProperty("apr")]
+        public string? Apr { get; set; }
 
+        [JsonProperty("coin")]
+        public string? Coin { get; set; }
+
+        [JsonProperty("announcement")]
+        public string? Announcement { get; set; }
+    }
 }
