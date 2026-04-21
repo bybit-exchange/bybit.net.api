@@ -45,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `BybitP2PService.UploadChatFile(...)` for `POST /v5/p2p/oss/upload_file`.
 - Added `BybitRFQService.AcceptOtherQuote(...)` for `POST /v5/rfq/accept-other-quote`.
 - Added Spot Margin UTA methods for currency data, coin state, position tiers, max borrowable amount, repayment available amount, auto repay mode, fixed-rate borrow, fixed-rate renew, fixed-rate order/contract info, and liability endpoints.
+- Added `BybitSpreadTradingService.GetSpreadMaxOrderQty(...)` for `GET /v5/spread/max-qty`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
