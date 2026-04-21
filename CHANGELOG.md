@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added token earn methods for `GET /v5/earn/token/product`, `POST /v5/earn/token/place-order`, `GET /v5/earn/token/order`, `GET /v5/earn/token/position`, `GET /v5/earn/token/yield`, `GET /v5/earn/token/hourly-yield`, and `GET /v5/earn/token/history-apr`.
 - Added `BybitLendingService.RepayInsLoan(...)` for `POST /v5/ins-loan/repay-loan`.
 - Added typed account request models for manual repay and delta mode operations.
+- Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
 - Added typed asset response models for transfer, funding, portfolio margin, withdrawal address, small balance convert, fiat convert, delivery, settlement, exchange record, and allowed deposit endpoints.
 - Added typed broker response and request models for earnings, account info, subaccount deposits, rate limits, and voucher endpoints.
@@ -45,6 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added broker endpoint tests covering current broker routes and request payload mapping.
 - Added earn endpoint tests covering shared earn, fixed-term, and token endpoint routing and payload mapping.
 - Added lending endpoint tests covering current OTC routes, public access behavior, and corrected legacy lending routes.
+- Added affiliate endpoint tests covering the affiliate date-filter query mapping and typed response mapping.
 
 ### Changed
 - Updated `BybitAccountService.SetAccountMarginMode(...)` to send the correct request field name `setMarginMode`.
@@ -61,6 +63,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitLendingService.GetInsLoanOrders(...)` and `GetInsLoanRepayOrders(...)` to use the current OTC routes instead of the incorrect `ensure-tokens-convert` placeholder route.
 - Updated `BybitLendingService.GetInsLoanInfo(...)` and `GetInsMarginCoinInfo(...)` to use the public endpoint flow and return typed models.
 - Updated `BybitLendingService` legacy C2C methods to use typed models and corrected routes for `redeem-cancel` and `history-order`.
+- Updated `BybitAffiliateService.GetAffiliateUserList(...)` to support the documented `startDate` and `endDate` parameters.
+- Updated `BybitAffiliateService.GetAffiliateUserList(...)` and `GetAffiliateUserInfo(...)` to return typed models instead of raw JSON strings.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.

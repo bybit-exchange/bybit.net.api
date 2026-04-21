@@ -1,10 +1,6 @@
-﻿using bybit.net.api.Models.Lending;
+using bybit.net.api.Models;
+using bybit.net.api.Models.Affiliate;
 using bybit.net.api.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace bybit.net.api.ApiServiceImp
 {
@@ -21,23 +17,16 @@ namespace bybit.net.api.ApiServiceImp
         }
 
         private const string GET_AFFILIATE_USER_LIST = "/v5/affiliate/aff-user-list";
+        private const string GET_AFFILIATE_USER_INFO = "/v5/user/aff-customer-info";
 
-        /// <summary>
-        /// Get Affiliate User List
-        /// Requires master UID and API key with only "Affiliate" permission.
-        /// </summary>
-        /// <param name="size">[0,1000], default 0</param>
-        /// <param name="cursor">pagination cursor</param>
-        /// <param name="needDeposit">include deposit info</param>
-        /// <param name="need30">include last 30d trading info</param>
-        /// <param name="need365">include last 365d trading info</param>
-        /// <returns></returns>
-        public async Task<string?> GetAffiliateUserList(
+        public async Task<GeneralResponse<GetAffiliateUserListResult>?> GetAffiliateUserList(
             int? size = null,
             string? cursor = null,
             bool? needDeposit = null,
             bool? need30 = null,
-            bool? need365 = null)
+            bool? need365 = null,
+            string? startDate = null,
+            string? endDate = null)
         {
             var query = new Dictionary<string, object>();
 
@@ -46,27 +35,20 @@ namespace bybit.net.api.ApiServiceImp
                 ("cursor", cursor),
                 ("needDeposit", needDeposit),
                 ("need30", need30),
-                ("need365", need365)
+                ("need365", need365),
+                ("startDate", startDate),
+                ("endDate", endDate)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_AFFILIATE_USER_LIST, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetAffiliateUserListResult>>(GET_AFFILIATE_USER_LIST, HttpMethod.Get, query: query);
             return result;
         }
 
-        private const string GET_AFFILIATE_USER_INFO = "/v5/user/aff-customer-info";
-
-        /// <summary>
-        /// Get Affiliate User Info
-        /// Requires master UID and API key with only "Affiliate" permission.
-        /// </summary>
-        /// <param name="uid">Affiliate client's master UID</param>
-        /// <returns></returns>
-        public async Task<string?> GetAffiliateUserInfo(string uid)
+        public async Task<GeneralResponse<GetAffiliateUserInfoResult>?> GetAffiliateUserInfo(string uid)
         {
             var query = new Dictionary<string, object> { { "uid", uid } };
-            var result = await this.SendSignedAsync<string>(GET_AFFILIATE_USER_INFO, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetAffiliateUserInfoResult>>(GET_AFFILIATE_USER_INFO, HttpMethod.Get, query: query);
             return result;
         }
-
     }
 }
