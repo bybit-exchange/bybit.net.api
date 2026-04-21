@@ -1,7 +1,6 @@
 ﻿using bybit.net.api.ApiServiceImp;
 using bybit.net.api.Models.Market;
 using bybit.net.api.Models;
-using Newtonsoft.Json;
 using Xunit;
 using bybit.net.api;
 
@@ -14,11 +13,9 @@ namespace bybit.api.test
         [Fact]
         public async Task CheckMarketKline_ResponseAsync()
         {
-            var klineInfoString = await marketDataService.GetMarketKline(category: Category.SPOT, symbol: "BTCUSDT", interval: MarketInterval.OneHour, start: 1693785600000, limit: 2);
-            if (!string.IsNullOrEmpty(klineInfoString))
+            var generalResponse = await marketDataService.GetMarketKline(category: Category.SPOT, symbol: "BTCUSDT", interval: MarketInterval.OneHour, start: 1693785600000, limit: 2);
+            if (generalResponse != null)
             {
-                Console.WriteLine(klineInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<MarketKLineResult>>(klineInfoString);
                 var klineInfo = generalResponse?.Result;
 
                 Assert.Equal(0, generalResponse?.RetCode);
@@ -32,11 +29,9 @@ namespace bybit.api.test
         [Fact]
         public async Task CheckMarketTcikers_ResponseAsync()
         {
-            var tickersInfoString = await marketDataService.GetMarketTickers(category: Category.SPOT);
-            if (!string.IsNullOrEmpty(tickersInfoString))
+            var generalResponse = await marketDataService.GetMarketTickers(category: Category.SPOT);
+            if (generalResponse != null)
             {
-                Console.WriteLine(tickersInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<MarketTickerResult>>(tickersInfoString);
                 var tickersInfo = generalResponse?.Result;
 
                 Assert.Equal(0, generalResponse?.RetCode);
@@ -50,11 +45,9 @@ namespace bybit.api.test
         [Fact]
         public async Task CheckFundingRate_ResponseAsync()
         {
-            var fundingInfoString = await marketDataService.GetMarketFundingHistory(category: Category.LINEAR, symbol: "BTCUSDT");
-            if (!string.IsNullOrEmpty(fundingInfoString))
+            var generalResponse = await marketDataService.GetMarketFundingHistory(category: Category.LINEAR, symbol: "BTCUSDT");
+            if (generalResponse != null)
             {
-                Console.WriteLine(fundingInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<FundingRateResult>>(fundingInfoString);
                 var fundingInfo = generalResponse?.Result;
 
                 Assert.Equal(0, generalResponse?.RetCode);

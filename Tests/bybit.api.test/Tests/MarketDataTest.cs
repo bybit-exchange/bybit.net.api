@@ -1,4 +1,6 @@
 using bybit.net.api.ApiServiceImp;
+using bybit.net.api.Models;
+using bybit.net.api.Models.Market;
 using Moq;
 using Moq.Protected;
 using System.Net;
@@ -12,7 +14,7 @@ namespace bybit.api.test.Tests
         [Fact]
         public async Task CheckServerTime_ResponseAsync()
         {
-            var responseContent = "{\"timeSecond\":1499827319559}";
+            var responseContent = "{\"retCode\":0,\"retMsg\":\"OK\",\"result\":{\"timeSecond\":\"1499827319\",\"timeNano\":\"1499827319559000000\"},\"retExtInfo\":{},\"time\":1499827319559}";
             var mockMessageHandler = new Mock<HttpMessageHandler>();
             mockMessageHandler.Protected()
                 .SetupSendAsync("/v5/market/time", HttpMethod.Get)
@@ -31,7 +33,8 @@ namespace bybit.api.test.Tests
 
             var result = await market.CheckServerTime();
 
-            Assert.Equal(responseContent, result);
+            Assert.Equal(0, result?.RetCode);
+            Assert.Equal("1499827319", result?.Result?.timeSecond);
         }
         #endregion
     }

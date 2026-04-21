@@ -34,6 +34,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added fixed-term earn methods for `GET /v5/earn/fixed-term/product`, `POST /v5/earn/fixed-term/place-order`, `GET /v5/earn/fixed-term/order`, `GET /v5/earn/fixed-term/position`, `POST /v5/earn/fixed-term/redeem`, and `POST /v5/earn/fixed-term/position/auto-invest`.
 - Added token earn methods for `GET /v5/earn/token/product`, `POST /v5/earn/token/place-order`, `GET /v5/earn/token/order`, `GET /v5/earn/token/position`, `GET /v5/earn/token/yield`, `GET /v5/earn/token/hourly-yield`, and `GET /v5/earn/token/history-apr`.
 - Added `BybitLendingService.RepayInsLoan(...)` for `POST /v5/ins-loan/repay-loan`.
+- Added `BybitMarketDataService.GetRpiOrderbook(...)` for `GET /v5/market/rpi_orderbook`.
+- Added `BybitMarketDataService.GetAdlAlert(...)` for `GET /v5/market/adlAlert`.
+- Added `BybitMarketDataService.GetIndexPriceComponents(...)` for `GET /v5/market/index-price-components`.
+- Added `BybitMarketDataService.GetFeeGroupInfo(...)` for `GET /v5/market/fee-group-info`.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
@@ -41,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added typed broker response and request models for earnings, account info, subaccount deposits, rate limits, and voucher endpoints.
 - Added typed earn response models for shared earn, fixed-term earn, and BYUSDT token earn endpoints.
 - Added typed lending response models for institutional lending and legacy C2C lending endpoints.
+- Added typed market response models for recent trades, open interest, insurance pool, delivery price, index price components, ADL alerts, and fee group info.
 - Added account endpoint tests covering new routes and request payload mapping.
 - Added asset endpoint tests covering route selection, payload mapping, and public access behavior.
 - Added broker endpoint tests covering current broker routes and request payload mapping.
@@ -65,6 +70,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitLendingService` legacy C2C methods to use typed models and corrected routes for `redeem-cancel` and `history-order`.
 - Updated `BybitAffiliateService.GetAffiliateUserList(...)` to support the documented `startDate` and `endDate` parameters.
 - Updated `BybitAffiliateService.GetAffiliateUserList(...)` and `GetAffiliateUserInfo(...)` to return typed models instead of raw JSON strings.
+- Updated `BybitMarketDataService` public endpoints to return typed `GeneralResponse<T>` models instead of raw JSON strings.
+- Updated `BybitMarketDataService.GetInstrumentInfo(...)` to support the documented `symbolType` parameter.
+- Updated `BybitMarketDataService.GetMarketOrderbook(...)` to require the documented `symbol` parameter.
+- Updated market kline methods to support omitted `category` where the V5 docs define a default.
+- Updated `BybitMarketDataService.GetMarketHistoricalVolatility(...)` to support `quoteCoin` and the documented integer `period` request shape.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
