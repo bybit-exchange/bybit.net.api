@@ -53,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added typed market response models for recent trades, open interest, insurance pool, delivery price, index price components, ADL alerts, and fee group info.
 - Added typed new crypto loan request and response models for active common, flexible, and fixed crypto loan endpoints.
 - Added typed P2P response models for active P2P ad, order, chat, account, and payment endpoints.
+- Added typed position response models for active position endpoints.
 - Added account endpoint tests covering new routes and request payload mapping.
 - Added asset endpoint tests covering route selection, payload mapping, and public access behavior.
 - Added broker endpoint tests covering current broker routes and request payload mapping.
@@ -89,7 +90,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `BybitP2PService.GetAllOrders(...)` and `GetPendingOrders(...)` to send `side` as a single integer instead of an array.
 - Updated `BybitP2PService` methods to return typed P2P response models instead of raw JSON strings.
 - Updated signed REST transport to support multipart form-data requests.
+- Updated `BybitPositionService.SwitchPositionMode(...)` to send the documented `mode` field.
+- Updated `BybitPositionService.SetPositionTradingStop(...)` to send `positionIdx`, require `tpslMode`, and support `activePrice`.
+- Updated `BybitPositionService.SetPositionAutoAddMargin(...)` to make `positionIdx` optional.
+- Updated `BybitPositionService.GetMovePositionHistory(...)` and `GetClosedOptionsPositions(...)` timestamp parameters to use 64-bit values.
+- Updated `BybitPositionService` methods to return typed `GeneralResponse<T>` models instead of raw JSON strings.
 
 ### Notes
 - `GetContractTransactionLogClassic(...)` remains in the SDK because the local documentation marks it as legacy rather than fully removed.
 - Removed the stale `GetAssetDeliveryRecords(...)` implementation that pointed to the coin exchange history route instead of the active delivery endpoint.
+- Removed the abandoned `BybitPositionService.SwitchPositionMargin(...)` method for `POST /v5/position/switch-isolated`.
