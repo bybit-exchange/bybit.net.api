@@ -47,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Spot Margin UTA methods for currency data, coin state, position tiers, max borrowable amount, repayment available amount, auto repay mode, fixed-rate borrow, fixed-rate renew, fixed-rate order/contract info, and liability endpoints.
 - Added `BybitSpreadTradingService.GetSpreadMaxOrderQty(...)` for `GET /v5/spread/max-qty`.
 - Added lightweight `BybitAlphaService` coverage for the V5 Alpha trade endpoints.
+- Added lightweight `BybitBotService` coverage for V5 spot grid, DCA, futures combo, futures grid, and futures martingale bot endpoints.
 - Added typed account request models for manual repay and delta mode operations.
 - Added typed affiliate response models for affiliate user list and affiliate user info endpoints.
 - Added typed account response models for newly implemented account endpoints and updated account mutations.
