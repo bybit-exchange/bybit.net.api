@@ -12,5 +12,6 @@ namespace bybit.net.api.Models.RFQ
         public string? symbol { get; set; }    // contract name
         public string? side { get; set; }      // Buy | Sell
         public string? qty { get; set; }       // quantity
+        public string? price { get; set; }     // quote price
     }
 }

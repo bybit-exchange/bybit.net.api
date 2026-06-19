@@ -34,7 +34,7 @@ Your contributions are warmly welcomed and appreciated!
 **Bybit.Net.Api** constantly evolves, keeping pace with the freshest features from Bybit's API. Crafted for efficiency, the library maintains a slim profile by minimizing external dependencies. If you've broadened its horizons or ironed out bugs, we eagerly await your pull request.
 
 ## Installation
-Ensure you're using .NET 6 or newer. This SDK depends on Microsoft.Extensions.Logging 7.0.0 and Newtonsoft 13.0.3.
+Ensure you're using .NET 10 or newer. This SDK depends on Microsoft.Extensions.Logging 7.0.0 and Newtonsoft 13.0.3.
 Dotnet CLI
 ```bash
 dotnet add package bybit.net.api

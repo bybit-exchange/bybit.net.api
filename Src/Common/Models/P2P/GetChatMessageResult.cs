@@ -8,7 +8,7 @@ namespace bybit.net.api.Models.P2P
 {
     public class GetChatMessageResult
     {
-        public List<P2pChatMessage>? list { get; set; }
+        public List<P2pChatMessage>? result { get; set; }
     }
 
     public class P2pChatMessage

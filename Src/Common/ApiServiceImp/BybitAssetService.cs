@@ -8,6 +8,16 @@ namespace bybit.net.api.ApiServiceImp
 {
     public class BybitAssetService : BybitApiService
     {
+        public BybitAssetService(string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
+        : this(httpClient: new HttpClient(), url: url, recvWindow: recvWindow, debugMode: debugMode)
+        {
+        }
+
+        public BybitAssetService(HttpClient httpClient, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
+            : base(httpClient: httpClient, url: url, recvWindow: recvWindow, debugMode: debugMode)
+        {
+        }
+
         public BybitAssetService(string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
         : this(httpClient: new HttpClient(), apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
         {
@@ -32,7 +42,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit">[1,50], default 20</param>
         /// <param name="cursor">pagination cursor</param>
         /// <returns></returns>
-        public async Task<string?> GetDeliveryRecord(
+        public async Task<GeneralResponse<GetDeliveryRecordResult>?> GetDeliveryRecord(
             string category,
             string? symbol = null,
             long? startTime = null,
@@ -52,7 +62,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("cursor", cursor)
             );
 
-            var result = await this.SendSignedAsync<string>(GET_DELIVERY_RECORD, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetDeliveryRecordResult>>(GET_DELIVERY_RECORD, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -68,7 +78,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Coin Exchange Records</returns>
-        public async Task<string?> GetCoinExchangeRecords(string? fromCoin = null, string? toCoin = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetCoinExchangeRecordsResult>?> GetCoinExchangeRecords(string? fromCoin = null, string? toCoin = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object>();
 
@@ -78,32 +88,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(COIN_EXCHANGE_RECORDS, HttpMethod.Get, query: query);
-            return result;
-        }
-
-        private const string ASSET_DELIVERY_RECORDS = "/v5/asset/exchange/order-record";
-        /// <summary>
-        /// Query delivery records of USDC futures and Options, sorted by deliveryTime in descending order
-        /// Unified account covers: USDC futures / Option
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="symbol"></param>
-        /// <param name="expDate"></param>
-        /// <param name="limit"></param>
-        /// <param name="cursor"></param>
-        /// <returns>Delivery Records</returns>
-        public async Task<string?> GetAssetDeliveryRecords(Category category, string? symbol = null, string? expDate = null, int? limit = null, string? cursor = null)
-        {
-            var query = new Dictionary<string, object> { { "category", category.Value } };
-
-            BybitParametersUtils.AddOptionalParameters(query,
-                ("symbol", symbol),
-                ("expDate", expDate),
-                ("limit", limit),
-                ("cursor", cursor)
-            );
-            var result = await this.SendSignedAsync<string>(ASSET_DELIVERY_RECORDS, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetCoinExchangeRecordsResult>>(COIN_EXCHANGE_RECORDS, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -117,16 +102,18 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Usdc Settlements</returns>
-        public async Task<string?> GetAssetUsdcSettlement(Category category, string? symbol = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetUsdcSettlementResult>?> GetAssetUsdcSettlement(Category category, string? symbol = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("symbol", symbol),
+                ("startTime", startTime),
+                ("endTime", endTime),
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(USDC_SETTLEMENT, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetUsdcSettlementResult>>(USDC_SETTLEMENT, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -211,10 +198,10 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="accountType"></param>
         /// <param name="toAccountType"></param>
         /// <returns>List of coin</returns>
-        public async Task<string?> GetTransferableCoin(AccountType accountType, AccountType toAccountType)
+        public async Task<GeneralResponse<GetTransferableCoinResult>?> GetTransferableCoin(AccountType accountType, AccountType toAccountType)
         {
-            var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
-            var result = await this.SendSignedAsync<string>(TRANSABLE_COIN, HttpMethod.Get, query: query);
+            var query = new Dictionary<string, object> { { "fromAccountType", accountType.Value }, { "toAccountType", toAccountType.Value } };
+            var result = await this.SendSignedAsync<GeneralResponse<GetTransferableCoinResult>>(TRANSABLE_COIN, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -229,12 +216,12 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="coin"></param>
         /// <param name="amount"></param>
         /// <returns>transferId</returns>
-        public async Task<string?> CreateInternalTransfer(AccountType accountType, AccountType toAccountType, string coin, string amount, string? transferId = null)
+        public async Task<GeneralResponse<CreateTransferResult>?> CreateInternalTransfer(AccountType accountType, AccountType toAccountType, string coin, string amount, string? transferId = null)
         {
-            var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "coin", coin }, { "amount", amount } };
+            var query = new Dictionary<string, object> { { "fromAccountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "coin", coin }, { "amount", amount } };
             if (string.IsNullOrEmpty(transferId)) transferId = BybitParametersUtils.GenerateTransferId();
             query.Add("transferId", transferId);
-            var result = await this.SendSignedAsync<string>(INTERNAL_TRANSFER, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<CreateTransferResult>>(INTERNAL_TRANSFER, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -254,12 +241,12 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="coin"></param>
         /// <param name="amount"></param>
         /// <returns>transferId</returns>
-        public async Task<string?> CreateUniversalTransfer(AccountType accountType, AccountType toAccountType, string fromMemberId, string toMemberId, string coin, string amount, string? transferId = null)
+        public async Task<GeneralResponse<CreateTransferResult>?> CreateUniversalTransfer(AccountType accountType, AccountType toAccountType, string fromMemberId, string toMemberId, string coin, string amount, string? transferId = null)
         {
-            var query = new Dictionary<string, object> { { "accountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "fromMemberId", fromMemberId }, { "toMemberId", toMemberId }, { "coin", coin }, { "amount", amount } };
+            var query = new Dictionary<string, object> { { "fromAccountType", accountType.Value }, { "toAccountType", toAccountType.Value }, { "fromMemberId", fromMemberId }, { "toMemberId", toMemberId }, { "coin", coin }, { "amount", amount } };
             if (string.IsNullOrEmpty(transferId)) transferId = BybitParametersUtils.GenerateTransferId();
             query.Add("transferId", transferId);
-            var result = await this.SendSignedAsync<string>(UNIVERSAL_TRANSFER, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<CreateTransferResult>>(UNIVERSAL_TRANSFER, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -275,20 +262,20 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Internal Transfers</returns>
-        public async Task<string?> GetInternalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetTransferRecordsResult>?> GetInternalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { };
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("transferId", transferId),
                 ("coin", coin),
-                ("transferStatus", transferStatus?.Value),
+                ("status", transferStatus?.Value),
                 ("startTime", startTime),
                 ("endTime", endTime),
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(INTERNAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetTransferRecordsResult>>(INTERNAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -307,20 +294,20 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Universal Transfers</returns>
-        public async Task<string?> GetUniversalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetTransferRecordsResult>?> GetUniversalTransferRecords(string? transferId = null, string? coin = null, TransferStatus? transferStatus = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { };
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("transferId", transferId),
                 ("coin", coin),
-                ("transferStatus", transferStatus?.Value),
+                ("status", transferStatus?.Value),
                 ("startTime", startTime),
                 ("endTime", endTime),
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(UNIVERSAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetTransferRecordsResult>>(UNIVERSAL_TRANSFER_RECORDS, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -347,7 +334,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Deposited Coin Info</returns>
-        public async Task<string?> GetAssetAllowedDepositInfo(string? chain = null, string? coin = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetAllowedDepositCoinInfoResult>?> GetAssetAllowedDepositInfo(string? chain = null, string? coin = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { };
 
@@ -357,7 +344,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(ALLOW_DEPOSIT_COINS, HttpMethod.Get, query: query);
+            var result = await this.SendPublicAsync<GeneralResponse<GetAllowedDepositCoinInfoResult>>(ALLOW_DEPOSIT_COINS, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -760,6 +747,236 @@ namespace bybit.net.api.ApiServiceImp
 
             var result = await this.SendSignedAsync<string>(GET_CONVERT_COIN_LIST, HttpMethod.Get, query: query);
             return result;
+        }
+
+        private const string GET_FUNDING_HISTORY = "/v5/asset/fundinghistory";
+
+        public async Task<GeneralResponse<GetFundingHistoryResult>?> GetFundingAccountTransactionHistory(string? createTimeFrom = null, string? createTimeTo = null, string? limit = null, string? cursor = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("createTimeFrom", createTimeFrom),
+                ("createTimeTo", createTimeTo),
+                ("limit", limit),
+                ("cursor", cursor)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetFundingHistoryResult>>(GET_FUNDING_HISTORY, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_PORTFOLIO_MARGIN_INFO = "/v5/asset/portfolio-margin";
+
+        public async Task<GeneralResponse<GetPortfolioMarginInfoResult>?> GetPortfolioMarginInfo(string? baseCoin = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("baseCoin", baseCoin)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetPortfolioMarginInfoResult>>(GET_PORTFOLIO_MARGIN_INFO, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_TOTAL_MEMBERS_ASSETS = "/v5/asset/total-members-assets";
+
+        public async Task<GeneralResponse<GetTotalMembersAssetsResult>?> GetTotalMembersAssets(string? coin = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("coin", coin)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetTotalMembersAssetsResult>>(GET_TOTAL_MEMBERS_ASSETS, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_ASSET_OVERVIEW = "/v5/asset/asset-overview";
+
+        public async Task<GeneralResponse<GetAssetOverviewResult>?> GetAssetOverview(string? memberId = null, string? valuationCurrency = null, string? accountType = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("memberId", memberId),
+                ("valuationCurrency", valuationCurrency),
+                ("accountType", accountType)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetAssetOverviewResult>>(GET_ASSET_OVERVIEW, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_WITHDRAWAL_ADDRESS_LIST = "/v5/asset/withdraw/query-address";
+
+        public async Task<GeneralResponse<GetWithdrawalAddressListResult>?> GetWithdrawalAddressList(string? coin = null, string? chain = null, int? addressType = null, int? limit = null, string? cursor = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("coin", coin),
+                ("chain", chain),
+                ("addressType", addressType),
+                ("limit", limit),
+                ("cursor", cursor)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetWithdrawalAddressListResult>>(GET_WITHDRAWAL_ADDRESS_LIST, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_SMALL_BALANCE_COINS = "/v5/asset/covert/small-balance-list";
+
+        public async Task<GeneralResponse<GetSmallBalanceCoinsResult>?> GetSmallBalanceCoins(string accountType, string? fromCoin = null)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "accountType", accountType }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("fromCoin", fromCoin)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetSmallBalanceCoinsResult>>(GET_SMALL_BALANCE_COINS, HttpMethod.Get, query: query);
+        }
+
+        private const string REQUEST_SMALL_BALANCE_QUOTE = "/v5/asset/covert/get-quote";
+
+        public async Task<GeneralResponse<RequestSmallBalanceQuoteResult>?> RequestSmallBalanceQuote(string accountType, List<string> fromCoinList, string toCoin)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "accountType", accountType },
+                { "fromCoinList", fromCoinList },
+                { "toCoin", toCoin }
+            };
+
+            return await this.SendSignedAsync<GeneralResponse<RequestSmallBalanceQuoteResult>>(REQUEST_SMALL_BALANCE_QUOTE, HttpMethod.Post, query: body);
+        }
+
+        private const string CONFIRM_SMALL_BALANCE_QUOTE = "/v5/asset/covert/small-balance-execute";
+
+        public async Task<GeneralResponse<ConfirmSmallBalanceQuoteResult>?> ConfirmSmallBalanceQuote(string quoteId)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "quoteId", quoteId }
+            };
+
+            return await this.SendSignedAsync<GeneralResponse<ConfirmSmallBalanceQuoteResult>>(CONFIRM_SMALL_BALANCE_QUOTE, HttpMethod.Post, query: body);
+        }
+
+        private const string GET_SMALL_BALANCE_HISTORY = "/v5/asset/covert/small-balance-history";
+
+        public async Task<GeneralResponse<GetSmallBalanceExchangeHistoryResult>?> GetSmallBalanceExchangeHistory(string? accountType = null, string? quoteId = null, string? startTime = null, string? endTime = null, string? cursor = null, string? size = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("accountType", accountType),
+                ("quoteId", quoteId),
+                ("startTime", startTime),
+                ("endTime", endTime),
+                ("cursor", cursor),
+                ("size", size)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetSmallBalanceExchangeHistoryResult>>(GET_SMALL_BALANCE_HISTORY, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_FIAT_BALANCE = "/v5/fiat/balance-query";
+
+        public async Task<GeneralResponse<List<GetFiatBalanceResult>>?> GetFiatBalance(string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("currency", currency)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<List<GetFiatBalanceResult>>>(GET_FIAT_BALANCE, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_FIAT_TRADING_PAIR_LIST = "/v5/fiat/query-coin-list";
+
+        public async Task<GeneralResponse<GetFiatTradingPairListResult>?> GetFiatTradingPairList(string? side = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("side", side)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetFiatTradingPairListResult>>(GET_FIAT_TRADING_PAIR_LIST, HttpMethod.Get, query: query);
+        }
+
+        private const string REQUEST_FIAT_QUOTE = "/v5/fiat/quote-apply";
+
+        public async Task<GeneralResponse<RequestFiatQuoteResult>?> RequestFiatQuote(string fromCoin, string fromCoinType, string toCoin, string toCoinType, string requestAmount, string? requestCoinType = null)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "fromCoin", fromCoin },
+                { "fromCoinType", fromCoinType },
+                { "toCoin", toCoin },
+                { "toCoinType", toCoinType },
+                { "requestAmount", requestAmount }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(body,
+                ("requestCoinType", requestCoinType)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<RequestFiatQuoteResult>>(REQUEST_FIAT_QUOTE, HttpMethod.Post, query: body);
+        }
+
+        private const string CONFIRM_FIAT_QUOTE = "/v5/fiat/trade-execute";
+
+        public async Task<GeneralResponse<ConfirmFiatQuoteResult>?> ConfirmFiatQuote(string quoteTxId, string subUserId, string? webhookUrl = null, string? merchantRequestId = null)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "quoteTxId", quoteTxId },
+                { "subUserId", subUserId }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(body,
+                ("webhookUrl", webhookUrl),
+                ("MerchantRequestId", merchantRequestId)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<ConfirmFiatQuoteResult>>(CONFIRM_FIAT_QUOTE, HttpMethod.Post, query: body);
+        }
+
+        private const string GET_FIAT_CONVERT_STATUS = "/v5/fiat/trade-query";
+
+        public async Task<GeneralResponse<GetFiatConvertStatusResult>?> GetFiatConvertStatus(string? tradeNo = null, string? merchantRequestId = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("tradeNo", tradeNo),
+                ("merchantRequestId", merchantRequestId)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<GetFiatConvertStatusResult>>(GET_FIAT_CONVERT_STATUS, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_FIAT_CONVERT_HISTORY = "/v5/fiat/query-trade-history";
+
+        public async Task<GeneralResponse<List<GetFiatConvertStatusResult>>?> GetFiatConvertHistory(int? index = null, int? limit = null, string? startTime = null, string? endTime = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("index", index),
+                ("limit", limit),
+                ("startTime", startTime),
+                ("endTime", endTime)
+            );
+
+            return await this.SendSignedAsync<GeneralResponse<List<GetFiatConvertStatusResult>>>(GET_FIAT_CONVERT_HISTORY, HttpMethod.Get, query: query);
+        }
+
+        private const string GET_FIAT_REFERENCE_PRICE = "/v5/fiat/reference-price";
+
+        public async Task<GeneralResponse<GetFiatReferencePriceResult>?> GetFiatReferencePrice(string symbol)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "symbol", symbol }
+            };
+
+            return await this.SendSignedAsync<GeneralResponse<GetFiatReferencePriceResult>>(GET_FIAT_REFERENCE_PRICE, HttpMethod.Get, query: query);
         }
 
 

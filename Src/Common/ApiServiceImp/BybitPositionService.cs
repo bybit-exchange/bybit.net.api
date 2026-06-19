@@ -1,6 +1,7 @@
 ﻿using bybit.net.api.Models;
 using bybit.net.api.Models.Account;
 using bybit.net.api.Models.Position;
+using bybit.net.api.Models.Position.Response;
 using bybit.net.api.Models.Trade;
 using bybit.net.api.Services;
 using System.Diagnostics;
@@ -38,7 +39,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Position Info</returns>
-        public async Task<string?> GetPositionInfo(Category category, string? symbol = null, string? baseCoin = null, string? settleCoin = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetPositionInfoResult>?> GetPositionInfo(Category category, string? symbol = null, string? baseCoin = null, string? settleCoin = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
@@ -49,7 +50,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(POSITION_LIST, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetPositionInfoResult>>(POSITION_LIST, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -64,7 +65,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="buyLeverage"></param>
         /// <param name="sellLeverage"></param>
         /// <returns>None</returns>
-        public async Task<string?> SetPositionLeverage(Category category, string symbol, string buyLeverage, string sellLeverage)
+        public async Task<GeneralResponse<object>?> SetPositionLeverage(Category category, string symbol, string buyLeverage, string sellLeverage)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
@@ -73,33 +74,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("buyLeverage", buyLeverage),
                 ("sellLeverage", sellLeverage)
             );
-            var result = await this.SendSignedAsync<string>(SET_LEVERAGE, HttpMethod.Post, query: query);
-            return result;
-        }
-
-        private const string SWITCH_MARGIN = "/v5/position/switch-isolated";
-        /// <summary>
-        /// Switch Cross/Isolated Margin Select cross margin mode or isolated margin mode per symbol level
-        /// Unified account covers: Inverse contract
-        /// Classic account covers: USDT perpetual / Inverse contract
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="symbol"></param>
-        /// <param name="tradeMode"></param>
-        /// <param name="buyLeverage"></param>
-        /// <param name="sellLeverage"></param>
-        /// <returns>None</returns>
-        public async Task<string?> SwitchPositionMargin(Category category, string symbol, TradeMode tradeMode, string buyLeverage, string sellLeverage)
-        {
-            var query = new Dictionary<string, object> { { "category", category.Value } };
-
-            BybitParametersUtils.AddOptionalParameters(query,
-                ("symbol", symbol),
-                ("buyLeverage", buyLeverage),
-                ("sellLeverage", sellLeverage),
-                ("tradeMode", tradeMode.Value)
-            );
-            var result = await this.SendSignedAsync<string>(SWITCH_MARGIN, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(SET_LEVERAGE, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -115,18 +90,18 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="category"></param>
         /// <param name="symbol"></param>
         /// <param name="coin"></param>
-        /// <param name="positionMode"></param>
+        /// <param name="mode"></param>
         /// <returns>None</returns>
-        public async Task<string?> SwitchPositionMode(Category category, string? symbol = null, string? coin = null, PositionMode? positionMode = null)
+        public async Task<GeneralResponse<object>?> SwitchPositionMode(Category category, PositionMode mode, string? symbol = null, string? coin = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("symbol", symbol),
                  ("coin", coin),
-                ("positionMode", positionMode?.Value)
+                ("mode", mode.Value)
             );
-            var result = await this.SendSignedAsync<string>(SWITCH_POSITION_MODE, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(SWITCH_POSITION_MODE, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -142,11 +117,12 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="category"></param>
         /// <param name="symbol"></param>
-        /// <param name="positionIndex"></param>
+        /// <param name="positionIdx"></param>
         /// <param name="takeProfit"></param>
         /// <param name="stopLoss"></param>
         /// <param name="tpTriggerBy"></param>
         /// <param name="slTriggerBy"></param>
+        /// <param name="activePrice"></param>
         /// <param name="trailingStop"></param>
         /// <param name="tpslMode"></param>
         /// <param name="tpSize"></param>
@@ -156,19 +132,19 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="tpOrderType"></param>
         /// <param name="slOrderType"></param>
         /// <returns>None</returns>
-        public async Task<string?> SetPositionTradingStop(Category category, string symbol, PositionIndex positionIndex, string? takeProfit = null,
-        string? stopLoss = null, TriggerBy? tpTriggerBy = null, TriggerBy? slTriggerBy = null, string? trailingStop = null, TpslMode? tpslMode = null,
+        public async Task<GeneralResponse<object>?> SetPositionTradingStop(Category category, string symbol, TpslMode tpslMode, PositionIndex positionIdx, string? takeProfit = null,
+        string? stopLoss = null, TriggerBy? tpTriggerBy = null, TriggerBy? slTriggerBy = null, string? activePrice = null, string? trailingStop = null,
                                                 string? tpSize = null, string? slSize = null, string? tpLimitPrice = null, string? slLimitPrice = null, OrderType? tpOrderType = null, OrderType? slOrderType = null)
         {
-            var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "positionIndex", positionIndex.Value } };
+            var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "tpslMode", tpslMode.Value }, { "positionIdx", positionIdx.Value } };
 
             BybitParametersUtils.AddOptionalParameters(query,
                 ("takeProfit", takeProfit),
                 ("stopLoss", stopLoss),
                 ("tpTriggerBy", tpTriggerBy?.Value),
                 ("slTriggerBy", slTriggerBy?.Value),
+                ("activePrice", activePrice),
                 ("trailingStop", trailingStop),
-                ("tpslMode", tpslMode?.Value),
                  ("tpSize", tpSize),
                 ("slSize", slSize),
                 ("tpLimitPrice", tpLimitPrice),
@@ -176,7 +152,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("tpOrderType", tpOrderType?.Value),
                 ("slOrderType", slOrderType?.Value)
             );
-            var result = await this.SendSignedAsync<string>(SET_TRADING_STOP, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(SET_TRADING_STOP, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -191,11 +167,13 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="autoAddMargin"></param>
         /// <param name="positionIdx"></param>
         /// <returns>None</returns>
-        public async Task<string?> SetPositionAutoAddMargin(Category category, string symbol, AutoAddMargin autoAddMargin, PositionIndex positionIdx)
+        public async Task<GeneralResponse<object>?> SetPositionAutoAddMargin(Category category, string symbol, AutoAddMargin autoAddMargin, PositionIndex? positionIdx = null)
         {
-            var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "autoAddMargin", autoAddMargin.Value }, { "positionIdx", positionIdx.Value } };
+            var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "autoAddMargin", autoAddMargin.Value } };
 
-            var result = await this.SendSignedAsync<string>(SET_AUTO_ADD_MARGIN, HttpMethod.Post, query: query);
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("positionIdx", positionIdx?.Value));
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(SET_AUTO_ADD_MARGIN, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -210,12 +188,12 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="margin"></param>
         /// <param name="positionIdx"></param>
         /// <returns>Position Margin</returns>
-        public async Task<string?> SetPositionUpdateMargin(Category category, string symbol, string margin, PositionIndex? positionIdx = null)
+        public async Task<GeneralResponse<PositionMarginResult>?> SetPositionUpdateMargin(Category category, string symbol, string margin, PositionIndex? positionIdx = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol }, { "margin", margin }, };
             BybitParametersUtils.AddOptionalParameters(query,
                ("positionIdx", positionIdx?.Value));
-            var result = await this.SendSignedAsync<string>(UPDATE_MARGIN, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<PositionMarginResult>>(UPDATE_MARGIN, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -233,7 +211,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Close PNL</returns>
-        public async Task<string?> GetClosedPnl(Category category, string? symbol = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetClosedPnlResult>?> GetClosedPnl(Category category, string? symbol = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
@@ -244,7 +222,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(CLOSE_PNL, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetClosedPnlResult>>(CLOSE_PNL, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -259,10 +237,10 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="category"></param>
         /// <param name="symbol"></param>
         /// <returns>None</returns>
-        public async Task<string?> ConfirmPositionRiskLimit(Category category, string symbol)
+        public async Task<GeneralResponse<object>?> ConfirmPositionRiskLimit(Category category, string symbol)
         {
             var query = new Dictionary<string, object> { { "category", category.Value }, { "symbol", symbol } };
-            var result = await this.SendSignedAsync<string>(CONFIRM_NEW_RISK_LIMIT, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<object>>(CONFIRM_NEW_RISK_LIMIT, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -280,10 +258,10 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="fromUid"></param>
         /// <param name="toUid"></param>
         /// <returns>Move Position</returns>
-        public async Task<string?> MovePosition(string fromUid, string toUid, List<Dictionary<string, object>> list)
+        public async Task<GeneralResponse<MovePositionResult>?> MovePosition(string fromUid, string toUid, List<Dictionary<string, object>> list)
         {
             var query = new Dictionary<string, object> { { "fromUid", fromUid }, { "toUid", toUid }, { "list", list } };
-            var result = await this.SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<MovePositionResult>>(MOVE_POSITION, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -300,10 +278,10 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="fromUid"></param>
         /// <param name="toUid"></param>
         /// <returns>Move Position</returns>
-        public async Task<string?> MovePosition(string fromUid, string toUid, List<MovePositionRequest> list)
+        public async Task<GeneralResponse<MovePositionResult>?> MovePosition(string fromUid, string toUid, List<MovePositionRequest> list)
         {
             var query = new Dictionary<string, object> { { "fromUid", fromUid }, { "toUid", toUid }, { "list", list } };
-            var result = await this.SendSignedAsync<string>(MOVE_POSITION, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<MovePositionResult>>(MOVE_POSITION, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -321,7 +299,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns>Move Position History</returns>
-        public async Task<string?> GetMovePositionHistory(Category? category = null, string? symbol = null, int? startTime = null, int? endTime = null, string? status = null, string? blockTradeId = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetMovePositionHistoryResult>?> GetMovePositionHistory(Category? category = null, string? symbol = null, long? startTime = null, long? endTime = null, string? status = null, string? blockTradeId = null, string? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { };
 
@@ -335,7 +313,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(MOVE_POSITION_HISTORY, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetMovePositionHistoryResult>>(MOVE_POSITION_HISTORY, HttpMethod.Get, query: query);
             return result;
         }
 
@@ -352,7 +330,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <param name="limit"></param>
         /// <param name="cursor"></param>
         /// <returns></returns>
-        public async Task<string?> GetClosedOptionsPositions(Category category, string? symbol = null, int? startTime = null, int? endTime = null, int? limit = null, string? cursor = null)
+        public async Task<GeneralResponse<GetClosedOptionsPositionsResult>?> GetClosedOptionsPositions(Category category, string? symbol = null, long? startTime = null, long? endTime = null, int? limit = null, string? cursor = null)
         {
             var query = new Dictionary<string, object> { { "category", category.Value } };
 
@@ -363,7 +341,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("limit", limit),
                 ("cursor", cursor)
             );
-            var result = await this.SendSignedAsync<string>(GET_CLOSED_OPTIONS_POSITIONS, HttpMethod.Get, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<GetClosedOptionsPositionsResult>>(GET_CLOSED_OPTIONS_POSITIONS, HttpMethod.Get, query: query);
             return result;
         }
     }

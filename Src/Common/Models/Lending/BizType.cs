@@ -10,6 +10,7 @@
         public static BizType SPOT { get => new("SPOT"); }
         public static BizType DERIVATIVES { get => new("DERIVATIVES"); }
         public static BizType OPTIONS { get => new("OPTIONS"); }
+        public static BizType CONVERT { get => new("CONVERT"); }
         public string Value { get; private set; }
         public static implicit operator string(BizType bizType) => bizType.Value;
         public override readonly string ToString() => Value.ToString();

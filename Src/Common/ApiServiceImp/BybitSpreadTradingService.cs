@@ -136,6 +136,34 @@ namespace bybit.net.api.ApiServiceImp
             return result;
         }
 
+        private const string GET_SPREAD_MAX_ORDER_QTY = "/v5/spread/max-qty";
+
+        /// <summary>
+        /// Get Max Qty
+        /// Query the maximum order quantity for the given symbol.
+        /// HTTP GET /v5/spread/max-qty
+        /// </summary>
+        /// <param name="symbol">Spread combination symbol name (required)</param>
+        /// <param name="side">Order side: 1 Buy, 2 Sell (required)</param>
+        /// <param name="orderPrice">Order price (required)</param>
+        /// <returns>Raw JSON string</returns>
+        public async Task<string?> GetSpreadMaxOrderQty(string symbol, string side, string orderPrice)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "symbol", symbol },
+                { "side", side },
+                { "orderPrice", orderPrice }
+            };
+
+            var result = await this.SendSignedAsync<string>(
+                GET_SPREAD_MAX_ORDER_QTY,
+                HttpMethod.Get,
+                query: query);
+
+            return result;
+        }
+
         private const string CREATE_SPREAD_ORDER = "/v5/spread/order/create";
 
         /// <summary>

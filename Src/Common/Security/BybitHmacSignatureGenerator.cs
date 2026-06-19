@@ -28,6 +28,12 @@ namespace bybit.net.api
         public string GeneratePostSignature(IDictionary<string, object> parameters)
         {
             string paramJson = JsonConvert.SerializeObject(parameters);
+            return GeneratePostSignature(paramJson);
+        }
+
+        public string GeneratePostSignature(string body)
+        {
+            string paramJson = body;
             string rawData = $"{currentTimeStamp}{apikey}{recWindow}{paramJson}";
             return Sign(rawData);
         }
@@ -40,6 +46,11 @@ namespace bybit.net.api
         public string GenerateGetSignature(IDictionary<string, object> parameters)
         {
             string queryString = GenerateQueryString(parameters);
+            return GenerateGetSignature(queryString);
+        }
+
+        public string GenerateGetSignature(string queryString)
+        {
             string rawData = $"{currentTimeStamp}{apikey}{recWindow}{queryString}";
             return Sign(rawData);
         }

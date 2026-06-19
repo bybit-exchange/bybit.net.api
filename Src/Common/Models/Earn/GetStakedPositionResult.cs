@@ -1,30 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace bybit.net.api.Models.Earn
 {
     public class GetStakedPositionResult
     {
-        public List<EarnStakedPosition>? list { get; set; }
+        [JsonProperty("list")]
+        public List<EarnStakedPosition>? List { get; set; }
     }
 
     public class EarnStakedPosition
     {
-        public string? coin { get; set; }
-        public string? productId { get; set; }
-        public string? amount { get; set; }
-        public string? totalPnl { get; set; }                      // Onchain non-LST only
-        public string? claimableYield { get; set; }                // Not returned for Onchain
-        public string? id { get; set; }                            // Onchain only
-        public string? status { get; set; }                        // Processing, Active (Onchain)
-        public string? orderId { get; set; }                       // Onchain only
-        public string? estimateRedeemTime { get; set; }            // ms, Onchain only
-        public string? estimateStakeTime { get; set; }             // ms, Onchain only
-        public string? estimateInterestCalculationTime { get; set; } // ms, Onchain only
-        public string? settlementTime { get; set; }                // ms, Onchain Fixed only
-    }
+        [JsonProperty("coin")]
+        public string? Coin { get; set; }
 
+        [JsonProperty("productId")]
+        public string? ProductId { get; set; }
+
+        [JsonProperty("amount")]
+        public string? Amount { get; set; }
+
+        [JsonProperty("totalPnl")]
+        public string? TotalPnl { get; set; }
+
+        [JsonProperty("claimableYield")]
+        public string? ClaimableYield { get; set; }
+
+        [JsonProperty("id")]
+        public string? Id { get; set; }
+
+        [JsonProperty("status")]
+        public string? Status { get; set; }
+
+        [JsonProperty("orderId")]
+        public string? OrderId { get; set; }
+
+        [JsonProperty("estimateRedeemTime")]
+        public string? EstimateRedeemTime { get; set; }
+
+        [JsonProperty("estimateStakeTime")]
+        public string? EstimateStakeTime { get; set; }
+
+        [JsonProperty("estimateInterestCalculationTime")]
+        public string? EstimateInterestCalculationTime { get; set; }
+
+        [JsonProperty("settlementTime")]
+        public string? SettlementTime { get; set; }
+
+        [JsonProperty("autoReinvest")]
+        public string? AutoReinvest { get; set; }
+    }
 }

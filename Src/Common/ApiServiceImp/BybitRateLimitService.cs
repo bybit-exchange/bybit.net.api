@@ -1,4 +1,5 @@
 ﻿using bybit.net.api.Models.RateLimit;
+using bybit.net.api.Models;
 using bybit.net.api.Services;
 using System;
 using System.Collections.Generic;
@@ -25,14 +26,14 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Set Rate Limit — POST /v5/apilimit/set
         /// </summary>
-        public async Task<string?> SetApiRateLimit(IEnumerable<ApiRateLimitSetItem> list)
+        public async Task<GeneralResponse<SetApiRateLimitResponse>?> SetApiRateLimit(IEnumerable<ApiRateLimitSetItem> list)
         {
             var body = new Dictionary<string, object>
             {
                 { "list", list?.ToArray() ?? Array.Empty<ApiRateLimitSetItem>() }
             };
 
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<SetApiRateLimitResponse>>(
                 SET_API_RATE_LIMIT,
                 HttpMethod.Post,
                 query: body);
@@ -45,14 +46,14 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Get Rate Limit — GET /v5/apilimit/query
         /// </summary>
-        public async Task<string?> GetApiRateLimit(string uids)
+        public async Task<GeneralResponse<GetApiRateLimitResponse>?> GetApiRateLimit(string uids)
         {
             var query = new Dictionary<string, object>
             {
                 { "uids", uids }
             };
 
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<GetApiRateLimitResponse>>(
                 GET_API_RATE_LIMIT,
                 HttpMethod.Get,
                 query: query);
@@ -65,10 +66,10 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Get Rate Limit Cap — GET /v5/apilimit/query-cap
         /// </summary>
-        public async Task<string?> GetApiRateLimitCap()
+        public async Task<GeneralResponse<GetApiRateLimitCapResponse>?> GetApiRateLimitCap()
         {
             var query = new Dictionary<string, object>();
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<GetApiRateLimitCapResponse>>(
                 GET_API_RATE_LIMIT_CAP,
                 HttpMethod.Get,
                 query: query);
@@ -81,7 +82,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Get All Rate Limits — GET /v5/apilimit/query-all
         /// </summary>
-        public async Task<string?> GetAllApiRateLimits(
+        public async Task<GeneralResponse<GetAllApiRateLimitsResponse>?> GetAllApiRateLimits(
             string? limit = null,     // [1, 1000], default 1000
             string? cursor = null,
             string? uids = null)      // comma-separated; across different masters
@@ -94,7 +95,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("uids", uids)
             );
 
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<GetAllApiRateLimitsResponse>>(
                 GET_API_RATE_LIMIT_ALL,
                 HttpMethod.Get,
                 query: query);

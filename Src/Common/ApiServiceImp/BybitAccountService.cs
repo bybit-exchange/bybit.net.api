@@ -1,5 +1,6 @@
 ﻿using bybit.net.api.Models;
 using bybit.net.api.Models.Account;
+using bybit.net.api.Models.Account.Response;
 using bybit.net.api.Models.Lending;
 using bybit.net.api.Services;
 
@@ -315,13 +316,13 @@ namespace bybit.net.api.ApiServiceImp
         /// </summary>
         /// <param name="setMarginMode"></param>
         /// <returns>Margin Mode</returns>
-        public async Task<string?> SetAccountMarginMode(SetMarginMode? setMarginMode = null)
+        public async Task<GeneralResponse<SetMarginModeResult>?> SetAccountMarginMode(SetMarginMode? setMarginMode = null)
         {
             var query = new Dictionary<string, object> { };
             BybitParametersUtils.AddOptionalParameters(query,
-               ("SetMarginMode", setMarginMode?.Value)
+               ("setMarginMode", setMarginMode?.Value)
            );
-            var result = await this.SendSignedAsync<string>(ACCOUNT_MARGIN_MODE, HttpMethod.Post, query: query);
+            var result = await this.SendSignedAsync<GeneralResponse<SetMarginModeResult>>(ACCOUNT_MARGIN_MODE, HttpMethod.Post, query: query);
             return result;
         }
 
@@ -441,7 +442,7 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Manual Borrow — POST /v5/account/borrow
         /// </summary>
-        public async Task<string?> ManualBorrow(string coin, string amount)
+        public async Task<GeneralResponse<ManualBorrowResult>?> ManualBorrow(string coin, string amount)
         {
             var body = new Dictionary<string, object>
             {
@@ -449,7 +450,7 @@ namespace bybit.net.api.ApiServiceImp
                 { "amount", amount }
             };
 
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<ManualBorrowResult>>(
                 ACCOUNT_MANUAL_BORROW,
                 HttpMethod.Post,
                 query: body);
@@ -462,18 +463,199 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Manual Repay — POST /v5/account/repay
         /// </summary>
-        public async Task<string?> ManualRepay(string? coin = null, string? amount = null)
+        public async Task<GeneralResponse<ManualRepayResult>?> ManualRepay(string? coin = null, string? amount = null, RepaymentType? repaymentType = null)
         {
             var body = new Dictionary<string, object>();
             BybitParametersUtils.AddOptionalParameters(body,
                 ("coin", coin),
-                ("amount", amount)
+                ("amount", amount),
+                ("repaymentType", repaymentType?.Value)
             );
 
-            var result = await this.SendSignedAsync<string>(
+            var result = await this.SendSignedAsync<GeneralResponse<ManualRepayResult>>(
                 ACCOUNT_MANUAL_REPAY,
                 HttpMethod.Post,
                 query: body);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Manual Repay — POST /v5/account/repay
+        /// </summary>
+        public async Task<GeneralResponse<ManualRepayResult>?> ManualRepay(ManualRepayRequest request)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            return await this.ManualRepay(request.Coin, request.Amount, request.RepaymentType);
+        }
+
+        private const string ACCOUNT_NO_CONVERT_REPAY = "/v5/account/no-convert-repay";
+
+        /// <summary>
+        /// Manual Repay Without Asset Conversion — POST /v5/account/no-convert-repay
+        /// </summary>
+        public async Task<GeneralResponse<ManualRepayResult>?> ManualRepayWithoutAssetConversion(string coin, string? amount = null, RepaymentType? repaymentType = null)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "coin", coin }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(body,
+                ("amount", amount),
+                ("repaymentType", repaymentType?.Value)
+            );
+
+            var result = await this.SendSignedAsync<GeneralResponse<ManualRepayResult>>(
+                ACCOUNT_NO_CONVERT_REPAY,
+                HttpMethod.Post,
+                query: body);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Manual Repay Without Asset Conversion — POST /v5/account/no-convert-repay
+        /// </summary>
+        public async Task<GeneralResponse<ManualRepayResult>?> ManualRepayWithoutAssetConversion(NoConvertRepayRequest request)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            return await this.ManualRepayWithoutAssetConversion(request.Coin!, request.Amount, request.RepaymentType);
+        }
+
+        private const string ACCOUNT_INSTRUMENTS_INFO = "/v5/account/instruments-info";
+
+        /// <summary>
+        /// Query trading-pair instrument specifications available to the current account.
+        /// </summary>
+        public async Task<GeneralResponse<GetAccountInstrumentsInfoResult>?> GetAccountInstrumentsInfo(Category category, string? symbol = null, int? limit = null, string? cursor = null)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "category", category.Value }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("symbol", symbol),
+                ("limit", limit),
+                ("cursor", cursor)
+            );
+
+            var result = await this.SendSignedAsync<GeneralResponse<GetAccountInstrumentsInfoResult>>(
+                ACCOUNT_INSTRUMENTS_INFO,
+                HttpMethod.Get,
+                query: query);
+
+            return result;
+        }
+
+        private const string ACCOUNT_OPTION_ASSET_INFO = "/v5/account/option-asset-info";
+
+        /// <summary>
+        /// Query option asset profit and loss information for each coin under the account.
+        /// </summary>
+        public async Task<GeneralResponse<GetOptionAssetInfoResult>?> GetOptionAssetInfo()
+        {
+            var result = await this.SendSignedAsync<GeneralResponse<GetOptionAssetInfoResult>>(
+                ACCOUNT_OPTION_ASSET_INFO,
+                HttpMethod.Get);
+
+            return result;
+        }
+
+        private const string ACCOUNT_PAY_INFO = "/v5/account/pay-info";
+
+        /// <summary>
+        /// Query repayment collateral information before repayment.
+        /// </summary>
+        public async Task<GeneralResponse<GetPayInfoResult>?> GetPayInfo(string? coin = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("coin", coin)
+            );
+
+            var result = await this.SendSignedAsync<GeneralResponse<GetPayInfoResult>>(
+                ACCOUNT_PAY_INFO,
+                HttpMethod.Get,
+                query: query);
+
+            return result;
+        }
+
+        private const string ACCOUNT_SET_DELTA_MODE = "/v5/account/set-delta-mode";
+
+        /// <summary>
+        /// Turn Delta Neutral mode on or off.
+        /// </summary>
+        public async Task<GeneralResponse<SetDeltaModeResult>?> SetDeltaNeutralMode(DeltaNeutralMode deltaEnable)
+        {
+            var body = new Dictionary<string, object>
+            {
+                { "deltaEnable", deltaEnable.Value }
+            };
+
+            var result = await this.SendSignedAsync<GeneralResponse<SetDeltaModeResult>>(
+                ACCOUNT_SET_DELTA_MODE,
+                HttpMethod.Post,
+                query: body);
+
+            return result;
+        }
+
+        /// <summary>
+        /// Turn Delta Neutral mode on or off.
+        /// </summary>
+        public async Task<GeneralResponse<SetDeltaModeResult>?> SetDeltaNeutralMode(SetDeltaModeRequest request)
+        {
+            ArgumentNullException.ThrowIfNull(request);
+
+            return await this.SetDeltaNeutralMode(request.DeltaEnable);
+        }
+
+        private const string ACCOUNT_TRADE_INFO_FOR_ANALYSIS = "/v5/account/trade-info-for-analysis";
+
+        /// <summary>
+        /// Query aggregated spot-trade analysis data for a symbol.
+        /// </summary>
+        public async Task<GeneralResponse<GetTradeInfoForAnalysisResult>?> GetTradeInfoForAnalysis(string symbol, long? startTime = null, long? endTime = null)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "symbol", symbol }
+            };
+
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("startTime", startTime),
+                ("endTime", endTime)
+            );
+
+            var result = await this.SendSignedAsync<GeneralResponse<GetTradeInfoForAnalysisResult>>(
+                ACCOUNT_TRADE_INFO_FOR_ANALYSIS,
+                HttpMethod.Get,
+                query: query);
+
+            return result;
+        }
+
+        private const string ACCOUNT_WITHDRAWAL = "/v5/account/withdrawal";
+
+        /// <summary>
+        /// Query the available amount to transfer for coins in the Unified wallet.
+        /// </summary>
+        public async Task<GeneralResponse<GetTransferableAmountResult>?> GetTransferableAmount(string coinName)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "coinName", coinName }
+            };
+
+            var result = await this.SendSignedAsync<GeneralResponse<GetTransferableAmountResult>>(
+                ACCOUNT_WITHDRAWAL,
+                HttpMethod.Get,
+                query: query);
 
             return result;
         }
