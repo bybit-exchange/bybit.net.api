@@ -46,6 +46,11 @@ namespace bybit.net.api
         public string GenerateGetSignature(IDictionary<string, object> parameters)
         {
             string queryString = GenerateQueryString(parameters);
+            return GenerateGetSignature(queryString);
+        }
+
+        public string GenerateGetSignature(string queryString)
+        {
             string rawData = $"{currentTimeStamp}{apikey}{recWindow}{queryString}";
             return Sign(rawData);
         }

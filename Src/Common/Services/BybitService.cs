@@ -85,13 +85,14 @@ namespace bybit.net.api
             IBybitSignatureService bybitSignatureService = new BybitHmacSignatureGenerator(apiKey, apiSecret, timestamp, recvWindow);
             if (httpMethod == HttpMethod.Get)
             {
-                requestUri = queryStringBuilder.Length > 0 ? requestUri + "?" + queryStringBuilder.ToString() : requestUri;
-                signature = bybitSignatureService.GenerateGetSignature(query ?? new Dictionary<string, object>());
+                var queryString = queryStringBuilder.ToString();
+                requestUri = queryString.Length > 0 ? requestUri + "?" + queryString : requestUri;
+                signature = bybitSignatureService.GenerateGetSignature(queryString);
             }
             else if (httpMethod == HttpMethod.Post)
             {
-                content = JsonConvert.SerializeObject(query);
-                signature = bybitSignatureService.GeneratePostSignature(query ?? new Dictionary<string, object>());
+                content = JsonConvert.SerializeObject(query ?? new Dictionary<string, object>());
+                signature = bybitSignatureService.GeneratePostSignature(content);
             }
 
             return await SendAsync<T>(requestUri, httpMethod, signature, content ?? null, timestamp);
