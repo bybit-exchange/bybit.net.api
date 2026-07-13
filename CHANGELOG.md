@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-13
+
+### Added
+- Added `BybitAffiliateService.GetAffiliateSubList(...)` for `GET /v5/affiliate/affiliate-sub-list`.
+- Added liquidity-mining methods on `BybitEarnService`: `AddLiquidity`, `AddMargin`, `ClaimLiquidityInterest`, `GetLiquidityMiningLiquidationRecords`, `GetLiquidityMiningOrders`, `GetLiquidityMiningPositions`, `GetLiquidityMiningProducts`, `GetLiquidityMiningYieldRecords`, `ReinvestLiquidity`, `RemoveLiquidity`.
+- Added advance-earn methods on `BybitEarnService`: `GetAdvanceEarnOrder`, `GetAdvanceEarnPosition`, `GetAdvanceEarnProduct`, `GetAdvanceEarnProductExtraInfo`, `GetDoubleWinLeverage`, `GetSmartLeverageRedeemEstAmountList`, `PlaceAdvanceEarnOrder`.
+- Added hold-to-earn methods on `BybitEarnService`: `GetHoldToEarnProduct`, `GetHoldToEarnYieldHistory`.
+- Added RWA methods on `BybitEarnService`: `GetRwaNavChart`, `GetRwaOrderList`, `GetRwaPositionList`, `GetRwaProductList`, `PlaceRwaOrder`.
+- Added PWM methods on `BybitEarnService`: `PwmAssetTrend`, `PwmClaim`, `PwmCreateCustomPlan`, `PwmFundNav`, `PwmFundTransfer`, `PwmGetNewPlanDetail`, `PwmGetPlanDetail`, `PwmInvestMore`, `PwmListInvestmentPlans`, `PwmListOrder`, `PwmListProductCards`, `PwmQueryFundTransferResult`, `PwmRedeem`, `PwmSubscribe`.
+- Added PWM asset-manager methods on `BybitEarnService`: `PwmInstCreateFund`, `PwmInstCreateInvestmentPlan`, `PwmInstCreateSubAccount`, `PwmInstGetInvestmentPlans`, `PwmInstListFunds`, `PwmInstListOrders`, `PwmInstManageInvestmentPlan`, `PwmInstManageOrder`, `PwmInstSettleProfit`.
+- Added `BybitEarnService.ListEarnCoupons(...)` for `GET /v5/earn/coupons`.
+- Added `BybitSpotMarginService.GetVipMarginData(...)` for `GET /v5/spot-margin-trade/data`.
+- Added `BybitUserService.QueryReferrals(...)` for `GET /v5/user/invitation/referrals`.
+- Added `BybitUserService.SignAgreement(...)` for `POST /v5/user/agreement`.
+
 ## [1.3.0] - 2026-04-22
 
 ### Added
