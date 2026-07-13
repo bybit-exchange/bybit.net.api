@@ -24,7 +24,7 @@ namespace bybit.net.api
             this.httpClient = httpClient;
             this.apiKey = apiKey;
             this.apiSecret = apiSecret;
-            this.url = url;
+            this.url = url ?? BybitConstants.HTTP_MAINNET_URL;
             this.debugMode = debugMode;
             this.recvWindow = recvWindow;
         }
@@ -32,7 +32,7 @@ namespace bybit.net.api
         public BybitService(HttpClient httpClient, string? url = BybitConstants.HTTP_MAINNET_URL, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW)
         {
             this.httpClient = httpClient;
-            this.url = url;
+            this.url = url ?? BybitConstants.HTTP_MAINNET_URL;
             this.recvWindow = recvWindow;
         }
 
