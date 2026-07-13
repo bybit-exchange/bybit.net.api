@@ -624,5 +624,57 @@ namespace bybit.net.api.ApiServiceImp
             return result;
         }
         #endregion
+
+        private const string QUERY_API_KEY = "/v5/user/query-api";
+        /// <summary>
+        /// Get API Key Information for the current key.
+        /// </summary>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/user/apikey-info"/>
+        /// <returns>Request results as JSON string.</returns>
+        public async Task<string?> QueryAPIKey()
+        {
+            var result = await this.SendSignedAsync<string>(QUERY_API_KEY, HttpMethod.Get);
+            return result;
+        }
+
+        private const string QUERY_REFERRALS = "/v5/user/invitation/referrals";
+        /// <summary>
+        /// Query referral users invited by the current account.
+        /// </summary>
+        /// <param name="cursor">Cursor for pagination</param>
+        /// <param name="size">Page size</param>
+        /// <param name="status">Filter by referral status</param>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/user/invitation/referrals"/>
+        /// <returns>Request results as JSON string.</returns>
+        public async Task<string?> QueryReferrals(string? cursor = null, long? size = null, List<Dictionary<string, object>>? status = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("cursor", cursor),
+                ("size", size),
+                ("status", status)
+            );
+            var result = await this.SendSignedAsync<string>(QUERY_REFERRALS, HttpMethod.Get, query: query);
+            return result;
+        }
+
+        private const string SIGN_AGREEMENT = "/v5/user/agreement";
+        /// <summary>
+        /// Sign a Bybit user agreement of the given category.
+        /// </summary>
+        /// <param name="category">Agreement category</param>
+        /// <param name="agree">Whether the user agrees to the agreement</param>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/user/agreement"/>
+        /// <returns>Request results as JSON string.</returns>
+        public async Task<string?> SignAgreement(long category, bool agree)
+        {
+            var query = new Dictionary<string, object>
+            {
+                { "category", category },
+                { "agree", agree }
+            };
+            var result = await this.SendSignedAsync<string>(SIGN_AGREEMENT, HttpMethod.Post, query: query);
+            return result;
+        }
     }
 }

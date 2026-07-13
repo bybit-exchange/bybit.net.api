@@ -686,5 +686,24 @@ namespace bybit.net.api.ApiServiceImp
             return result;
         }
         #endregion
+
+        private const string GET_VIP_MARGIN_DATA = "/v5/spot-margin-trade/data";
+        /// <summary>
+        /// Get VIP Margin Data
+        /// </summary>
+        /// <param name="vipLevel">VIP level</param>
+        /// <param name="currency">Currency</param>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/spot-margin-trade/data"/>
+        /// <returns>Request results as JSON string.</returns>
+        public async Task<string?> GetVipMarginData(string? vipLevel = null, string? currency = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("vipLevel", vipLevel),
+                ("currency", currency)
+            );
+            var result = await this.SendPublicAsync<string>(GET_VIP_MARGIN_DATA, HttpMethod.Get, query: query);
+            return result;
+        }
     }
 }

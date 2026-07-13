@@ -50,5 +50,30 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<GeneralResponse<GetAffiliateUserInfoResult>>(GET_AFFILIATE_USER_INFO, HttpMethod.Get, query: query);
             return result;
         }
+
+        private const string GET_AFFILIATE_SUB_LIST = "/v5/affiliate/affiliate-sub-list";
+        /// <summary>
+        /// Get affiliate sub-affiliate list
+        /// </summary>
+        /// <param name="cursor">Cursor for pagination</param>
+        /// <param name="size">Page size</param>
+        /// <param name="startDate">Start date filter</param>
+        /// <param name="endDate">End date filter</param>
+        /// <param name="subAffId">Sub-affiliate ID filter</param>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/affiliate/affiliate-sub-list"/>
+        /// <returns>Request results as JSON string.</returns>
+        public async Task<string?> GetAffiliateSubList(string? cursor = null, long? size = null, string? startDate = null, string? endDate = null, long? subAffId = null)
+        {
+            var query = new Dictionary<string, object>();
+            BybitParametersUtils.AddOptionalParameters(query,
+                ("cursor", cursor),
+                ("size", size),
+                ("startDate", startDate),
+                ("endDate", endDate),
+                ("subAffId", subAffId)
+            );
+            var result = await this.SendSignedAsync<string>(GET_AFFILIATE_SUB_LIST, HttpMethod.Get, query: query);
+            return result;
+        }
     }
 }

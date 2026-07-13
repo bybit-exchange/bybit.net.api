@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-07-13
+
+### Added
+- Added `BybitAffiliateService.GetAffiliateSubList(...)` for `GET /v5/affiliate/affiliate-sub-list`.
+- Added `BybitBotService.CloseDCABot(...)` for `POST /v5/dca/close-bot` (typed overload alongside existing `CloseDcaBot`).
+- Added `BybitBotService.CreateDCABot(...)` for `POST /v5/dca/create-bot` (typed overload alongside existing `CreateDcaBot`).
+- Added `BybitBotService.CloseComboBot(...)` for `POST /v5/fcombobot/close`.
+- Added `BybitBotService.CreateComboBot(...)` for `POST /v5/fcombobot/create`.
+- Added `BybitBotService.GetComboDetail(...)` for `POST /v5/fcombobot/detail`.
+- Added `BybitBotService.GetComboLimit(...)` for `POST /v5/fcombobot/getlimit`.
+- Added `BybitBotService.CloseFGridBot(...)` for `POST /v5/fgridbot/close`.
+- Added `BybitBotService.CreateFGridBot(...)` for `POST /v5/fgridbot/create`.
+- Added `BybitBotService.GetFGridDetail(...)` for `POST /v5/fgridbot/detail`.
+- Added `BybitBotService.ValidateFGridInput(...)` for `POST /v5/fgridbot/validate`.
+- Added `BybitBotService.CloseFMartBot(...)` for `POST /v5/fmartingalebot/close`.
+- Added `BybitBotService.CreateFMartBot(...)` for `POST /v5/fmartingalebot/create`.
+- Added `BybitBotService.GetFMartDetail(...)` for `POST /v5/fmartingalebot/detail`.
+- Added `BybitBotService.GetFMartLimit(...)` for `POST /v5/fmartingalebot/getlimit`.
+- Added `BybitBotService.CloseGridBot(...)` for `POST /v5/grid/close-grid`.
+- Added `BybitBotService.CreateGridBot(...)` for `POST /v5/grid/create-grid`.
+- Added `BybitBotService.QueryGridDetail(...)` for `POST /v5/grid/query-grid-detail`.
+- Added `BybitBotService.ValidateGridInput(...)` for `POST /v5/grid/validate-input`.
+- Added liquidity-mining methods on `BybitEarnService`: `AddLiquidity`, `AddMargin`, `ClaimLiquidityInterest`, `GetLiquidityMiningLiquidationRecords`, `GetLiquidityMiningOrders`, `GetLiquidityMiningPositions`, `GetLiquidityMiningProducts`, `GetLiquidityMiningYieldRecords`, `ReinvestLiquidity`, `RemoveLiquidity`.
+- Added advance-earn methods on `BybitEarnService`: `GetAdvanceEarnOrder`, `GetAdvanceEarnPosition`, `GetAdvanceEarnProduct`, `GetAdvanceEarnProductExtraInfo`, `GetDoubleWinLeverage`, `GetSmartLeverageRedeemEstAmountList`, `PlaceAdvanceEarnOrder`.
+- Added hold-to-earn methods on `BybitEarnService`: `GetHoldToEarnProduct`, `GetHoldToEarnYieldHistory`.
+- Added RWA methods on `BybitEarnService`: `GetRwaNavChart`, `GetRwaOrderList`, `GetRwaPositionList`, `GetRwaProductList`, `PlaceRwaOrder`.
+- Added PWM methods on `BybitEarnService`: `PwmAssetTrend`, `PwmClaim`, `PwmCreateCustomPlan`, `PwmFundNav`, `PwmFundTransfer`, `PwmGetNewPlanDetail`, `PwmGetPlanDetail`, `PwmInvestMore`, `PwmListInvestmentPlans`, `PwmListOrder`, `PwmListProductCards`, `PwmQueryFundTransferResult`, `PwmRedeem`, `PwmSubscribe`.
+- Added PWM asset-manager methods on `BybitEarnService`: `PwmInstCreateFund`, `PwmInstCreateInvestmentPlan`, `PwmInstCreateSubAccount`, `PwmInstGetInvestmentPlans`, `PwmInstListFunds`, `PwmInstListOrders`, `PwmInstManageInvestmentPlan`, `PwmInstManageOrder`, `PwmInstSettleProfit`.
+- Added `BybitEarnService.ListEarnCoupons(...)` for `GET /v5/earn/coupons`.
+- Added `BybitSpotMarginService.GetVipMarginData(...)` for `GET /v5/spot-margin-trade/data`.
+- Added `BybitUserService.QueryAPIKey()` for `GET /v5/user/query-api`.
+- Added `BybitUserService.QueryReferrals(...)` for `GET /v5/user/invitation/referrals`.
+- Added `BybitUserService.SignAgreement(...)` for `POST /v5/user/agreement`.
+
 ## [1.3.0] - 2026-04-22
 
 ### Added
