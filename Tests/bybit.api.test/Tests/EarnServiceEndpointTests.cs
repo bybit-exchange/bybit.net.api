@@ -90,6 +90,54 @@ namespace bybit.api.test.Tests
         }
 
         [Fact]
+        public async Task AddLiquidity_SerializesPostBodyAndSigns()
+        {
+            const string apiKey = "test-key";
+            const string apiSecret = "test-secret";
+            const string recvWindow = "5000";
+            var responseContent = "{\"retCode\":0,\"retMsg\":\"\",\"result\":{\"orderId\":\"o1\",\"orderLinkId\":\"link1\"},\"time\":1}";
+            HttpRequestMessage? capturedRequest = null;
+
+            var handler = new Mock<HttpMessageHandler>();
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.Is<HttpRequestMessage>(request =>
+                        request.Method == HttpMethod.Post &&
+                        request.RequestUri!.AbsolutePath == "/v5/earn/liquidity-mining/add-liquidity"),
+                    ItExpr.IsAny<CancellationToken>())
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(responseContent),
+                });
+
+            var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
+            var service = new BybitEarnService(client, apiKey: apiKey, apiSecret: apiSecret, recvWindow: recvWindow);
+            var result = await service.AddLiquidity(
+                productId: "p1",
+                orderLinkId: "link1",
+                quoteAccountType: "FUND",
+                baseAccountType: "FUND",
+                quoteAmount: "100",
+                baseAmount: "0.5",
+                leverage: "3");
+
+            Assert.NotNull(result);
+            Assert.NotNull(capturedRequest);
+
+            var body = await capturedRequest!.Content!.ReadAsStringAsync();
+            Assert.Equal(
+                "{\"productId\":\"p1\",\"orderLinkId\":\"link1\",\"quoteAccountType\":\"FUND\",\"baseAccountType\":\"FUND\",\"quoteAmount\":\"100\",\"baseAmount\":\"0.5\",\"leverage\":\"3\"}",
+                body);
+
+            var timestamp = capturedRequest.Headers.GetValues("X-BAPI-TIMESTAMP").Single();
+            var signature = capturedRequest.Headers.GetValues("X-BAPI-SIGN").Single();
+            Assert.Equal(SigningTestUtil.Sign($"{timestamp}{apiKey}{recvWindow}{body}", apiSecret), signature);
+        }
+
+        [Fact]
         public async Task SetFixedTermAutoInvest_UsesExpectedPayload()
         {
             var responseContent = "{\"retCode\":0,\"retMsg\":\"\",\"result\":{},\"time\":1}";

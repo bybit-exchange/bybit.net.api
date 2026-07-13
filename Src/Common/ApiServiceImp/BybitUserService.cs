@@ -625,28 +625,16 @@ namespace bybit.net.api.ApiServiceImp
         }
         #endregion
 
-        private const string QUERY_API_KEY = "/v5/user/query-api";
-        /// <summary>
-        /// Get API Key Information for the current key.
-        /// </summary>
-        /// <see href="https://bybit-exchange.github.io/docs/v5/user/apikey-info"/>
-        /// <returns>Request results as JSON string.</returns>
-        public async Task<string?> QueryAPIKey()
-        {
-            var result = await this.SendSignedAsync<string>(QUERY_API_KEY, HttpMethod.Get);
-            return result;
-        }
-
         private const string QUERY_REFERRALS = "/v5/user/invitation/referrals";
         /// <summary>
         /// Query referral users invited by the current account.
         /// </summary>
         /// <param name="cursor">Cursor for pagination</param>
         /// <param name="size">Page size</param>
-        /// <param name="status">Filter by referral status</param>
-        /// <see href="https://bybit-exchange.github.io/docs/v5/user/invitation/referrals"/>
+        /// <param name="status">Filter by referral status ("0" = alive, "1" = invalid)</param>
+        /// <see href="https://bybit-exchange.github.io/docs/v5/user/friend-referral"/>
         /// <returns>Request results as JSON string.</returns>
-        public async Task<string?> QueryReferrals(string? cursor = null, long? size = null, List<Dictionary<string, object>>? status = null)
+        public async Task<string?> QueryReferrals(string? cursor = null, long? size = null, string? status = null)
         {
             var query = new Dictionary<string, object>();
             BybitParametersUtils.AddOptionalParameters(query,
