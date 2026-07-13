@@ -1,0 +1,33 @@
+Src/Common/ApiServiceImp/BybitUserService.cs
+  4060116d8234d3a7 627-678
+Src/Common/bybit.net.api.csproj
+  4060116d8234d3a7 4,28-29,66
+Src/Common/ApiServiceImp/BybitBotService.cs
+  4060116d8234d3a7 147-730
+CHANGELOG.md
+  4060116d8234d3a7 8-41
+Src/Common/ApiServiceImp/BybitAffiliateService.cs
+  4060116d8234d3a7 53-77
+Src/Common/ApiServiceImp/BybitEarnService.cs
+  4060116d8234d3a7 372-1514
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2-bit.10+672fbf0",
+  "base_commit_sha": "1dad9e20fb5488323adce2ae2871d089afb402f8",
+  "prompts": {
+    "4060116d8234d3a7": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d3fe9282-23ed-48a1-911f-7926ef008688",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "doris-xiao-bybit",
+      "messages": [],
+      "total_additions": 2553,
+      "total_deletions": 6,
+      "accepted_lines": 2551,
+      "overriden_lines": 0
+    }
+  }
+}
