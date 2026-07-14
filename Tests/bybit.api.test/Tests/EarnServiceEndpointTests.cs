@@ -98,6 +98,7 @@ namespace bybit.api.test.Tests
             var responseContent = "{\"retCode\":0,\"retMsg\":\"\",\"result\":{\"orderId\":\"o1\",\"orderLinkId\":\"link1\"},\"time\":1}";
             HttpRequestMessage? capturedRequest = null;
 
+            string? capturedBody = null;
             var handler = new Mock<HttpMessageHandler>();
             handler.Protected()
                 .Setup<Task<HttpResponseMessage>>(
@@ -106,7 +107,11 @@ namespace bybit.api.test.Tests
                         request.Method == HttpMethod.Post &&
                         request.RequestUri!.AbsolutePath == "/v5/earn/liquidity-mining/add-liquidity"),
                     ItExpr.IsAny<CancellationToken>())
-                .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    capturedRequest = request;
+                    capturedBody = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+                })
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -127,7 +132,7 @@ namespace bybit.api.test.Tests
             Assert.NotNull(result);
             Assert.NotNull(capturedRequest);
 
-            var body = await capturedRequest!.Content!.ReadAsStringAsync();
+            var body = capturedBody!;
             Assert.Equal(
                 "{\"productId\":\"p1\",\"orderLinkId\":\"link1\",\"quoteAccountType\":\"FUND\",\"baseAccountType\":\"FUND\",\"quoteAmount\":\"100\",\"baseAmount\":\"0.5\",\"leverage\":\"3\"}",
                 body);

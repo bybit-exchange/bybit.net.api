@@ -12,7 +12,7 @@ namespace bybit.api.test
     {
         readonly BybitTradeService TradeService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
         #region Trade History
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_GetTradeHistory()
         {
             var tradeInfoString = await TradeService.GetTradeHistory(category: Category.LINEAR, symbol: "GASUSDT");
@@ -21,7 +21,7 @@ namespace bybit.api.test
         #endregion
 
         #region inverse oder
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_PlaceInverseOrderByDict()
         {
             var orderInfoString = await TradeService.PlaceOrder(category: Category.LINEAR, symbol: "GASUSDT", side: Side.BUY, orderType: OrderType.LIMIT, qty: "10", price: "10", timeInForce: TimeInForce.GTC, positionIdx: 1);
@@ -37,7 +37,7 @@ namespace bybit.api.test
         #endregion
 
         #region Batch Order
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_PlaceBatchOrderByDict()
         {
             Dictionary<string, object> dict1 = new() { { "category", "linear" }, { "symbol", "XRPUSDT" }, { "orderType", "Limit" }, { "side", "Buy" }, { "qty", "10" }, { "price", "0.6080" }, { "timeInForce", "GTC" }, { "positionIdx", 1 } };
@@ -54,7 +54,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_PlaceBatchOrderByClass()
         {
             var order1 = new OrderRequest { Category = "linear", Symbol = "XRPUSDT", OrderType = "Limit", Side = "Buy", Qty = "10", Price = "0.6080", TimeInForce = "GTC", PositionIdx = 1 };
@@ -70,7 +70,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_PlaceBatchOrderByStruct()
         {
             var order1 = new OrderRequest { Category = "linear", Symbol = "XRPUSDT", OrderType = OrderType.LIMIT.Value, Side = Side.BUY.Value, Qty = "10", Price = "0.6080", TimeInForce = TimeInForce.GTC.Value };
@@ -87,7 +87,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_AmendOrder()
         {
             var orderInfoString = await TradeService.AmendOrder(orderId: "xxxxxxxxxxxxxx", category: Category.LINEAR, symbol: "XRPUSDT", price: "0.5", qty: "15");
@@ -100,7 +100,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_AmendBatchOrder()
         {
             var order1 = new OrderRequest { Symbol = "XRPUSDT", OrderId = "xxxxxxxxxx", Qty = "10", Price = "0.6080" };
@@ -115,7 +115,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_CancelOrder()
         {
             var orderInfoString = await TradeService.CancelOrder(orderId: "xxxxxxxxxxxxxxxxxx", category: Category.SPOT, symbol: "XRPUSDT");
@@ -128,7 +128,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_CancelBatchOrder()
         {
             var order1 = new OrderRequest { Symbol = "BTC-10FEB23-24000-C", OrderLinkId = "9b381bb1-401" };
@@ -143,7 +143,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Requires valid testnet credentials")]
         public async Task Check_CancelAllOrder()
         {
             var orderInfoString = await TradeService.CancelAllOrder(category: Category.LINEAR, baseCoin: "USDT", symbol: "BTCUSDT");

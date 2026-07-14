@@ -18,6 +18,7 @@ namespace bybit.api.test.Tests
             const string recvWindow = "5000";
             var responseContent = "{\"ret_code\":0,\"ret_msg\":\"SUCCESS\",\"result\":{\"count\":0,\"items\":[]},\"ext_code\":\"\",\"ext_info\":{},\"time_now\":\"1\"}";
             HttpRequestMessage? capturedRequest = null;
+            string? capturedBody = null;
 
             var handler = new Mock<HttpMessageHandler>();
             handler.Protected()
@@ -27,7 +28,11 @@ namespace bybit.api.test.Tests
                         request.Method == HttpMethod.Post &&
                         request.RequestUri!.AbsolutePath == "/v5/p2p/order/simplifyList"),
                     ItExpr.IsAny<CancellationToken>())
-                .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                {
+                    capturedRequest = request;
+                    capturedBody = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
+                })
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -41,10 +46,10 @@ namespace bybit.api.test.Tests
 
             Assert.NotNull(result);
             Assert.NotNull(capturedRequest);
-            Assert.NotNull(capturedRequest!.Content);
+            Assert.NotNull(capturedBody);
 
-            var body = await capturedRequest.Content!.ReadAsStringAsync();
-            var timestamp = capturedRequest.Headers.GetValues("X-BAPI-TIMESTAMP").Single();
+            var body = capturedBody!;
+            var timestamp = capturedRequest!.Headers.GetValues("X-BAPI-TIMESTAMP").Single();
             var signature = capturedRequest.Headers.GetValues("X-BAPI-SIGN").Single();
             var expectedSignature = Sign($"{timestamp}{apiKey}{recvWindow}{body}", apiSecret);
 
