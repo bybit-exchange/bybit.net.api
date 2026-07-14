@@ -55,7 +55,6 @@ namespace bybit.api.test.Tests
             const string recvWindow = "5000";
             var responseContent = "{\"retCode\":0,\"retMsg\":\"\",\"result\":{},\"time\":1}";
             HttpRequestMessage? capturedRequest = null;
-            string? capturedBody = null;
 
             var handler = new Mock<HttpMessageHandler>();
             handler.Protected()
@@ -65,11 +64,7 @@ namespace bybit.api.test.Tests
                         request.Method == HttpMethod.Post &&
                         request.RequestUri!.AbsolutePath == "/v5/user/agreement"),
                     ItExpr.IsAny<CancellationToken>())
-                .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
-                {
-                    capturedRequest = request;
-                    capturedBody = request.Content?.ReadAsStringAsync().GetAwaiter().GetResult();
-                })
+                .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)
                 .ReturnsAsync(new HttpResponseMessage
                 {
                     StatusCode = HttpStatusCode.OK,
@@ -83,7 +78,7 @@ namespace bybit.api.test.Tests
             Assert.NotNull(result);
             Assert.NotNull(capturedRequest);
 
-            var body = capturedBody!;
+            var body = await capturedRequest!.Content!.ReadAsStringAsync();
             Assert.Equal("{\"category\":1,\"agree\":true}", body);
 
             var timestamp = capturedRequest.Headers.GetValues("X-BAPI-TIMESTAMP").Single();

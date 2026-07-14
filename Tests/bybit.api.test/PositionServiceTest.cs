@@ -15,7 +15,7 @@ namespace bybit.api.test
     {
         readonly BybitPositionService PositionService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url:BybitConstants.HTTP_TESTNET_URL);
         #region Poistion GetPositionList
-        [Fact(Skip = "Requires valid testnet credentials")]
+        [Fact]
         public async Task Check_ConfirmPositionInfo()
         {
             var inversePositionInfo = await PositionService.GetPositionInfo(category: Category.INVERSE, symbol: "BTCUSD");

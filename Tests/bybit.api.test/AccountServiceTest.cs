@@ -33,7 +33,7 @@ namespace bybit.api.test
         #endregion
 
         #region Batch Set Collateral Info
-        [Fact(Skip = "Requires valid testnet credentials")]
+        [Fact]
         public async Task Check_BatchSetCollateralInfoByDict()
         {
             Dictionary<string, object> dict1 = new() { { "coin", "MATIC" }, { "collateralSwitch", "OFF" } };
@@ -51,7 +51,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact(Skip = "Requires valid testnet credentials")]
+        [Fact]
         public async Task Check_BatchSetCollateralInfoByClass()
         {
             var coin1 = new SetCollateralCoinRequest { coin = "MATIC", collateralSwitch = "OFF", };
