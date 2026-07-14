@@ -13,7 +13,7 @@ namespace bybit.api.test
     {
         readonly BybitAccountService AccountService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
         #region Get Collateral Info
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_GetCollateralInfo()
         {
             var collateralInfoString = await AccountService.GetAccountCollateralInfo("XRP");
@@ -23,7 +23,7 @@ namespace bybit.api.test
         #endregion
 
         #region Set Collateral Info
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_SetCollateralInfo()
         {
             var collateralInfoString = await AccountService.SetAccountCollateralCoin("XRP", CollateralSwitch.ON);

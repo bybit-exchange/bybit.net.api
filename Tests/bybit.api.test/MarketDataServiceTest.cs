@@ -10,7 +10,7 @@ namespace bybit.api.test
     {
         readonly BybitMarketDataService marketDataService = new(url: BybitConstants.HTTP_TESTNET_URL);
         #region Market Kline
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task CheckMarketKline_ResponseAsync()
         {
             var generalResponse = await marketDataService.GetMarketKline(category: Category.SPOT, symbol: "BTCUSDT", interval: MarketInterval.OneHour, start: 1693785600000, limit: 2);
@@ -26,7 +26,7 @@ namespace bybit.api.test
         #endregion
 
         #region Market Tickers
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task CheckMarketTcikers_ResponseAsync()
         {
             var generalResponse = await marketDataService.GetMarketTickers(category: Category.SPOT);
@@ -42,7 +42,7 @@ namespace bybit.api.test
         #endregion
 
         #region Funding Rate
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task CheckFundingRate_ResponseAsync()
         {
             var generalResponse = await marketDataService.GetMarketFundingHistory(category: Category.LINEAR, symbol: "BTCUSDT");

@@ -23,7 +23,7 @@ namespace bybit.api.test
         }
         #endregion
         #region Poistion Confirm new risk limit
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_ConfirmPositionNewRiskLimit()
         {
             var positionInfo = await PositionService.ConfirmPositionRiskLimit(category: Category.LINEAR, symbol:"BTCUSDT");
@@ -32,7 +32,7 @@ namespace bybit.api.test
         #endregion
 
         #region Get Move Position History
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_MovePositionInfoHistory()
         {
             var positionInfo = await PositionService.GetMovePositionHistory();
@@ -42,7 +42,7 @@ namespace bybit.api.test
         #endregion
 
         #region Move Position
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_MovePositionByDict()
         {
             Dictionary<string, object> dict1 = new() { { "category", "spot" }, { "symbol", "BTCUSDT" }, { "price", "100" }, { "side", "Sell" }, { "qty", "0.01" } };
@@ -55,7 +55,7 @@ namespace bybit.api.test
             }
         }
 
-        [Fact]
+        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
         public async Task Check_MovePositionByClass()
         {
             var request = new MovePositionRequest{ category= "spot", symbol="BTCUSDT", price="100",side="Sell",qty="0.01" };
