@@ -23,7 +23,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 10.0.x
 
       - name: Derive version
         id: ver
@@ -36,18 +36,12 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Publishing version: $VERSION"
 
-      - name: Restore
-        run: dotnet restore
-
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-
-      - name: Test
-        run: dotnet test --configuration Release --no-build --verbosity normal
-
-      - name: Pack
+      # Publish only builds & packs the SDK project. Tests live in
+      # dotnet.yml (PR/push CI); publish is scoped to shipping the package.
+      - name: Pack SDK
         run: >
-          dotnet pack --configuration Release --no-build
+          dotnet pack Src/Common/bybit.net.api.csproj
+          --configuration Release
           -p:PackageVersion=${{ steps.ver.outputs.version }}
           -o ./nupkg
 
