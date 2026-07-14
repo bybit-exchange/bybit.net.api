@@ -1,0 +1,36 @@
+.github/workflows/publish.yml
+  6fdc727c7130148c 1-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2-bit.10+672fbf0",
+  "base_commit_sha": "00f07fce1640c50284225eb4c97d2c6ae91b114f",
+  "prompts": {
+    "6fdc727c7130148c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9cd7b18b-aed2-4b41-be1c-d63a69e00c50",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "doris-xiao-bybit",
+      "messages": [],
+      "total_additions": 66,
+      "total_deletions": 0,
+      "accepted_lines": 66,
+      "overriden_lines": 0
+    },
+    "840dd2d3dfff3eaf": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c2ef9c26-c758-4988-a792-d89bfb0a3dd8",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "doris-xiao-bybit",
+      "messages": [],
+      "total_additions": 465,
+      "total_deletions": 0,
+      "accepted_lines": 408,
+      "overriden_lines": 29
+    }
+  }
+}
