@@ -1,0 +1,37 @@
+Tests/bybit.api.test/PositionServiceTest.cs
+  6fdc727c7130148c 26,35,45,58
+Tests/bybit.api.test/PublicWebsocketTest.cs
+  6fdc727c7130148c 10
+Tests/bybit.api.test/MarketDataServiceTest.cs
+  6fdc727c7130148c 4-5,13,16-21,29,32-37,45,48-53
+Tests/bybit.api.test/UserServiceTest.cs
+  6fdc727c7130148c 12,29
+Tests/bybit.api.test/AccountServiceTest.cs
+  6fdc727c7130148c 16,26
+Tests/bybit.api.test/SpreadTradingServiceTest.cs
+  6fdc727c7130148c 21
+Tests/bybit.api.test/PrivateWebsocketTest.cs
+  6fdc727c7130148c 10
+Tests/bybit.api.test/WebSocketHandlerTests.cs
+  6fdc727c7130148c 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2-bit.10+672fbf0",
+  "base_commit_sha": "57b9d7a73abb3350b7f9cbf940f850e1857f33d8",
+  "prompts": {
+    "6fdc727c7130148c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9cd7b18b-aed2-4b41-be1c-d63a69e00c50",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "doris-xiao-bybit",
+      "messages": [],
+      "total_additions": 15,
+      "total_deletions": 15,
+      "accepted_lines": 35,
+      "overriden_lines": 0
+    }
+  }
+}
