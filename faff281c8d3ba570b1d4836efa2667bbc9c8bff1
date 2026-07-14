@@ -1,0 +1,23 @@
+Tests/bybit.api.test/Tests/BaseUrlFallbackTests.cs
+  e6c0547212f128a5 1-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.2-bit.10+672fbf0",
+  "base_commit_sha": "faff281c8d3ba570b1d4836efa2667bbc9c8bff1",
+  "prompts": {
+    "e6c0547212f128a5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "53a57d93-2a7f-41ce-8899-40121783ce24",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "paul.yang",
+      "messages": [],
+      "total_additions": 497,
+      "total_deletions": 11,
+      "accepted_lines": 486,
+      "overriden_lines": 0
+    }
+  }
+}
