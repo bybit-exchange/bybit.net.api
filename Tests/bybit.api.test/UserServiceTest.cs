@@ -9,7 +9,7 @@ namespace bybit.api.test
     {
         readonly BybitUserService userService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", BybitConstants.HTTP_TESTNET_URL);
         #region Batch Order
-        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_CreateSubApiKey()
         {
             SubUserPermissions permissions = new()
@@ -26,7 +26,7 @@ namespace bybit.api.test
             */
         }
 
-        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_ModifySubApiKey()
         {
             SubUserPermissions permissions = new()

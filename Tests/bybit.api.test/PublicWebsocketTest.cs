@@ -7,7 +7,7 @@ namespace bybit.api.test
     {
         readonly BybitLinearWebSocket bybitLinearWebSocket = new(useTestNet: true, pingIntevral: 5);
         #region Check Public Channel Orderbook
-        [Fact(Skip = "Integration test: connects to live Bybit WSS which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_OrderBookSubscribe()
         {
             bybitLinearWebSocket.OnMessageReceived(

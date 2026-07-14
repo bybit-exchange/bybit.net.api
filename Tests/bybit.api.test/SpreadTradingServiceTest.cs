@@ -18,7 +18,7 @@ namespace bybit.api.test
             debugMode: true);
 
         #region Get Instruments Info
-        [Fact(Skip = "Integration test: hits live Bybit API which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_GetSpreadInstrumentsInfo()
         {
             var resp = await SpreadService.GetSpreadInstrumentsInfo(

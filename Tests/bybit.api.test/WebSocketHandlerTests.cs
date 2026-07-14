@@ -7,7 +7,7 @@ namespace bybit.api.test
 {
     public class WebSocketHandlerTests
     {
-        [Fact(Skip = "Integration test: connects to live Bybit WSS which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_SubscribesToOrderBookAndReceivesData()
         {
             // Arrange

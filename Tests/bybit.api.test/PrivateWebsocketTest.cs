@@ -7,7 +7,7 @@ namespace bybit.api.test
     {
         readonly BybitPrivateWebsocket bybitPrivateWebsocket = new(apiKey: "xxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxx", useTestNet: true, pingIntevral: 5, maxAliveTime:"120s");
         #region Check Private channel with max alive time
-        [Fact(Skip = "Integration test: connects to live Bybit WSS which geo-blocks CI runners")]
+        [Fact]
         public async Task Check_OrderBookSubscribe()
         {
             bybitPrivateWebsocket.OnMessageReceived(
