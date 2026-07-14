@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      id-token: write   # required for NuGet Trusted Publishing (OIDC)
     steps:
       - uses: actions/checkout@v4
 
@@ -50,12 +51,19 @@ jobs:
           -p:PackageVersion=${{ steps.ver.outputs.version }}
           -o ./nupkg
 
+      # Trusted Publishing: exchange the workflow's short-lived OIDC token
+      # for a temporary NuGet API key. Placed right before push because the
+      # temp key is valid for only 1 hour.
+      - name: NuGet login (Trusted Publishing)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}   # nuget.org profile name, NOT email
+
       - name: Push to NuGet
-        env:
-          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
         run: >
           dotnet nuget push "./nupkg/*.nupkg"
-          --api-key "$NUGET_API_KEY"
+          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
           --source https://api.nuget.org/v3/index.json
           --skip-duplicate
 
