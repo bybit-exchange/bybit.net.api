@@ -38,10 +38,13 @@ jobs:
 
       # Publish only builds & packs the SDK project. Tests live in
       # dotnet.yml (PR/push CI); publish is scoped to shipping the package.
+      # GeneratePackageOnBuild=false disables the csproj's auto-pack-during-build
+      # so dotnet pack owns the full build+pack pipeline (avoids CI "dll not found").
       - name: Pack SDK
         run: >
           dotnet pack Src/Common/bybit.net.api.csproj
           --configuration Release
+          -p:GeneratePackageOnBuild=false
           -p:PackageVersion=${{ steps.ver.outputs.version }}
           -o ./nupkg
 
