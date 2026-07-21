@@ -1,6 +1,7 @@
 ﻿using bybit.net.api.Services;
 using bybit.net.api.Models;
 using bybit.net.api.Models.P2P;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("size", size)
             );
 
-            var result = await this.SendPublicAsync<P2PResponse<GetAdsResult>>(GET_P2P_ADS, HttpMethod.Post, query: body);
+            var result = await this.SendSignedAsync<P2PResponse<GetAdsResult>>(GET_P2P_ADS, HttpMethod.Post, query: body);
             return result;
         }
 
@@ -552,10 +553,10 @@ namespace bybit.net.api.ApiServiceImp
         /// Get User Payment
         /// Returns your saved P2P payment methods. POST sends params via query: body (none here).
         /// </summary>
-        public async Task<P2PResponse<List<UserPaymentItem>>?> GetUserPayment()
+        public async Task<P2PResponse<JToken>?> GetUserPayment()
         {
-            var body = new Dictionary<string, object>(); // empty payload
-            var result = await this.SendSignedAsync<P2PResponse<List<UserPaymentItem>>>(GET_P2P_USER_PAYMENT, HttpMethod.Post, query: body);
+            var body = new Dictionary<string, object>();
+            var result = await this.SendSignedAsync<P2PResponse<JToken>>(GET_P2P_USER_PAYMENT, HttpMethod.Post, query: body);
             return result;
         }
     }

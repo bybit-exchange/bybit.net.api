@@ -111,7 +111,7 @@ namespace bybit.net.api
             var bybitSignatureService = new BybitHmacSignatureGenerator(apiKey, apiSecret, timestamp, recvWindow);
             string signature = bybitSignatureService.GeneratePostSignature(string.Empty);
 
-            using HttpRequestMessage request = BuildHttpRequest(requestUri, HttpMethod.Post, signature, timestamp);
+            HttpRequestMessage request = BuildHttpRequest(requestUri, HttpMethod.Post, signature, timestamp);
             request.Content = content;
 
             return await SendAsync<T>(request, requestUri);
@@ -166,7 +166,7 @@ namespace bybit.net.api
         /// <returns>A task that represents the asynchronous operation. The task result contains the deserialized response object of type T or throws an exception if there's an issue.</returns>
         private async Task<T?> SendAsync<T>(string requestUri, HttpMethod httpMethod, string? signature = null, string? content = null, string? timestamp = null)
         {
-            using HttpRequestMessage request = BuildHttpRequest(requestUri, httpMethod, signature, timestamp ?? CurrentTimeStamp, content);
+            HttpRequestMessage request = BuildHttpRequest(requestUri, httpMethod, signature, timestamp ?? CurrentTimeStamp, content);
 
             return await SendAsync<T>(request, requestUri);
         }

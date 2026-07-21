@@ -11,6 +11,7 @@ using System.Collections.Generic;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class PositionServiceTest
     {
         readonly BybitPositionService PositionService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url:BybitConstants.HTTP_TESTNET_URL);
