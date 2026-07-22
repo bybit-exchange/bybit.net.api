@@ -1,0 +1,71 @@
+name: Publish NuGet
+
+on:
+  release:
+    types: [published]
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Manual version (no v prefix, e.g. 1.2.3); leave empty to derive from tag'
+        required: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write   # required for NuGet Trusted Publishing (OIDC)
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Derive version
+        id: ver
+        run: |
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          else
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Publishing version: $VERSION"
+
+      # Publish only builds & packs the SDK project. Tests live in
+      # dotnet.yml (PR/push CI); publish is scoped to shipping the package.
+      # GeneratePackageOnBuild=false disables the csproj's auto-pack-during-build
+      # so dotnet pack owns the full build+pack pipeline (avoids CI "dll not found").
+      - name: Pack SDK
+        run: >
+          dotnet pack Src/Common/bybit.net.api.csproj
+          --configuration Release
+          -p:GeneratePackageOnBuild=false
+          -p:PackageVersion=${{ steps.ver.outputs.version }}
+          -o ./nupkg
+
+      # Trusted Publishing: exchange the workflow's short-lived OIDC token
+      # for a temporary NuGet API key. Placed right before push because the
+      # temp key is valid for only 1 hour.
+      - name: NuGet login (Trusted Publishing)
+        id: login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}   # nuget.org profile name, NOT email
+
+      - name: Push to NuGet
+        run: >
+          dotnet nuget push "./nupkg/*.nupkg"
+          --api-key "${{ steps.login.outputs.NUGET_API_KEY }}"
+          --source https://api.nuget.org/v3/index.json
+          --skip-duplicate
+
+      - name: Upload nupkg to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./nupkg/*.nupkg
