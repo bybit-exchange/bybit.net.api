@@ -398,7 +398,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("cursor", cursor)
             );
 
-            var result = await this.SendPublicAsync<string>(
+            var result = await this.SendSignedAsync<string>(
                 GET_RQF_PUBLIC_TRADES,
                 HttpMethod.Get,
                 query: query);

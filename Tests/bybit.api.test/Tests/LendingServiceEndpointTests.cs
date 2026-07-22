@@ -51,7 +51,7 @@ namespace bybit.api.test.Tests
                 });
 
             var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitLendingService(client, "key", "secret");
+            var service = new BybitLendingService(client, apiKey: "key", apiSecret: "secret");
             var result = await service.GetInsLoanOrders(limit: 10);
 
             Assert.NotNull(result);
@@ -72,7 +72,7 @@ namespace bybit.api.test.Tests
                 });
 
             var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitLendingService(client, "key", "secret");
+            var service = new BybitLendingService(client, apiKey: "key", apiSecret: "secret");
             var result = await service.GetInsLoanRepayOrders(limit: 100);
 
             Assert.NotNull(result);
@@ -101,7 +101,7 @@ namespace bybit.api.test.Tests
                 });
 
             var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitLendingService(client, "key", "secret");
+            var service = new BybitLendingService(client, apiKey: "key", apiSecret: "secret");
             var result = await service.RepayInsLoan("USDT", "500000");
 
             Assert.NotNull(result);
@@ -122,7 +122,7 @@ namespace bybit.api.test.Tests
                 });
 
             var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitLendingService(client, "key", "secret");
+            var service = new BybitLendingService(client, apiKey: "key", apiSecret: "secret");
             var result = await service.C2CCancelRedeem(orderId: "1");
 
             Assert.NotNull(result);
@@ -143,7 +143,7 @@ namespace bybit.api.test.Tests
                 });
 
             var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitLendingService(client, "key", "secret");
+            var service = new BybitLendingService(client, apiKey: "key", apiSecret: "secret");
             var result = await service.GetC2CLendingOrders(orderType: LendingOrderType.DEPOSIT);
 
             Assert.NotNull(result);

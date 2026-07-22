@@ -8,6 +8,7 @@ using Xunit;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class TradeServiceTest
     {
         readonly BybitTradeService TradeService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);

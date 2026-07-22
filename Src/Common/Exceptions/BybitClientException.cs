@@ -2,6 +2,12 @@
 {
     public class BybitClientException : BybitHttpException
     {
+        [Newtonsoft.Json.JsonConstructor]
+        public BybitClientException()
+        {
+            Message = string.Empty;
+        }
+
         public BybitClientException(string message)
         : base(message)
         {
