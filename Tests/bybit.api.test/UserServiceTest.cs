@@ -5,6 +5,7 @@ using Xunit;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class UserServiceTest
     {
         readonly BybitUserService userService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", BybitConstants.HTTP_TESTNET_URL);

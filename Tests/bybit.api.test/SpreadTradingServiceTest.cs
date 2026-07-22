@@ -9,6 +9,7 @@ using Xunit;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class SpreadTradingServiceTest
     {
         readonly BybitSpreadTradingService SpreadService = new(
