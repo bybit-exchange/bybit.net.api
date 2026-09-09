@@ -12,7 +12,7 @@ namespace bybit.api.test
     [Trait("Category", "Integration")]
     public class AccountServiceTest
     {
-        readonly BybitAccountService AccountService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
+        readonly BybitAccountService AccountService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
         #region Get Collateral Info
         [Fact]
         public async Task Check_GetCollateralInfo()
