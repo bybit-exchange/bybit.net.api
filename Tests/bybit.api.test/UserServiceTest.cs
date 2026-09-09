@@ -8,7 +8,7 @@ namespace bybit.api.test
     [Trait("Category", "Integration")]
     public class UserServiceTest
     {
-        readonly BybitUserService userService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", BybitConstants.HTTP_TESTNET_URL);
+        readonly BybitUserService userService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", BybitConstants.HTTP_TESTNET_URL);
         #region Batch Order
         [Fact]
         public async Task Check_CreateSubApiKey()
