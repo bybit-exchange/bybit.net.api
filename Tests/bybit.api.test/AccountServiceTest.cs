@@ -9,9 +9,19 @@ using bybit.net.api.Models.Account;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class AccountServiceTest
     {
-        readonly BybitAccountService AccountService = new(apiKey: "X6wmWloIPvaLXAKqv2", apiSecret: "rY1CWGYLHy0AUjdNZqqspvd3Krhp79fHp1sP", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
+        private static string TestnetApiKey =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_KEY") ?? string.Empty;
+        private static string TestnetApiSecret =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_SECRET") ?? string.Empty;
+
+        readonly BybitAccountService AccountService = new(
+            apiKey: TestnetApiKey,
+            apiSecret: TestnetApiSecret,
+            url: BybitConstants.HTTP_TESTNET_URL,
+            debugMode: false);
         #region Get Collateral Info
         [Fact]
         public async Task Check_GetCollateralInfo()
