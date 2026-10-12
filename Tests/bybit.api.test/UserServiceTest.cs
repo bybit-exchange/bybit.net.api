@@ -18,12 +18,6 @@ namespace bybit.api.test
             apiSecret: TestnetApiSecret,
             url: BybitConstants.HTTP_TESTNET_URL,
             debugMode: false);
-namespace bybit.api.test
-{
-    [Trait("Category", "Integration")]
-    public class UserServiceTest
-    {
-        readonly BybitUserService userService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", BybitConstants.HTTP_TESTNET_URL);
         #region Batch Order
         [Fact]
         public async Task Check_CreateSubApiKey()
