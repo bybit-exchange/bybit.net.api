@@ -54,36 +54,18 @@ namespace bybit.api.test.Tests
             const string apiSecret = "test-secret";
             const string recvWindow = "5000";
             var responseContent = "{\"retCode\":0,\"retMsg\":\"\",\"result\":{},\"time\":1}";
-            HttpRequestMessage? capturedRequest = null;
-
-            var handler = new Mock<HttpMessageHandler>();
-            handler.Protected()
-                .Setup<Task<HttpResponseMessage>>(
-                    "SendAsync",
-                    ItExpr.Is<HttpRequestMessage>(request =>
-                        request.Method == HttpMethod.Post &&
-                        request.RequestUri!.AbsolutePath == "/v5/user/agreement"),
-                    ItExpr.IsAny<CancellationToken>())
-                .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)
-                .ReturnsAsync(new HttpResponseMessage
-                {
-                    StatusCode = HttpStatusCode.OK,
-                    Content = new StringContent(responseContent),
-                });
-
-            var client = new HttpClient(handler.Object) { BaseAddress = new Uri("https://api.bybit.com") };
+            var handler = new SignedRequestRecordingHandler(responseContent);
+            var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
             var service = new BybitUserService(client, apiKey, apiSecret, recvWindow: recvWindow);
             var result = await service.SignAgreement(category: 1, agree: true);
 
             Assert.NotNull(result);
-            Assert.NotNull(capturedRequest);
-
-            var body = await capturedRequest!.Content!.ReadAsStringAsync();
-            Assert.Equal("{\"category\":1,\"agree\":true}", body);
-
-            var timestamp = capturedRequest.Headers.GetValues("X-BAPI-TIMESTAMP").Single();
-            var signature = capturedRequest.Headers.GetValues("X-BAPI-SIGN").Single();
-            Assert.Equal(SigningTestUtil.Sign($"{timestamp}{apiKey}{recvWindow}{body}", apiSecret), signature);
+            Assert.Equal(HttpMethod.Post, handler.Method);
+            Assert.Equal("/v5/user/agreement", handler.Path);
+            Assert.Equal("{\"category\":1,\"agree\":true}", handler.Body);
+            Assert.Equal(
+                SigningTestUtil.Sign($"{handler.Timestamp}{apiKey}{recvWindow}{handler.Body}", apiSecret),
+                handler.Signature);
         }
     }
 }
