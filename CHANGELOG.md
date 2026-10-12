@@ -1,3 +1,59 @@
+## 1.4.1 — 2026-10-10
+
+### Added
+- `BybitAccountService.DemoApplyMoney(...)`
+- `BybitAlphaService.GetLPOrderList(...)`
+- `BybitAlphaService.GetLPPayTokenList(...)`
+- `BybitAlphaService.GetLPPayTokenPrice(...)`
+- `BybitAlphaService.GetLPPoolInfo(...)`
+- `BybitAlphaService.GetLPPoolList(...)`
+- `BybitAlphaService.GetLPPositionList(...)`
+- `BybitAlphaService.ExecuteLPRedeem(...)`
+- `BybitAlphaService.ExecuteLPStake(...)`
+- `BybitAlphaService.ExecutePredictionBuy(...)`
+- `BybitAlphaService.GetPredictionEngineStatus(...)`
+- `BybitAlphaService.GetPredictionEventDetail(...)`
+- `BybitAlphaService.GetPredictionOrderBook(...)`
+- `BybitAlphaService.GetPredictionOrderEstimate(...)`
+- `BybitAlphaService.GetPredictionOrderList(...)`
+- `BybitAlphaService.GetPredictionPayTokenList(...)`
+- `BybitAlphaService.GetPredictionPortfolioSummary(...)`
+- `BybitAlphaService.GetPredictionPositionHistory(...)`
+- `BybitAlphaService.GetPredictionPositionList(...)`
+- `BybitAlphaService.GetPredictionPriceHistory(...)`
+- `BybitAlphaService.ExecutePredictionSell(...)`
+- `BybitAlphaService.GetPredictionSideMarketList(...)`
+- `BybitAlphaService.GetPredictionGroupStageDetail(...)`
+- `BybitAlphaService.GetPredictionMatchList(...)`
+- `BybitAlphaService.GetPredictionTimelineStages(...)`
+- `BybitAlphaService.GetPredictionTokenPrice(...)`
+- `BybitAssetService.LimitOrderCallback(...)`
+- `BybitAssetService.CoinConvertLimitQuery(...)`
+- `BybitAssetService.QueryOrderFromOpenApi(...)`
+- `BybitAssetService.TransferSubMemberSave(...)`
+- `BybitNewCryptoLoanService.GetCryptoLoanFixedAvailableInventory(...)`
+- `BybitNewCryptoLoanService.GetCryptoLoanFlexibleAvailableInventory(...)`
+- `BybitEarnService.ListEarnAutoSavings(...)`
+- `BybitEarnService.EditEarnAutoSavings(...)`
+- `BybitLendingService.InsLoanCoinDeltaAmount(...)`
+- `BybitLendingService.InsLoanDelayLiqStatus(...)`
+- `BybitLendingService.InsLoanEnsureTokens(...)`
+- `BybitMarketDataService.GetOptionBaseCoins(...)`
+- `BybitP2PService.UploadChatFile(...)`
+- `BybitPositionService.GetPositionSymbolInfo(...)`
+- `BybitSpotMarginService.QueryFixedAvailableInventory(...)`
+- `BybitSpotMarginService.GetSpotMarginTradeFlexibleAvailableInventory(...)`
+- `BybitUserService.QueryReferralCode(...)`
+
+### Fixed
+- Corrected Alpha Prediction parameter names, required fields, and enum types.
+- Serialized GET collection parameters as repeated query keys.
+- Allowed comma-separated Option underlying-type filters.
+- Sent P2P chat files as signed multipart form data.
+- Kept public endpoint requests free of API authentication headers.
+- Removed embedded testnet credentials and restored integration-test isolation.
+- Aligned NuGet publishing with the .NET 10 SDK project.
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
