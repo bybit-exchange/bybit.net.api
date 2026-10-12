@@ -515,5 +515,19 @@ namespace bybit.net.api.ApiServiceImp
                 HttpMethod.Get,
                 query: query);
         }
+
+    private const string GET_OPTION_BASE_COINS = "/v5/market/option-base-coins";
+    /// <summary>
+    /// Get Option Base Coins
+    /// </summary>
+    public async Task<string?> GetOptionBaseCoins(string? underlyingType = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("underlyingType", underlyingType)
+        );
+        var result = await this.SendPublicAsync<string>(GET_OPTION_BASE_COINS, HttpMethod.Get, query: query);
+        return result;
+    }
     }
 }

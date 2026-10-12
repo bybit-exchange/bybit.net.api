@@ -127,32 +127,52 @@ namespace bybit.net.api
         /// <returns>A StringBuilder containing the constructed query string.</returns>
         private StringBuilder BuildQueryString(Dictionary<string, object> queryParameters, StringBuilder builder)
         {
-            IEnumerable<(KeyValuePair<string, object> queryParameter, string queryParameterValue)> enumerable()
+            foreach (KeyValuePair<string, object> queryParameter in queryParameters)
             {
-                foreach (KeyValuePair<string, object> queryParameter in queryParameters)
+                foreach (string queryParameterValue in GetQueryValues(queryParameter.Value))
                 {
-                    var queryParameterValue = Convert.ToString(queryParameter.Value, CultureInfo.InvariantCulture);
-                    if (!string.IsNullOrWhiteSpace(queryParameterValue))
+                    if (builder.Length > 0)
                     {
-                        yield return (queryParameter, queryParameterValue);
+                        builder.Append('&');
                     }
-                }
-            }
 
-            foreach (var (queryParameter, queryParameterValue) in enumerable())
-            {
-                if (builder.Length > 0)
-                {
-                    builder.Append('&');
+                    builder
+                        .Append(queryParameter.Key)
+                        .Append('=')
+                        .Append(Uri.EscapeDataString(queryParameterValue));
                 }
-
-                builder
-                    .Append(queryParameter.Key)
-                    .Append('=')
-                    .Append(Uri.EscapeDataString(queryParameterValue));
             }
 
             return builder;
+        }
+
+        private static IEnumerable<string> GetQueryValues(object value)
+        {
+            if (value is string text)
+            {
+                yield return text;
+                yield break;
+            }
+
+            if (value is System.Collections.IEnumerable values)
+            {
+                foreach (var item in values)
+                {
+                    var itemText = Convert.ToString(item, CultureInfo.InvariantCulture);
+                    if (!string.IsNullOrWhiteSpace(itemText))
+                    {
+                        yield return itemText;
+                    }
+                }
+
+                yield break;
+            }
+
+            var scalar = Convert.ToString(value, CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(scalar))
+            {
+                yield return scalar;
+            }
         }
 
         /// <summary>
