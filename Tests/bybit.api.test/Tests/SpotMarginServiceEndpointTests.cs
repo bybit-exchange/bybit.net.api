@@ -21,7 +21,6 @@ namespace bybit.api.test.Tests
                     ItExpr.Is<HttpRequestMessage>(request =>
                         request.Method == HttpMethod.Get &&
                         request.RequestUri!.AbsolutePath == "/v5/spot-margin-trade/data" &&
-                        !request.Headers.Contains("X-BAPI-API-KEY") &&
                         !request.Headers.Contains("X-BAPI-SIGN")),
                     ItExpr.IsAny<CancellationToken>())
                 .Callback<HttpRequestMessage, CancellationToken>((request, _) => capturedRequest = request)

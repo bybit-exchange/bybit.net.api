@@ -5,6 +5,7 @@ using Xunit;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class WebSocketHandlerTests
     {
         [Fact]

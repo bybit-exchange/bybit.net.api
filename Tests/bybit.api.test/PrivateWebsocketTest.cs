@@ -3,6 +3,7 @@ using Xunit;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class PrivateWebsocketTest
     {
         readonly BybitPrivateWebsocket bybitPrivateWebsocket = new(apiKey: "xxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxx", useTestNet: true, pingIntevral: 5, maxAliveTime:"120s");

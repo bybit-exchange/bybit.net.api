@@ -6,6 +6,7 @@ using bybit.net.api;
 
 namespace bybit.api.test
 {
+    [Trait("Category", "Integration")]
     public class MarketDataServiceTest
     {
         readonly BybitMarketDataService marketDataService = new(url: BybitConstants.HTTP_TESTNET_URL);

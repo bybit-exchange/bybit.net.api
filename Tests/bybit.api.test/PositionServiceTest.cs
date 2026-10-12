@@ -14,16 +14,7 @@ namespace bybit.api.test
     [Trait("Category", "Integration")]
     public class PositionServiceTest
     {
-        private static string TestnetApiKey =>
-            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_KEY") ?? string.Empty;
-        private static string TestnetApiSecret =>
-            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_SECRET") ?? string.Empty;
-
-        readonly BybitPositionService PositionService = new(
-            apiKey: TestnetApiKey,
-            apiSecret: TestnetApiSecret,
-            url: BybitConstants.HTTP_TESTNET_URL,
-            debugMode: false);
+        readonly BybitPositionService PositionService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", url:BybitConstants.HTTP_TESTNET_URL);
         #region Poistion GetPositionList
         [Fact]
         public async Task Check_ConfirmPositionInfo()
@@ -31,6 +22,8 @@ namespace bybit.api.test
             var positionInfo = await PositionService.GetPositionInfo(category: Category.INVERSE, symbol: "BTCUSD");
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            var inversePositionInfo = await PositionService.GetPositionInfo(category: Category.INVERSE, symbol: "BTCUSD");
+            await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(inversePositionInfo));
         }
         #endregion
         #region Poistion Confirm new risk limit
@@ -40,6 +33,8 @@ namespace bybit.api.test
             var positionInfo = await PositionService.ConfirmPositionRiskLimit(category: Category.LINEAR, symbol:"BTCUSDT");
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            var positionInfo = await PositionService.ConfirmPositionRiskLimit(category: Category.LINEAR, symbol:"BTCUSDT");
+            await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
         }
         #endregion
 
@@ -47,6 +42,9 @@ namespace bybit.api.test
         [Fact]
         public async Task Check_MovePositionInfoHistory()
         {
+            var positionInfo = await PositionService.GetMovePositionHistory();
+            await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
+            Assert.NotNull(positionInfo);
             var positionInfo = await PositionService.GetMovePositionHistory();
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
@@ -62,6 +60,12 @@ namespace bybit.api.test
             var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: request);
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: request);
+            if (positionInfo != null)
+            {
+                await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
+                Assert.NotNull(positionInfo);
+            }
         }
 
         [Fact]
@@ -71,6 +75,12 @@ namespace bybit.api.test
             var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: new List<MovePositionRequest> { request });
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: new List<MovePositionRequest> { request });
+            if (positionInfo != null)
+            {
+                await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
+                Assert.NotNull(positionInfo);
+            }
         }
         #endregion
     }

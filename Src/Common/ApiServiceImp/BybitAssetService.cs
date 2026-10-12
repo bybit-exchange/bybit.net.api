@@ -3,6 +3,7 @@ using bybit.net.api.Models.Account;
 using bybit.net.api.Models.Asset;
 using bybit.net.api.Models.Position;
 using bybit.net.api.Services;
+using Newtonsoft.Json.Linq;
 
 namespace bybit.net.api.ApiServiceImp
 {
@@ -181,7 +182,6 @@ namespace bybit.net.api.ApiServiceImp
             BybitParametersUtils.AddOptionalParameters(query,
                 ("toAccountType", toAccountType?.Value),
                 ("toMemberId", toMemberId),
-                ("coin", coin),
                 ("memberId", memberId),
                 ("withBonus", withBonus?.Value),
                 ("withTransferSafeAmount", withTransferSafeAmount?.Value),
@@ -879,14 +879,14 @@ namespace bybit.net.api.ApiServiceImp
 
         private const string GET_FIAT_BALANCE = "/v5/fiat/balance-query";
 
-        public async Task<GeneralResponse<List<GetFiatBalanceResult>>?> GetFiatBalance(string? currency = null)
+        public async Task<GeneralResponse<JToken>?> GetFiatBalance(string? currency = null)
         {
             var query = new Dictionary<string, object>();
             BybitParametersUtils.AddOptionalParameters(query,
                 ("currency", currency)
             );
 
-            return await this.SendSignedAsync<GeneralResponse<List<GetFiatBalanceResult>>>(GET_FIAT_BALANCE, HttpMethod.Get, query: query);
+            return await this.SendSignedAsync<GeneralResponse<JToken>>(GET_FIAT_BALANCE, HttpMethod.Get, query: query);
         }
 
         private const string GET_FIAT_TRADING_PAIR_LIST = "/v5/fiat/query-coin-list";
@@ -954,7 +954,7 @@ namespace bybit.net.api.ApiServiceImp
 
         private const string GET_FIAT_CONVERT_HISTORY = "/v5/fiat/query-trade-history";
 
-        public async Task<GeneralResponse<List<GetFiatConvertStatusResult>>?> GetFiatConvertHistory(int? index = null, int? limit = null, string? startTime = null, string? endTime = null)
+        public async Task<GeneralResponse<JToken>?> GetFiatConvertHistory(int? index = null, int? limit = null, string? startTime = null, string? endTime = null)
         {
             var query = new Dictionary<string, object>();
             BybitParametersUtils.AddOptionalParameters(query,
@@ -964,7 +964,7 @@ namespace bybit.net.api.ApiServiceImp
                 ("endTime", endTime)
             );
 
-            return await this.SendSignedAsync<GeneralResponse<List<GetFiatConvertStatusResult>>>(GET_FIAT_CONVERT_HISTORY, HttpMethod.Get, query: query);
+            return await this.SendSignedAsync<GeneralResponse<JToken>>(GET_FIAT_CONVERT_HISTORY, HttpMethod.Get, query: query);
         }
 
         private const string GET_FIAT_REFERENCE_PRICE = "/v5/fiat/reference-price";
