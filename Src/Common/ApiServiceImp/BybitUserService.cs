@@ -664,5 +664,15 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<string>(SIGN_AGREEMENT, HttpMethod.Post, query: query);
             return result;
         }
+
+    private const string QUERY_REFERRAL_CODE = "/v5/user/invitation/code";
+    /// <summary>
+    /// Query Referral Code
+    /// </summary>
+    public async Task<string?> QueryReferralCode()
+    {
+        var result = await this.SendSignedAsync<string>(QUERY_REFERRAL_CODE, HttpMethod.Get);
+        return result;
+    }
     }
 }

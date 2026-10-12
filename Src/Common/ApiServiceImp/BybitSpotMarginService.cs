@@ -705,5 +705,34 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendPublicAsync<string>(GET_VIP_MARGIN_DATA, HttpMethod.Get, query: query);
             return result;
         }
+
+    private const string QUERY_FIXED_AVAILABLE_INVENTORY = "/v5/spot-margin-trade/fixed-available-inventory";
+    /// <summary>
+    /// Query Fixed-Rate Available Inventory
+    /// </summary>
+    public async Task<string?> QueryFixedAvailableInventory(string currency, string term, string annualRate)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "currency", currency },
+            { "term", term },
+            { "annualRate", annualRate }
+        };
+        var result = await this.SendSignedAsync<string>(QUERY_FIXED_AVAILABLE_INVENTORY, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string GET_SPOT_MARGIN_TRADE_FLEXIBLE_AVAILABLE_INVENTORY = "/v5/spot-margin-trade/flexible-available-inventory";
+    /// <summary>
+    /// Get Flexible Available Inventory
+    /// </summary>
+    public async Task<string?> GetSpotMarginTradeFlexibleAvailableInventory(string currency)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "currency", currency }
+        };
+        var result = await this.SendSignedAsync<string>(GET_SPOT_MARGIN_TRADE_FLEXIBLE_AVAILABLE_INVENTORY, HttpMethod.Get, query: query);
+        return result;
+    }
     }
 }

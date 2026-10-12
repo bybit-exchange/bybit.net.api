@@ -659,5 +659,20 @@ namespace bybit.net.api.ApiServiceImp
 
             return result;
         }
+
+    private const string DEMO_APPLY_MONEY = "/v5/account/demo-apply-money";
+    /// <summary>
+    /// Apply demo funds
+    /// </summary>
+    public async Task<string?> DemoApplyMoney(long? adjustType = null, List<object>? utaDemoApplyMoney = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("adjustType", adjustType),
+            ("utaDemoApplyMoney", utaDemoApplyMoney)
+        );
+        var result = await this.SendSignedAsync<string>(DEMO_APPLY_MONEY, HttpMethod.Post, query: query);
+        return result;
+    }
     }
 }

@@ -274,5 +274,34 @@ namespace bybit.net.api.ApiServiceImp
             BybitParametersUtils.AddOptionalParameters(query, ("orderId", orderId), ("orderCurrency", orderCurrency), ("limit", limit), ("cursor", cursor));
             return await SendSignedAsync<GeneralResponse<GetRenewOrderInfoFixedResult>>(GET_RENEW_ORDER_INFO_FIXED, HttpMethod.Get, query: query);
         }
+
+    private const string GET_CRYPTO_LOAN_FIXED_AVAILABLE_INVENTORY = "/v5/crypto-loan-fixed/available-inventory";
+    /// <summary>
+    /// Get Available Inventory
+    /// </summary>
+    public async Task<string?> GetCryptoLoanFixedAvailableInventory(string currency, string term, string annualRate)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "currency", currency },
+            { "term", term },
+            { "annualRate", annualRate }
+        };
+        var result = await this.SendSignedAsync<string>(GET_CRYPTO_LOAN_FIXED_AVAILABLE_INVENTORY, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string GET_CRYPTO_LOAN_FLEXIBLE_AVAILABLE_INVENTORY = "/v5/crypto-loan-flexible/available-inventory";
+    /// <summary>
+    /// Get Available Inventory
+    /// </summary>
+    public async Task<string?> GetCryptoLoanFlexibleAvailableInventory(string currency)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "currency", currency }
+        };
+        var result = await this.SendSignedAsync<string>(GET_CRYPTO_LOAN_FLEXIBLE_AVAILABLE_INVENTORY, HttpMethod.Get, query: query);
+        return result;
+    }
     }
 }
