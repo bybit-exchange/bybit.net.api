@@ -150,7 +150,11 @@ namespace bybit.net.api
         {
             if (value is string text)
             {
-                yield return text;
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    yield return text;
+                }
+
                 yield break;
             }
 

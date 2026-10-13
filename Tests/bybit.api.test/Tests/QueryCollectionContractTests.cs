@@ -39,6 +39,28 @@ namespace bybit.api.test.Tests
             Assert.Equal("underlyingType=0%2C2", handler.Query);
         }
 
+        [Fact]
+        public async Task QueryReferrals_OmitsWhitespaceOptionalParametersFromQueryAndSignature()
+        {
+            const string apiKey = "test-key";
+            const string apiSecret = "test-secret";
+            const string recvWindow = "5000";
+            var handler = new RecordingHandler();
+            var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
+            var service = new BybitUserService(
+                client,
+                apiKey: apiKey,
+                apiSecret: apiSecret,
+                recvWindow: recvWindow);
+
+            await service.QueryReferrals(cursor: " ", status: "\t");
+
+            Assert.Equal(string.Empty, handler.Query);
+            Assert.Equal(
+                SigningTestUtil.Sign($"{handler.Timestamp}{apiKey}{recvWindow}", apiSecret),
+                handler.Signature);
+        }
+
         private sealed class RecordingHandler : HttpMessageHandler
         {
             public string Query { get; private set; } = string.Empty;
