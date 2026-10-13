@@ -109,10 +109,15 @@ namespace bybit.net.api
         {
             var timestamp = CurrentTimeStamp;
             var bybitSignatureService = new BybitHmacSignatureGenerator(apiKey, apiSecret, timestamp, recvWindow);
-            string signature = bybitSignatureService.GeneratePostSignature(string.Empty);
+            byte[] body = await content.ReadAsByteArrayAsync();
+            string signature = bybitSignatureService.GeneratePostSignature(body);
 
             HttpRequestMessage request = BuildHttpRequest(requestUri, HttpMethod.Post, signature, timestamp);
-            request.Content = content;
+            request.Content = new ByteArrayContent(body);
+            foreach (var header in content.Headers)
+            {
+                request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
 
             return await SendAsync<T>(request, requestUri);
         }

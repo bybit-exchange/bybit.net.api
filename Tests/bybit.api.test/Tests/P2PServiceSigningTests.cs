@@ -82,9 +82,12 @@ namespace bybit.api.test.Tests
         [Fact]
         public async Task UploadChatFile_SendsMultipartFileContent()
         {
+            const string apiKey = "test-key";
+            const string apiSecret = "test-secret";
+            const string recvWindow = "5000";
             var handler = new MultipartRecordingHandler();
             var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
-            var service = new BybitP2PService(client, "test-key", "test-secret");
+            var service = new BybitP2PService(client, apiKey, apiSecret, recvWindow: recvWindow);
             var fileBytes = new byte[] { 0x89, 0x50, 0x4E, 0x47 };
             var filePath = Path.GetTempFileName();
             await File.WriteAllBytesAsync(filePath, fileBytes);
@@ -94,9 +97,16 @@ namespace bybit.api.test.Tests
                 await service.UploadChatFile(filePath, "image/png");
 
                 Assert.Equal("multipart/form-data", handler.ContentType);
-                Assert.Equal("upload_file", handler.PartName);
-                Assert.Equal(Path.GetFileName(filePath), handler.FileName);
-                Assert.Equal(fileBytes, handler.FileBytes);
+                var multipartText = Encoding.Latin1.GetString(handler.Body);
+                Assert.Contains("upload_file", multipartText);
+                Assert.Contains(Path.GetFileName(filePath), multipartText);
+                Assert.True(handler.Body.AsSpan().IndexOf(fileBytes) >= 0);
+
+                var signaturePayload = Encoding.UTF8
+                    .GetBytes($"{handler.Timestamp}{apiKey}{recvWindow}")
+                    .Concat(handler.Body)
+                    .ToArray();
+                Assert.Equal(Sign(signaturePayload, apiSecret), handler.Signature);
             }
             finally
             {
@@ -105,29 +115,29 @@ namespace bybit.api.test.Tests
         }
 
         private static string Sign(string data, string secret)
+            => Sign(Encoding.UTF8.GetBytes(data), secret);
+
+        private static string Sign(byte[] data, string secret)
         {
             using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret));
-            return BitConverter.ToString(hmac.ComputeHash(Encoding.UTF8.GetBytes(data))).Replace("-", "").ToLower();
+            return BitConverter.ToString(hmac.ComputeHash(data)).Replace("-", "").ToLower();
         }
 
         private sealed class MultipartRecordingHandler : HttpMessageHandler
         {
             public string? ContentType { get; private set; }
-            public string? PartName { get; private set; }
-            public string? FileName { get; private set; }
-            public byte[]? FileBytes { get; private set; }
+            public byte[] Body { get; private set; } = Array.Empty<byte>();
+            public string Timestamp { get; private set; } = string.Empty;
+            public string Signature { get; private set; } = string.Empty;
 
             protected override async Task<HttpResponseMessage> SendAsync(
                 HttpRequestMessage request,
                 CancellationToken cancellationToken)
             {
                 ContentType = request.Content?.Headers.ContentType?.MediaType;
-
-                var multipart = Assert.IsType<MultipartFormDataContent>(request.Content);
-                var part = Assert.Single(multipart);
-                PartName = part.Headers.ContentDisposition?.Name?.Trim('"');
-                FileName = part.Headers.ContentDisposition?.FileName?.Trim('"');
-                FileBytes = await part.ReadAsByteArrayAsync(cancellationToken);
+                Body = await request.Content!.ReadAsByteArrayAsync(cancellationToken);
+                Timestamp = request.Headers.GetValues("X-BAPI-TIMESTAMP").Single();
+                Signature = request.Headers.GetValues("X-BAPI-SIGN").Single();
 
                 return new HttpResponseMessage
                 {

@@ -31,6 +31,7 @@ namespace bybit.api.test
             var positionInfo = await PositionService.GetPositionInfo(category: Category.INVERSE, symbol: "BTCUSD");
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            Assert.Equal(0, positionInfo!.RetCode);
         }
         #endregion
         #region Poistion Confirm new risk limit
@@ -40,6 +41,7 @@ namespace bybit.api.test
             var positionInfo = await PositionService.ConfirmPositionRiskLimit(category: Category.LINEAR, symbol:"BTCUSDT");
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            Assert.Equal(0, positionInfo!.RetCode);
         }
         #endregion
 
@@ -50,6 +52,7 @@ namespace bybit.api.test
             var positionInfo = await PositionService.GetMovePositionHistory();
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            Assert.Equal(0, positionInfo!.RetCode);
         }
         #endregion
 
@@ -62,6 +65,7 @@ namespace bybit.api.test
             var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: request);
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            Assert.Equal(0, positionInfo!.RetCode);
         }
 
         [Fact]
@@ -71,6 +75,7 @@ namespace bybit.api.test
             var positionInfo = await PositionService.MovePosition(fromUid: "123456", toUid: "456789", list: new List<MovePositionRequest> { request });
             await Console.Out.WriteLineAsync(JsonConvert.SerializeObject(positionInfo));
             Assert.NotNull(positionInfo);
+            Assert.Equal(0, positionInfo!.RetCode);
         }
         #endregion
     }

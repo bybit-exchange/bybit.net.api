@@ -1064,7 +1064,7 @@ namespace bybit.net.api.ApiServiceImp
     {
         var query = new Dictionary<string, object>
         {
-            { "subMemberIds", subMemberIds }
+            { "subMemberIds", new[] { subMemberIds } }
         };
         var result = await this.SendSignedAsync<string>(TRANSFER_SUB_MEMBER_SAVE, HttpMethod.Post, query: query);
         return result;
