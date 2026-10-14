@@ -8,7 +8,16 @@ namespace bybit.api.test
     [Trait("Category", "Integration")]
     public class UserServiceTest
     {
-        readonly BybitUserService userService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", BybitConstants.HTTP_TESTNET_URL);
+        private static string TestnetApiKey =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_KEY") ?? string.Empty;
+        private static string TestnetApiSecret =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_SECRET") ?? string.Empty;
+
+        readonly BybitUserService userService = new(
+            apiKey: TestnetApiKey,
+            apiSecret: TestnetApiSecret,
+            url: BybitConstants.HTTP_TESTNET_URL,
+            debugMode: false);
         #region Batch Order
         [Fact]
         public async Task Check_CreateSubApiKey()

@@ -205,5 +205,41 @@ namespace bybit.net.api.ApiServiceImp
             return result;
         }
         #endregion
+
+    private const string INS_LOAN_COIN_DELTA_AMOUNT = "/v5/ins-loan/coin-delta-amount";
+    /// <summary>
+    /// Get Coin Delta Amount
+    /// </summary>
+    public async Task<string?> InsLoanCoinDeltaAmount(string? coin = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("coin", coin)
+        );
+        var result = await this.SendSignedAsync<string>(INS_LOAN_COIN_DELTA_AMOUNT, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string INS_LOAN_DELAY_LIQ_STATUS = "/v5/ins-loan/delay-liq-status";
+    /// <summary>
+    /// Get Delay Liquidation Status
+    /// </summary>
+    public async Task<string?> InsLoanDelayLiqStatus()
+    {
+        var result = await this.SendSignedAsync<string>(INS_LOAN_DELAY_LIQ_STATUS, HttpMethod.Get);
+        return result;
+    }
+    private const string INS_LOAN_ENSURE_TOKENS = "/v5/ins-loan/ensure-tokens";
+    /// <summary>
+    /// Get Margin Tokens
+    /// </summary>
+    public async Task<string?> InsLoanEnsureTokens(string? productId = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("productId", productId)
+        );
+        var result = await this.SendSignedAsync<string>(INS_LOAN_ENSURE_TOKENS, HttpMethod.Get, query: query);
+        return result;
+    }
     }
 }

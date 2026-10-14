@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -559,5 +560,20 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<P2PResponse<JToken>>(GET_P2P_USER_PAYMENT, HttpMethod.Post, query: body);
             return result;
         }
+
+    /// <summary>
+    /// Upload Chat File
+    /// </summary>
+    public async Task<string?> UploadChatFile(
+        string filePath,
+        string contentType = "application/octet-stream")
+    {
+        await using var stream = File.OpenRead(filePath);
+        using var fileContent = new StreamContent(stream);
+        fileContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+        using var content = new MultipartFormDataContent();
+        content.Add(fileContent, "upload_file", Path.GetFileName(filePath));
+        return await SendSignedMultipartAsync<string>(UPLOAD_P2P_CHAT_FILE, content);
+    }
     }
 }

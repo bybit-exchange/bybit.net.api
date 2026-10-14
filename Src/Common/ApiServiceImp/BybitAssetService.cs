@@ -994,5 +994,80 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<string>(CANCEL_WITHDRAW, HttpMethod.Post, query: query);
             return result;
         }
+
+    private const string LIMIT_ORDER_CALLBACK = "/v5/asset/exchange/limit-order/callback";
+    /// <summary>
+    /// Limit order callback notification
+    /// </summary>
+    public async Task<string?> LimitOrderCallback(string exchangeTxId, long optionType, long timeStamp, string sign, string appId, string? errorCode = null)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "exchangeTxId", exchangeTxId },
+            { "optionType", optionType },
+            { "timeStamp", timeStamp },
+            { "sign", sign },
+            { "appId", appId }
+        };
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("errorCode", errorCode)
+        );
+        var result = await this.SendSignedAsync<string>(LIMIT_ORDER_CALLBACK, HttpMethod.Post, query: query);
+        return result;
+    }
+    private const string COIN_CONVERT_LIMIT_QUERY = "/v5/asset/exchange/query-convert-limit";
+    /// <summary>
+    /// Query coin conversion limit
+    /// </summary>
+    public async Task<string?> CoinConvertLimitQuery(string fromCoin, string toCoin, string accountType, long? fromCoinType = null, long? toCoinType = null)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "fromCoin", fromCoin },
+            { "toCoin", toCoin },
+            { "accountType", accountType }
+        };
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("fromCoinType", fromCoinType),
+            ("toCoinType", toCoinType)
+        );
+        var result = await this.SendSignedAsync<string>(COIN_CONVERT_LIMIT_QUERY, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string QUERY_ORDER_FROM_OPEN_API = "/v5/asset/exchange/query-order-list";
+    /// <summary>
+    /// Query conversion order list
+    /// </summary>
+    public async Task<string?> QueryOrderFromOpenApi(long? accountType = null, string? cursor = null, long? limit = null, string? toCoin = null, string? fromCoin = null, long? startTime = null, long? endTime = null, long? type = null, long? exchangeStatus = null, string? direction = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("accountType", accountType),
+            ("cursor", cursor),
+            ("limit", limit),
+            ("toCoin", toCoin),
+            ("fromCoin", fromCoin),
+            ("startTime", startTime),
+            ("endTime", endTime),
+            ("type", type),
+            ("exchangeStatus", exchangeStatus),
+            ("direction", direction)
+        );
+        var result = await this.SendSignedAsync<string>(QUERY_ORDER_FROM_OPEN_API, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string TRANSFER_SUB_MEMBER_SAVE = "/v5/asset/transfer/save-transfer-sub-member";
+    /// <summary>
+    /// Save Transferable Sub Member List
+    /// </summary>
+    public async Task<string?> TransferSubMemberSave(string subMemberIds)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "subMemberIds", new[] { subMemberIds } }
+        };
+        var result = await this.SendSignedAsync<string>(TRANSFER_SUB_MEMBER_SAVE, HttpMethod.Post, query: query);
+        return result;
+    }
     }
 }

@@ -6,20 +6,30 @@ using Xunit;
 using bybit.net.api.Models.Lending;
 using bybit.net.api.Models.Account.Response;
 using bybit.net.api.Models.Account;
+using Newtonsoft.Json.Linq;
 
 namespace bybit.api.test
 {
     [Trait("Category", "Integration")]
     public class AccountServiceTest
     {
-        readonly BybitAccountService AccountService = new(apiKey: "xxxxxxxxxxxxxxxxxxxxx", apiSecret: "xxxxxxxxxxxxxxxxxxxxx", url: BybitConstants.HTTP_TESTNET_URL, debugMode: true);
+        private static string TestnetApiKey =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_KEY") ?? string.Empty;
+        private static string TestnetApiSecret =>
+            Environment.GetEnvironmentVariable("BYBIT_TESTNET_API_SECRET") ?? string.Empty;
+
+        readonly BybitAccountService AccountService = new(
+            apiKey: TestnetApiKey,
+            apiSecret: TestnetApiSecret,
+            url: BybitConstants.HTTP_TESTNET_URL,
+            debugMode: false);
         #region Get Collateral Info
         [Fact]
         public async Task Check_GetCollateralInfo()
         {
             var collateralInfoString = await AccountService.GetAccountCollateralInfo("XRP");
             await Console.Out.WriteLineAsync(collateralInfoString);
-            Assert.NotNull(collateralInfoString);
+            AssertSuccessfulResponse(collateralInfoString);
         }
         #endregion
 
@@ -29,7 +39,7 @@ namespace bybit.api.test
         {
             var collateralInfoString = await AccountService.SetAccountCollateralCoin("XRP", CollateralSwitch.ON);
             await Console.Out.WriteLineAsync(collateralInfoString);
-            Assert.NotNull(collateralInfoString);
+            AssertSuccessfulResponse(collateralInfoString);
         }
         #endregion
 
@@ -41,15 +51,10 @@ namespace bybit.api.test
             Dictionary<string, object> dict2 = new() { { "coin", "SOL" }, { "collateralSwitch", "OFF" } };
             List<Dictionary<string, object>> request = new() { dict1, dict2 };
             var collateralInfoString = await AccountService.BatchSetAccountCollateralCoin(request: request);
-            if(!string.IsNullOrEmpty(collateralInfoString))
-            {
-                await Console.Out.WriteLineAsync(collateralInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
-                var collateralInfo = generalResponse?.Result;
-                Assert.Equal(0, generalResponse?.RetCode);
-                Assert.Equal("SUCCESS", generalResponse?.RetMsg);
-                Assert.NotNull(collateralInfo?.collateralCoinEntries);
-            }
+            await Console.Out.WriteLineAsync(collateralInfoString);
+            AssertSuccessfulResponse(collateralInfoString);
+            var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString!);
+            Assert.NotNull(generalResponse?.Result?.collateralCoinEntries);
         }
 
         [Fact]
@@ -58,16 +63,17 @@ namespace bybit.api.test
             var coin1 = new SetCollateralCoinRequest { coin = "MATIC", collateralSwitch = "OFF", };
             var coin2 = new SetCollateralCoinRequest { coin = "SOL", collateralSwitch = "OFF", };
             var collateralInfoString = await AccountService.BatchSetAccountCollateralCoin(request: new List<SetCollateralCoinRequest> { coin1, coin2 });
-            if (!string.IsNullOrEmpty(collateralInfoString))
-            {
-                await Console.Out.WriteLineAsync(collateralInfoString);
-                var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString);
-                var collateralInfo = generalResponse?.Result;
-                Assert.Equal(0, generalResponse?.RetCode);
-                Assert.Equal("SUCCESS", generalResponse?.RetMsg);
-                Assert.NotNull(collateralInfo?.collateralCoinEntries);
-            }
+            await Console.Out.WriteLineAsync(collateralInfoString);
+            AssertSuccessfulResponse(collateralInfoString);
+            var generalResponse = JsonConvert.DeserializeObject<GeneralResponse<BatchSetCollateralCoinResult>>(collateralInfoString!);
+            Assert.NotNull(generalResponse?.Result?.collateralCoinEntries);
         }
         #endregion
+
+        private static void AssertSuccessfulResponse(string? response)
+        {
+            Assert.False(string.IsNullOrWhiteSpace(response));
+            Assert.Equal(0, JObject.Parse(response!)["retCode"]?.Value<int>());
+        }
     }
 }

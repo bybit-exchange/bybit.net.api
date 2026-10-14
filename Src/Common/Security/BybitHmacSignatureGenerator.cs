@@ -38,6 +38,15 @@ namespace bybit.net.api
             return Sign(rawData);
         }
 
+        public string GeneratePostSignature(byte[] body)
+        {
+            byte[] prefix = Encoding.UTF8.GetBytes($"{currentTimeStamp}{apikey}{recWindow}");
+            byte[] rawData = new byte[prefix.Length + body.Length];
+            Buffer.BlockCopy(prefix, 0, rawData, 0, prefix.Length);
+            Buffer.BlockCopy(body, 0, rawData, prefix.Length, body.Length);
+            return Sign(rawData);
+        }
+
         /// <summary>
         /// Generate signature for http get request
         /// </summary>
@@ -55,14 +64,16 @@ namespace bybit.net.api
             return Sign(rawData);
         }
 
-        private string Sign(string data)
+        private string Sign(string data) => Sign(Encoding.UTF8.GetBytes(data));
+
+        private string Sign(byte[] data)
         {
             try
             {
                 if (string.IsNullOrEmpty(apikey) || string.IsNullOrEmpty(apiSecret))
                     throw new BybitClientException("Please set your api key and api secret", -1);
                 using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(apiSecret));
-                byte[] computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(data));
+                byte[] computedHash = hmac.ComputeHash(data);
                 return BitConverter.ToString(computedHash).Replace("-", "").ToLower();
             }
             catch (Exception ex)

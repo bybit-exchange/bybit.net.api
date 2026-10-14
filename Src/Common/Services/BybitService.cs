@@ -109,10 +109,15 @@ namespace bybit.net.api
         {
             var timestamp = CurrentTimeStamp;
             var bybitSignatureService = new BybitHmacSignatureGenerator(apiKey, apiSecret, timestamp, recvWindow);
-            string signature = bybitSignatureService.GeneratePostSignature(string.Empty);
+            byte[] body = await content.ReadAsByteArrayAsync();
+            string signature = bybitSignatureService.GeneratePostSignature(body);
 
             HttpRequestMessage request = BuildHttpRequest(requestUri, HttpMethod.Post, signature, timestamp);
-            request.Content = content;
+            request.Content = new ByteArrayContent(body);
+            foreach (var header in content.Headers)
+            {
+                request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value);
+            }
 
             return await SendAsync<T>(request, requestUri);
         }
@@ -127,32 +132,56 @@ namespace bybit.net.api
         /// <returns>A StringBuilder containing the constructed query string.</returns>
         private StringBuilder BuildQueryString(Dictionary<string, object> queryParameters, StringBuilder builder)
         {
-            IEnumerable<(KeyValuePair<string, object> queryParameter, string queryParameterValue)> enumerable()
+            foreach (KeyValuePair<string, object> queryParameter in queryParameters)
             {
-                foreach (KeyValuePair<string, object> queryParameter in queryParameters)
+                foreach (string queryParameterValue in GetQueryValues(queryParameter.Value))
                 {
-                    var queryParameterValue = Convert.ToString(queryParameter.Value, CultureInfo.InvariantCulture);
-                    if (!string.IsNullOrWhiteSpace(queryParameterValue))
+                    if (builder.Length > 0)
                     {
-                        yield return (queryParameter, queryParameterValue);
+                        builder.Append('&');
                     }
-                }
-            }
 
-            foreach (var (queryParameter, queryParameterValue) in enumerable())
-            {
-                if (builder.Length > 0)
-                {
-                    builder.Append('&');
+                    builder
+                        .Append(queryParameter.Key)
+                        .Append('=')
+                        .Append(Uri.EscapeDataString(queryParameterValue));
                 }
-
-                builder
-                    .Append(queryParameter.Key)
-                    .Append('=')
-                    .Append(Uri.EscapeDataString(queryParameterValue));
             }
 
             return builder;
+        }
+
+        private static IEnumerable<string> GetQueryValues(object value)
+        {
+            if (value is string text)
+            {
+                if (!string.IsNullOrWhiteSpace(text))
+                {
+                    yield return text;
+                }
+
+                yield break;
+            }
+
+            if (value is System.Collections.IEnumerable values)
+            {
+                foreach (var item in values)
+                {
+                    var itemText = Convert.ToString(item, CultureInfo.InvariantCulture);
+                    if (!string.IsNullOrWhiteSpace(itemText))
+                    {
+                        yield return itemText;
+                    }
+                }
+
+                yield break;
+            }
+
+            var scalar = Convert.ToString(value, CultureInfo.InvariantCulture);
+            if (!string.IsNullOrWhiteSpace(scalar))
+            {
+                yield return scalar;
+            }
         }
 
         /// <summary>
@@ -284,15 +313,15 @@ namespace bybit.net.api
             if (signature != null && signature.Length > 0)
             {
                 request.Headers.Add("X-BAPI-SIGN", signature);
+                if (this.apiKey is not null)
+                {
+                    request.Headers.Add("X-BAPI-API-KEY", this.apiKey);
+                }
             }
             request.Headers.Add("User-Agent", UserAgent);
             request.Headers.Add("X-BAPI-SIGN-TYPE", BybitConstants.DEFAULT_SIGN_TYPE);
             request.Headers.Add("X-BAPI-TIMESTAMP", timestamp);
             request.Headers.Add("X-BAPI-RECV-WINDOW", recvWindow);
-            if (this.apiKey is not null)
-            {
-                request.Headers.Add("X-BAPI-API-KEY", this.apiKey);
-            }
             if (content is not null)
             {
                 request.Content = new StringContent(content, Encoding.UTF8, "application/json");

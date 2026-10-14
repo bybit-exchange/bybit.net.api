@@ -344,5 +344,22 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<GeneralResponse<GetClosedOptionsPositionsResult>>(GET_CLOSED_OPTIONS_POSITIONS, HttpMethod.Get, query: query);
             return result;
         }
+
+    private const string GET_POSITION_SYMBOL_INFO = "/v5/position/symbol-info";
+    /// <summary>
+    /// Get Futures Leverage
+    /// </summary>
+    public async Task<string?> GetPositionSymbolInfo(string category, string? symbol = null)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "category", category }
+        };
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("symbol", symbol)
+        );
+        var result = await this.SendSignedAsync<string>(GET_POSITION_SYMBOL_INFO, HttpMethod.Get, query: query);
+        return result;
+    }
     }
 }

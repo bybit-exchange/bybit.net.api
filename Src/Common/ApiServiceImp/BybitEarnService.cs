@@ -1512,5 +1512,36 @@ namespace bybit.net.api.ApiServiceImp
             var result = await this.SendSignedAsync<string>(REMOVE_LIQUIDITY, HttpMethod.Post, query: query);
             return result;
         }
+
+    private const string LIST_EARN_AUTO_SAVINGS = "/v5/earn/flexible-saving/auto-savings";
+    /// <summary>
+    /// Get Auto Savings Settings
+    /// </summary>
+    public async Task<string?> ListEarnAutoSavings(IEnumerable<string>? coins = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("coins", coins)
+        );
+        var result = await this.SendSignedAsync<string>(LIST_EARN_AUTO_SAVINGS, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string EDIT_EARN_AUTO_SAVINGS = "/v5/earn/flexible-saving/auto-savings";
+    /// <summary>
+    /// Edit Auto Savings Settings
+    /// </summary>
+    public async Task<string?> EditEarnAutoSavings(bool isSelected, string? coin = null, bool? purchaseImmediately = null)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "isSelected", isSelected }
+        };
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("coin", coin),
+            ("purchaseImmediately", purchaseImmediately)
+        );
+        var result = await this.SendSignedAsync<string>(EDIT_EARN_AUTO_SAVINGS, HttpMethod.Post, query: query);
+        return result;
+    }
     }
 }
