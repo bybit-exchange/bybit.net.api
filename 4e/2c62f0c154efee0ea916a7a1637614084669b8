@@ -1,0 +1,90 @@
+Src/Common/ApiServiceImp/BybitTaxService.cs
+  s_ea43dbab71a8c6::t_c1c9f1f77b6f37 1-70
+Tests/bybit.api.test/Tests/AssetServiceEndpointTests.cs
+  s_ea43dbab71a8c6::t_b73b52df509ed0 171,178,182-195
+Tests/bybit.api.test/Tests/StrategyServiceContractTests.cs
+  s_ea43dbab71a8c6::t_6326af98dfae9b 1-39
+Src/Common/Services/BybitService.cs
+  s_ea43dbab71a8c6::t_67646ecf11d11d 320-322
+Src/Common/ApiServiceImp/BybitSpotXService.cs
+  s_ea43dbab71a8c6::t_9a0c25fd2888d4 10,15
+  s_ea43dbab71a8c6::t_f322122cea9bde 1-9,11-14,16-148
+CHANGELOG.md
+  s_ea43dbab71a8c6::t_35420214d31399 1-7
+  s_ea43dbab71a8c6::t_ba71bf90006ca6 8-37
+  s_ea43dbab71a8c6::t_cfbb4d3ba1357b 86-87,93
+Tests/bybit.api.test/Tests/SpotXServiceContractTests.cs
+  s_ea43dbab71a8c6::t_fb7c374a0bdb10 1-9,19-28,48-69
+  s_ea43dbab71a8c6::t_60bdbace6a8e3f 10-18
+  s_ea43dbab71a8c6::t_f1ead52bb6e5fd 29-47
+Tests/bybit.api.test/Tests/AccountServiceEndpointTests.cs
+  s_ea43dbab71a8c6::t_a41f2b80b83075 155-173
+Tests/bybit.api.test/Tests/TaxServiceContractTests.cs
+  s_ea43dbab71a8c6::t_6f17ebf87ed461 28-42
+  s_ea43dbab71a8c6::t_a41f2b80b83075 1-27,43
+Src/Common/ApiServiceImp/BybitAccountService.cs
+  s_ea43dbab71a8c6::t_c1c9f1f77b6f37 677-687
+Src/Common/Models/Account/DemoApplyMoneyItem.cs
+  s_ea43dbab71a8c6::t_c1c9f1f77b6f37 1-13
+Src/Common/ApiServiceImp/BybitAlphaService.cs
+  s_ea43dbab71a8c6::t_c1c9f1f77b6f37 185-200,231-243,374-383,595-597,603-604
+  s_ea43dbab71a8c6::t_9d99ea7edaffb1 598-602
+Tests/bybit.api.test/Tests/ReferralServiceContractTests.cs
+  s_ea43dbab71a8c6::t_6f17ebf87ed461 1-74
+Tests/bybit.api.test/Tests/PreUpgradeServiceContractTests.cs
+  s_ea43dbab71a8c6::t_6f17ebf87ed461 1-22
+Src/Common/ApiServiceImp/BybitAssetService.cs
+  s_ea43dbab71a8c6::t_25f7fdb0df8bb6 1063-1068,1072
+Src/Common/ApiServiceImp/BybitP2PService.cs
+  s_ea43dbab71a8c6::t_020b6f754b28ca 578
+Src/Common/ApiServiceImp/BybitStrategyService.cs
+  s_ea43dbab71a8c6::t_cd90bd3dc1e724 1-86
+Tests/bybit.api.test/Tests/AlphaServiceContractTests.cs
+  s_ea43dbab71a8c6::t_a41f2b80b83075 151-168
+Tests/bybit.api.test/Tests/EventServiceContractTests.cs
+  s_ea43dbab71a8c6::t_6f17ebf87ed461 1-83
+Tests/bybit.api.test/Tests/SigningTestUtil.cs
+  s_ea43dbab71a8c6::t_6f17ebf87ed461 27,31,39,45
+Src/Common/Models/Tax/TaxReportItem.cs
+  s_ea43dbab71a8c6::t_c1c9f1f77b6f37 1-13
+Tests/bybit.api.test/Tests/P2PServiceSigningTests.cs
+  s_ea43dbab71a8c6::t_6566f4c0877064 117-142
+Src/Common/ApiServiceImp/BybitEventService.cs
+  s_bac830f8b6b8d2::t_865cd8ac3781ae 1-115
+Src/Common/ApiServiceImp/BybitPreUpgradeService.cs
+  s_bac830f8b6b8d2::t_c312488ac62f46 1-42
+Src/Common/ApiServiceImp/BybitReferralService.cs
+  s_bac830f8b6b8d2::t_76888967350714 1-75
+Src/Common/ApiServiceImp/BybitSpotMarginService.cs
+  s_bac830f8b6b8d2::t_bd01b6ca988a0c 737-766
+Src/Common/bybit.net.api.csproj
+  s_bac830f8b6b8d2::t_4fbbe1f2fd3734 28-29
+Tests/bybit.api.test/TradeServiceTest.cs
+  s_ea43dbab71a8c6::t_8a4d711288e8f5 1-18,25-170
+Tests/bybit.api.test/UserServiceTest.cs
+  s_ea43dbab71a8c6::t_666dbed2ce503c 1-15,22-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2-bit.2+419f699",
+  "base_commit_sha": "4e2c62f0c154efee0ea916a7a1637614084669b8",
+  "prompts": {},
+  "sessions": {
+    "s_bac830f8b6b8d2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1affa-536e-7e63-a438-e1d60ce47e12",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "doris-xiao-bybit <doris.xiao@bybit.com>"
+    },
+    "s_ea43dbab71a8c6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1be04-50dc-7402-8a84-0b945c398d41",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "doris-xiao-bybit <doris.xiao@bybit.com>"
+    }
+  }
+}
