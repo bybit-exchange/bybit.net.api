@@ -1,0 +1,43 @@
+Tests/bybit.api.test/Tests/SpotXServiceContractTests.cs
+  s_ea43dbab71a8c6::t_8199f5856d0a19 18-42,48
+Src/Common/ApiServiceImp/BybitAccountService.cs
+  s_ea43dbab71a8c6::t_63586fe690b996 667
+Src/Common/ApiServiceImp/BybitAlphaService.cs
+  s_ea43dbab71a8c6::t_a4dd1e4375203a 170
+Tests/bybit.api.test/Tests/AssetServiceEndpointTests.cs
+  s_ea43dbab71a8c6::t_63586fe690b996 186,193
+Tests/bybit.api.test/Tests/SpotMarginServiceEndpointTests.cs
+  s_ea43dbab71a8c6::t_02a30f28ccb675 11-12,45-72
+Tests/bybit.api.test/Tests/PublicApiSurfaceTests.cs
+  s_ea43dbab71a8c6::t_f9a15e84b9e52c 1-48
+Tests/bybit.api.test/Tests/StrategyServiceContractTests.cs
+  s_ea43dbab71a8c6::t_02a30f28ccb675 8-44,48,60-61,63-65,67-71
+Src/Common/ApiServiceImp/BybitSpotXService.cs
+  s_ea43dbab71a8c6::t_1940ffe7e484eb 2,11,16,27,31-41
+  s_ea43dbab71a8c6::t_991a500fd2516e 17,42-47
+  s_6af3615319c4cd::t_2a7f8d143698dd 48
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2-bit.2+419f699",
+  "base_commit_sha": "2a846c852e83611d8b47745dabd0ffc72e332a07",
+  "prompts": {},
+  "sessions": {
+    "s_6af3615319c4cd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a17b58-1fcd-78f2-af28-625b66470487",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "doris-xiao-bybit <doris.xiao@bybit.com>"
+    },
+    "s_ea43dbab71a8c6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1be04-50dc-7402-8a84-0b945c398d41",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "doris-xiao-bybit <doris.xiao@bybit.com>"
+    }
+  }
+}
