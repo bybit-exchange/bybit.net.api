@@ -22,22 +22,6 @@ namespace bybit.net.api.ApiServiceImp
         /// <summary>
         /// Batch create tax report files
         /// </summary>
-        public async Task<string?> BatchCreateTaxReports(long startTime, long endTime, List<object> items, string? sourceInstitution = null, string? exportFileType = null)
-        {
-            var query = new Dictionary<string, object>
-            {
-                { "startTime", startTime },
-                { "endTime", endTime },
-                { "items", items }
-            };
-            BybitParametersUtils.AddOptionalParameters(query,
-                ("sourceInstitution", sourceInstitution),
-                ("exportFileType", exportFileType)
-            );
-            var result = await this.SendSignedAsync<string>(BATCH_CREATE_TAX_REPORTS, HttpMethod.Post, query: query);
-            return result;
-        }
-
         public async Task<string?> BatchCreateTaxReports(long startTime, long endTime, IReadOnlyCollection<TaxReportItem> items, string? sourceInstitution = null, string? exportFileType = null)
         {
             var query = new Dictionary<string, object>

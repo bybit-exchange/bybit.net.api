@@ -1,4 +1,5 @@
 using bybit.net.api.Services;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -7,13 +8,13 @@ namespace bybit.net.api.ApiServiceImp
 {
     public class BybitSpotXService : BybitApiService
     {
-        public BybitSpotXService(string? url = null, bool debugMode = false, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW)
+        public BybitSpotXService(Uri? url = null, bool debugMode = false, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW)
             : this(httpClient: new HttpClient(), url: url, recvWindow: recvWindow, debugMode: debugMode)
         {
         }
 
-        public BybitSpotXService(HttpClient httpClient, string? url = null, bool debugMode = false, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW)
-            : base(httpClient: httpClient, url: url, recvWindow: recvWindow, debugMode: debugMode)
+        public BybitSpotXService(HttpClient httpClient, Uri? url = null, bool debugMode = false, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW)
+            : base(httpClient: httpClient, url: GetBaseUrl(url), recvWindow: recvWindow, debugMode: debugMode)
         {
         }
 
@@ -23,8 +24,26 @@ namespace bybit.net.api.ApiServiceImp
         }
 
         public BybitSpotXService(HttpClient httpClient, string apiKey, string apiSecret, string? url = null, string recvWindow = BybitConstants.DEFAULT_REC_WINDOW, bool debugMode = false)
-            : base(httpClient: httpClient, apiKey: apiKey, apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
+            : base(httpClient: httpClient, apiKey: ValidateApiKey(apiKey), apiSecret: apiSecret, url: url, recvWindow: recvWindow, debugMode: debugMode)
         {
+        }
+
+        private static string ValidateApiKey(string apiKey)
+        {
+            if (Uri.TryCreate(apiKey, UriKind.Absolute, out var uri) &&
+                (uri.Scheme == Uri.UriSchemeHttp || uri.Scheme == Uri.UriSchemeHttps))
+            {
+                throw new ArgumentException(
+                    "The API key looks like a URL. Pass the public API base URL as a Uri instead.",
+                    nameof(apiKey));
+            }
+
+            return apiKey;
+        }
+
+        private static string? GetBaseUrl(Uri? url)
+        {
+            return url?.AbsoluteUri.TrimEnd('/');
         }
 
         private const string GET_LAUNCHPOOL_PROJECT_LIST = "/v5/spot-x/launchpool/project/list";

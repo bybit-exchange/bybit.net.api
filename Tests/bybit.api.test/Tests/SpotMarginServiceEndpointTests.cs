@@ -8,6 +8,8 @@ namespace bybit.api.test.Tests
 {
     public class SpotMarginServiceEndpointTests
     {
+        private const string SuccessResponse = "{\"retCode\":0,\"retMsg\":\"OK\"}";
+
         [Fact]
         public async Task GetVipMarginData_IsPublicAndSerializesQuery()
         {
@@ -39,6 +41,34 @@ namespace bybit.api.test.Tests
 
             var queryString = capturedRequest!.RequestUri!.Query.TrimStart('?');
             Assert.Equal("vipLevel=vip1&currency=USDT", queryString);
+        }
+
+        [Fact]
+        public async Task QueryFixedBorrowPenaltyInterest_UsesDocumentedEndpointAndQuery()
+        {
+            var handler = new SignedRequestRecordingHandler(SuccessResponse);
+            var client = new HttpClient(handler);
+            var service = new BybitSpotMarginService(client, "key", "secret", "https://api.bybit.com");
+
+            await service.QueryFixedBorrowPenaltyInterest("order-id", "USDT", "20", "next");
+
+            Assert.Equal(HttpMethod.Get, handler.Method);
+            Assert.Equal("/v5/spot-margin-trade/fixedborrow-interest-accrued", handler.Path);
+            Assert.Equal("orderId=order-id&orderCurrency=USDT&limit=20&cursor=next", handler.Query);
+        }
+
+        [Fact]
+        public async Task CancelFixedBorrowOrder_UsesDocumentedEndpointAndBody()
+        {
+            var handler = new SignedRequestRecordingHandler(SuccessResponse);
+            var client = new HttpClient(handler);
+            var service = new BybitSpotMarginService(client, "key", "secret", "https://api.bybit.com");
+
+            await service.CancelFixedBorrowOrder("order-id");
+
+            Assert.Equal(HttpMethod.Post, handler.Method);
+            Assert.Equal("/v5/spot-margin-trade/fixedborrow-order-cancel", handler.Path);
+            Assert.Equal("{\"orderId\":\"order-id\"}", handler.Body);
         }
     }
 }

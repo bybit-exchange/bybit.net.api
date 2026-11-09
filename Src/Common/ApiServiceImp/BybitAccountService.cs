@@ -664,18 +664,7 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Apply demo funds
     /// </summary>
-    public async Task<string?> DemoApplyMoney(long? adjustType = null, List<object>? utaDemoApplyMoney = null)
-    {
-        var query = new Dictionary<string, object>();
-        BybitParametersUtils.AddOptionalParameters(query,
-            ("adjustType", adjustType),
-            ("utaDemoApplyMoney", utaDemoApplyMoney)
-        );
-        var result = await this.SendSignedAsync<string>(DEMO_APPLY_MONEY, HttpMethod.Post, query: query);
-        return result;
-    }
-
-    public async Task<string?> DemoApplyMoney(long? adjustType, IReadOnlyCollection<DemoApplyMoneyItem> utaDemoApplyMoney)
+    public async Task<string?> DemoApplyMoney(long? adjustType = null, IReadOnlyCollection<DemoApplyMoneyItem>? utaDemoApplyMoney = null)
     {
         var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,

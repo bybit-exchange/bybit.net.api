@@ -183,14 +183,14 @@ namespace bybit.api.test.Tests
         }
 
         [Fact]
-        public async Task TransferSubMemberSave_PreservesSingleSubMemberIdOverload()
+        public async Task TransferSubMemberSave_SerializesSingleSubMemberIdCollection()
         {
             var handler = new SignedRequestRecordingHandler(
                 "{\"retCode\":0,\"retMsg\":\"OK\",\"result\":{},\"time\":1}");
             var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
             var service = new BybitAssetService(client, apiKey: "key", apiSecret: "secret");
 
-            await service.TransferSubMemberSave("uid1");
+            await service.TransferSubMemberSave(new[] { "uid1" });
 
             Assert.Equal("{\"subMemberIds\":[\"uid1\"]}", handler.Body);
         }

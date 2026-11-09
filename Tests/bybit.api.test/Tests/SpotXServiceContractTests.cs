@@ -16,11 +16,36 @@ public class SpotXServiceContractTests
     }
 
     [Fact]
+    public void AuthenticatedConstructor_RejectsUrlAsApiKey()
+    {
+        var exception = Assert.Throws<ArgumentException>(
+            () => new BybitSpotXService("https://api-testnet.bybit.com", "5000"));
+
+        Assert.Contains("URL", exception.Message, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void PublicConstructors_UseUriForBaseUrl()
+    {
+        var constructors = typeof(BybitSpotXService).GetConstructors();
+
+        Assert.Contains(constructors, constructor =>
+            constructor.GetParameters() is var parameters &&
+            parameters.Length > 0 &&
+            parameters[0].ParameterType == typeof(Uri));
+        Assert.Contains(constructors, constructor =>
+            constructor.GetParameters() is var parameters &&
+            parameters.Length > 1 &&
+            parameters[0].ParameterType == typeof(HttpClient) &&
+            parameters[1].ParameterType == typeof(Uri));
+    }
+
+    [Fact]
     public async Task PublicConstructor_CallsPublicEndpointWithoutAuthenticationHeaders()
     {
         var handler = new RecordingHandler();
         var client = new HttpClient(handler);
-        var service = new BybitSpotXService(client, url: "https://api.bybit.com");
+        var service = new BybitSpotXService(client, url: new Uri("https://api.bybit.com"));
 
         await service.GetLaunchpoolProjectList(1);
 

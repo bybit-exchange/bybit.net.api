@@ -1060,11 +1060,6 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Save Transferable Sub Member List
     /// </summary>
-    public Task<string?> TransferSubMemberSave(string subMemberId)
-    {
-        return TransferSubMemberSave(new[] { subMemberId });
-    }
-
     public async Task<string?> TransferSubMemberSave(IReadOnlyCollection<string> subMemberIds)
     {
         var query = new Dictionary<string, object>

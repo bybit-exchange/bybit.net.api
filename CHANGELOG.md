@@ -15,7 +15,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BybitEventService.GetEcTradeHistory(...)`
 - `BybitTaxService.BatchCreateTaxReports(...)`
 - `BybitTaxService.BatchQueryTaxReports(...)`
-- `BybitP2PService.UploadChatFile(...)`
 - `BybitPreUpgradeService.GetPreUpgradeTransactionLog(...)`
 - `BybitReferralService.GetReferralCampaignRewards(...)`
 - `BybitReferralService.GetReferralCommissionRecords(...)`
@@ -76,7 +75,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BybitLendingService.InsLoanDelayLiqStatus(...)`
 - `BybitLendingService.InsLoanEnsureTokens(...)`
 - `BybitMarketDataService.GetOptionBaseCoins(...)`
-- `BybitP2PService.UploadChatFile(...)`
 - `BybitPositionService.GetPositionSymbolInfo(...)`
 - `BybitSpotMarginService.QueryFixedAvailableInventory(...)`
 - `BybitSpotMarginService.GetSpotMarginTradeFlexibleAvailableInventory(...)`
