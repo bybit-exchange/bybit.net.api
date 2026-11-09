@@ -1,0 +1,19 @@
+docs/superpowers/specs/2026-11-09-post-review-fixes-design.md
+  s_ea43dbab71a8c6::t_51e1a032c293c0 1-62
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.2-bit.2+419f699",
+  "base_commit_sha": "b082531a51caecd3ace2cd7aa98eff131b12f726",
+  "prompts": {},
+  "sessions": {
+    "s_ea43dbab71a8c6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1be04-50dc-7402-8a84-0b945c398d41",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "doris-xiao-bybit <doris.xiao@bybit.com>"
+    }
+  }
+}
