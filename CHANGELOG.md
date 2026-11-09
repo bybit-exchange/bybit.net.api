@@ -1,3 +1,40 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 1.4.2 — 2026-11-06
+
+### Added
+- `BybitEventService.GetEcOrderHistory(...)`
+- `BybitEventService.GetEcActiveOrders(...)`
+- `BybitEventService.GetEcPositionInfo(...)`
+- `BybitEventService.GetEcSettlements(...)`
+- `BybitEventService.GetEcTradeHistory(...)`
+- `BybitTaxService.BatchCreateTaxReports(...)`
+- `BybitTaxService.BatchQueryTaxReports(...)`
+- `BybitP2PService.UploadChatFile(...)`
+- `BybitPreUpgradeService.GetPreUpgradeTransactionLog(...)`
+- `BybitReferralService.GetReferralCampaignRewards(...)`
+- `BybitReferralService.GetReferralCommissionRecords(...)`
+- `BybitReferralService.GetReferralUserIdentityProfile(...)`
+- `BybitReferralService.GetReferralUserInvitations(...)`
+- `BybitSpotMarginService.QueryFixedBorrowPenaltyInterest(...)`
+- `BybitSpotMarginService.CancelFixedBorrowOrder(...)`
+- `BybitSpotXService.GetLaunchpoolProjectList(...)`
+- `BybitSpotXService.GetLaunchpoolUserActivityLog(...)`
+- `BybitSpotXService.GetLaunchpoolUserCurrentStaking(...)`
+- `BybitSpotXService.GetLaunchpoolUserHistory(...)`
+- `BybitSpotXService.GetPuzzleProjectList(...)`
+- `BybitSpotXService.GetTokenSplashProjectList(...)`
+- `BybitSpotXService.GetTokenSplashUserActivityParams(...)`
+- `BybitStrategyService.CreateStrategy(...)`
+- `BybitStrategyService.QueryStrategyList(...)`
+- `BybitStrategyService.QueryStrategyOrderList(...)`
+- `BybitStrategyService.StopStrategy(...)`
+
 ## 1.4.1 — 2026-10-10
 
 ### Added
@@ -46,20 +83,16 @@
 - `BybitUserService.QueryReferralCode(...)`
 
 ### Fixed
+- Removed ambiguous Spot-X authenticated constructor resolution.
+- Serialized transferable sub-member IDs as individual array elements.
 - Corrected Alpha Prediction parameter names, required fields, and enum types.
 - Serialized GET collection parameters as repeated query keys.
 - Allowed comma-separated Option underlying-type filters.
 - Sent P2P chat files as signed multipart form data.
 - Kept public endpoint requests free of API authentication headers.
+- Added typed request collections for Demo, Tax, and Alpha endpoints.
 - Removed embedded testnet credentials and restored integration-test isolation.
 - Aligned NuGet publishing with the .NET 10 SDK project.
-
-# Changelog
-
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.4.0] - 2026-07-13
 

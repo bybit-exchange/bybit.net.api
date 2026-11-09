@@ -148,6 +148,24 @@ namespace bybit.api.test.Tests
                 handler.Body);
         }
 
+        [Fact]
+        public async Task CollectionParameters_AcceptDocumentedPrimitiveTypes()
+        {
+            var (service, handler) = CreateService();
+
+            await service.GetLPOrderList(orderStatus: new long[] { 1, 2 });
+            Assert.Equal("{\"orderStatus\":[1,2]}", handler.Body);
+
+            await service.GetLPPayTokenPrice(new[] { "CEX_1", "CEX_2" });
+            Assert.Equal("{\"tokenCode\":[\"CEX_1\",\"CEX_2\"]}", handler.Body);
+
+            await service.GetPredictionOrderBook(new[] { "token_yes", "token_no" });
+            Assert.Equal("{\"tokenIds\":[\"token_yes\",\"token_no\"]}", handler.Body);
+
+            await service.GetPredictionTokenPrice(new[] { "token_yes", "token_no" });
+            Assert.Equal("{\"tokenIds\":[\"token_yes\",\"token_no\"]}", handler.Body);
+        }
+
         private static (BybitAlphaService Service, RecordingHandler Handler) CreateService()
         {
             var handler = new RecordingHandler();

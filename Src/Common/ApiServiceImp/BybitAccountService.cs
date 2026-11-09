@@ -674,5 +674,16 @@ namespace bybit.net.api.ApiServiceImp
         var result = await this.SendSignedAsync<string>(DEMO_APPLY_MONEY, HttpMethod.Post, query: query);
         return result;
     }
+
+    public async Task<string?> DemoApplyMoney(long? adjustType, IReadOnlyCollection<DemoApplyMoneyItem> utaDemoApplyMoney)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("adjustType", adjustType),
+            ("utaDemoApplyMoney", utaDemoApplyMoney)
+        );
+        var result = await this.SendSignedAsync<string>(DEMO_APPLY_MONEY, HttpMethod.Post, query: query);
+        return result;
+    }
     }
 }
