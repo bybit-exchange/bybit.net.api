@@ -168,18 +168,31 @@ namespace bybit.api.test.Tests
         }
 
         [Fact]
-        public async Task TransferSubMemberSave_SerializesSubMemberIdsAsArray()
+        public async Task TransferSubMemberSave_SerializesMultipleSubMemberIdsAsArray()
         {
             var handler = new SignedRequestRecordingHandler(
                 "{\"retCode\":0,\"retMsg\":\"OK\",\"result\":{},\"time\":1}");
             var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
             var service = new BybitAssetService(client, apiKey: "key", apiSecret: "secret");
 
-            await service.TransferSubMemberSave("uid1,uid2");
+            await service.TransferSubMemberSave(new[] { "uid1", "uid2" });
 
             Assert.Equal(HttpMethod.Post, handler.Method);
             Assert.Equal("/v5/asset/transfer/save-transfer-sub-member", handler.Path);
-            Assert.Equal("{\"subMemberIds\":[\"uid1,uid2\"]}", handler.Body);
+            Assert.Equal("{\"subMemberIds\":[\"uid1\",\"uid2\"]}", handler.Body);
+        }
+
+        [Fact]
+        public async Task TransferSubMemberSave_SerializesSingleSubMemberIdCollection()
+        {
+            var handler = new SignedRequestRecordingHandler(
+                "{\"retCode\":0,\"retMsg\":\"OK\",\"result\":{},\"time\":1}");
+            var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
+            var service = new BybitAssetService(client, apiKey: "key", apiSecret: "secret");
+
+            await service.TransferSubMemberSave(new[] { "uid1" });
+
+            Assert.Equal("{\"subMemberIds\":[\"uid1\"]}", handler.Body);
         }
     }
 }

@@ -167,7 +167,7 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Get LP order history with status and execution details
     /// </summary>
-    public async Task<string?> GetLPOrderList(long? orderType = null, string? tokenCode = null, List<object>? orderStatus = null, long? days = null, long? limit = null, long? pageIndex = null, string? poolAddress = null)
+    public async Task<string?> GetLPOrderList(IReadOnlyCollection<long>? orderStatus = null, long? orderType = null, string? tokenCode = null, long? days = null, long? limit = null, long? pageIndex = null, string? poolAddress = null)
     {
         var query = new Dictionary<string, object>();
         BybitParametersUtils.AddOptionalParameters(query,
@@ -200,7 +200,7 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Get current prices for payment tokens
     /// </summary>
-    public async Task<string?> GetLPPayTokenPrice(List<object> tokenCode, string? chainCode = null)
+    public async Task<string?> GetLPPayTokenPrice(IReadOnlyCollection<string> tokenCode, string? chainCode = null)
     {
         var query = new Dictionary<string, object>
         {
@@ -333,7 +333,7 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Get full order book snapshot for prediction tokens
     /// </summary>
-    public async Task<string?> GetPredictionOrderBook(List<object> tokenIds)
+    public async Task<string?> GetPredictionOrderBook(IReadOnlyCollection<string> tokenIds)
     {
         var query = new Dictionary<string, object>
         {
@@ -544,7 +544,7 @@ namespace bybit.net.api.ApiServiceImp
     /// <summary>
     /// Get real-time prices for prediction outcome tokens
     /// </summary>
-    public async Task<string?> GetPredictionTokenPrice(List<object> tokenIds)
+    public async Task<string?> GetPredictionTokenPrice(IReadOnlyCollection<string> tokenIds)
     {
         var query = new Dictionary<string, object>
         {

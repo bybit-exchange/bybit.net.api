@@ -114,6 +114,32 @@ namespace bybit.api.test.Tests
             }
         }
 
+        [Fact]
+        public async Task UploadChatFile_WithFilePathOnly_SendsMultipartFileContent()
+        {
+            var handler = new MultipartRecordingHandler();
+            var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
+            var service = new BybitP2PService(client, "test-key", "test-secret");
+            var fileBytes = new byte[] { 0x89, 0x50, 0x4E, 0x47 };
+            var filePath = Path.GetTempFileName();
+            await File.WriteAllBytesAsync(filePath, fileBytes);
+
+            try
+            {
+                await service.UploadChatFile(filePath);
+
+                Assert.Equal("multipart/form-data", handler.ContentType);
+                var multipartText = Encoding.Latin1.GetString(handler.Body);
+                Assert.Contains("upload_file", multipartText);
+                Assert.Contains(Path.GetFileName(filePath), multipartText);
+                Assert.True(handler.Body.AsSpan().IndexOf(fileBytes) >= 0);
+            }
+            finally
+            {
+                File.Delete(filePath);
+            }
+        }
+
         private static string Sign(string data, string secret)
             => Sign(Encoding.UTF8.GetBytes(data), secret);
 

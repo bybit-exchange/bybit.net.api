@@ -575,5 +575,6 @@ namespace bybit.net.api.ApiServiceImp
         content.Add(fileContent, "upload_file", Path.GetFileName(filePath));
         return await SendSignedMultipartAsync<string>(UPLOAD_P2P_CHAT_FILE, content);
     }
+
     }
 }

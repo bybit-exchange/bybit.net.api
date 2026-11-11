@@ -152,5 +152,24 @@ namespace bybit.api.test.Tests
             Assert.Equal("4.5", result!.Result!.AvailableWithdrawal);
             Assert.Equal("4.5", result.Result.AvailableWithdrawalMap!["BTC"]);
         }
+
+        [Fact]
+        public async Task DemoApplyMoney_SerializesTypedItems()
+        {
+            var handler = new SignedRequestRecordingHandler(
+                "{\"retCode\":0,\"retMsg\":\"OK\",\"result\":{},\"time\":1}");
+            var client = new HttpClient(handler) { BaseAddress = new Uri("https://api.bybit.com") };
+            var service = new BybitAccountService(client, "key", "secret");
+
+            await service.DemoApplyMoney(0, new[]
+            {
+                new DemoApplyMoneyItem { Coin = "USDT", AmountStr = "109" },
+            });
+
+            Assert.Equal("/v5/account/demo-apply-money", handler.Path);
+            Assert.Equal(
+                "{\"adjustType\":0,\"utaDemoApplyMoney\":[{\"coin\":\"USDT\",\"amountStr\":\"109\"}]}",
+                handler.Body);
+        }
     }
 }

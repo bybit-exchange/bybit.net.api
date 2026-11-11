@@ -317,11 +317,11 @@ namespace bybit.net.api
                 {
                     request.Headers.Add("X-BAPI-API-KEY", this.apiKey);
                 }
+                request.Headers.Add("X-BAPI-SIGN-TYPE", BybitConstants.DEFAULT_SIGN_TYPE);
+                request.Headers.Add("X-BAPI-TIMESTAMP", timestamp);
+                request.Headers.Add("X-BAPI-RECV-WINDOW", recvWindow);
             }
             request.Headers.Add("User-Agent", UserAgent);
-            request.Headers.Add("X-BAPI-SIGN-TYPE", BybitConstants.DEFAULT_SIGN_TYPE);
-            request.Headers.Add("X-BAPI-TIMESTAMP", timestamp);
-            request.Headers.Add("X-BAPI-RECV-WINDOW", recvWindow);
             if (content is not null)
             {
                 request.Content = new StringContent(content, Encoding.UTF8, "application/json");

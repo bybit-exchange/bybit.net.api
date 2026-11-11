@@ -24,9 +24,11 @@ namespace bybit.api.test.Tests
 
         public HttpMethod? Method { get; private set; }
         public string Path { get; private set; } = string.Empty;
+        public string Query { get; private set; } = string.Empty;
         public string Body { get; private set; } = string.Empty;
         public string Timestamp { get; private set; } = string.Empty;
         public string Signature { get; private set; } = string.Empty;
+        public IReadOnlyCollection<string> HeaderNames { get; private set; } = Array.Empty<string>();
 
         protected override async Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
@@ -34,11 +36,13 @@ namespace bybit.api.test.Tests
         {
             Method = request.Method;
             Path = request.RequestUri!.AbsolutePath;
+            Query = request.RequestUri.Query.TrimStart('?');
             Body = request.Content is null
                 ? string.Empty
                 : await request.Content.ReadAsStringAsync(cancellationToken);
             Timestamp = GetHeader(request, "X-BAPI-TIMESTAMP");
             Signature = GetHeader(request, "X-BAPI-SIGN");
+            HeaderNames = request.Headers.Select(header => header.Key).ToArray();
 
             return new HttpResponseMessage
             {

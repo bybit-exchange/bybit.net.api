@@ -734,5 +734,35 @@ namespace bybit.net.api.ApiServiceImp
         var result = await this.SendSignedAsync<string>(GET_SPOT_MARGIN_TRADE_FLEXIBLE_AVAILABLE_INVENTORY, HttpMethod.Get, query: query);
         return result;
     }
+
+    private const string QUERY_FIXED_BORROW_PENALTY_INTEREST = "/v5/spot-margin-trade/fixedborrow-interest-accrued";
+    /// <summary>
+    /// Query Fixed-Rate Borrow Penalty Interest
+    /// </summary>
+    public async Task<string?> QueryFixedBorrowPenaltyInterest(string? orderId = null, string? orderCurrency = null, string? limit = null, string? cursor = null)
+    {
+        var query = new Dictionary<string, object>();
+        BybitParametersUtils.AddOptionalParameters(query,
+            ("orderId", orderId),
+            ("orderCurrency", orderCurrency),
+            ("limit", limit),
+            ("cursor", cursor)
+        );
+        var result = await this.SendSignedAsync<string>(QUERY_FIXED_BORROW_PENALTY_INTEREST, HttpMethod.Get, query: query);
+        return result;
+    }
+    private const string CANCEL_FIXED_BORROW_ORDER = "/v5/spot-margin-trade/fixedborrow-order-cancel";
+    /// <summary>
+    /// Cancel Fixed-Rate Borrow Order
+    /// </summary>
+    public async Task<string?> CancelFixedBorrowOrder(string orderId)
+    {
+        var query = new Dictionary<string, object>
+        {
+            { "orderId", orderId }
+        };
+        var result = await this.SendSignedAsync<string>(CANCEL_FIXED_BORROW_ORDER, HttpMethod.Post, query: query);
+        return result;
+    }
     }
 }
